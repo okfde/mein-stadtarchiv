@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Daten</h1>
+            <p>Die hier angebotenen Daten unterliegen der freien <a href="https://creativecommons.org/licenses/by/4.0/"
+                                                                    target="_blank">Creative Commons BY 4.0</a> Lizenz.
+                Sie können die Dokumente also gerne für eigene Arbeiten wie z.B. Blogbeiträge verwenden, solange Sie
+                einen korrekten Quellenverweis nutzen.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Mithelfen</h2>
+            <p>Wenn Sie einen technischen Fehler auf "Mein Stadtarchiv" finden, tragen Sie ihn bitte <a
+                    href="https://github.com/okfde/mein-stadtarchiv/issues">in unseren Bugtracker auf GitHub ein</a>.
+                Herzlichen Dank!</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Open Source</h2>
+            <p>"Mein Stadtarchiv" ist OpenSource-Software unter der <a
+                    href="https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29">3-Clause BSD License</a> und
+                steht <a href="https://github.com/okfde/mein-stadtarchiv">auf GitHub zum Download bereit</a>.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>API (Schnittstelle)</h2>
+            <p>Die Archivdaten können über eine einfache und weitestgehend selbsterklärende JSON-API abgerufen werden. Mit Hilfe des Attributes <code>pagination</code> kann zum nächsten Seite gesprungen werden.</p>
+            <pre><code>
+$ curl -s https://mein-stadtarchiv.de/api/documents | json_pp
+{
+   "pagination" : {
+      "next" : "https://mein-stadtarchiv.de/api/documents?page=2"
+   },
+   data: [
+        {
+            help_required: 1,
+            files: [
+                {
+                    downloadUrl: "https://media.mein-stadtarchiv.de/files/5a3112425062b177e94bb9eb/5a3112425062b177e94bb9ea/download",
+                    size: 30980428,
+                    accessUrl: "https://media.mein-stadtarchiv.de/stadtarchiv/files/5a3112425062b177e94bb9eb/5a3112425062b177e94bb9ea/show",
+                    pages: 1,
+                    mimeType: "image/tiff",
+                    sha1Checksum: "2e4cba8441cd4d7c4fc65070fd8ecbd5de8d5e25",
+                    binary_exists: true,
+                    id: "5a3112425062b177e94bb9ea",
+                    externalId: "A91x33441030979156420171118182926098-BA_01069",
+                    modified: "2017-12-13T20:50:24",
+                    fileName: "BA_01069.tif",
+                    created: "2017-12-14T07:54:31"
+                }
+            ],
+            tags: [ ],
+            title: "",
+            id: "5a3112425062b177e94bb9eb",
+            modified: "2017-12-13T12:55:12",
+            category: [
+                {
+                    parent: "5a266213012ca163a82b53fd",
+                    id: "5a31123c5062b177e94bb962",
+                    uid: "A91x31448185443878120170920110520375",
+                    title: "Bildarchiv",
+                    order_id: "03.05.01 BA"
+                }
+            ],
+            order_id: "BA_01069",
+            uid: "A91x33441030979156420171118182926098"
+        },
+        [...]
+   ]
+}
+            </code></pre>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Admin-Bereich</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Letzte Kommentare <a href="/admin/comments" class="btn btn-info">alle anzeigen</a></h3>
+            <div id="admin-comments">
+                {% for comment in comments %}
+                    <div class="admin-comment{% if loop.index % 2 == 1 %} admin-comment-alt{% endif %}">
+                        <p>
+                            Von <a href="mailto:{{ comment.author_email }}">{{ comment.author_name }}</a>
+                            am {{ comment.created|datetime }}
+                            zu <a href="/document/{{ comment.document.id }}">{{ comment.document.title }}</a>
+                        </p>
+                        <p>{{ comment.content }}</p>
+                        <p class="admin-comment-actions">
+                            {% if comment.status != 1 %}<a href="/admin/comment?id={{ comment.id }}&status=1" class="btn btn-success">freischalten</a>{% endif %}
+                            <a href="/admin/comment?id={{ comment.id }}&status=-1" class="btn btn-danger">löschen</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Letzte Stichworte</h3>
+        </div>
+    </div>
+{% endblock %}

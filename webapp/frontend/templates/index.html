@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="row row-gap">
+        <div class="col-md-6">
+            <h1>Tauchen Sie in die Geschichte Ihrer Stadt ein!</h1>
+            <p>In den Archiven Ihrer Stadt schlummern Dokumente aus vielen Jahrhunderten. Das ist Ihre eigene Geschichte!</p>
+            <p>Für die Kolpingstadt Kerpen haben <a href="/info/ueber-uns">wir</a> dieses Archiv für Sie geöffnet. Viel Spaß beim Durchstäbern Ihrer Stadtgeschichte!</p>
+        </div>
+        <div class="col-md-6">
+            <a href="/static/images/kerpen/aussenansicht-fullscreen.jpg" data-toggle="lightbox">
+                <img src="/static/images/kerpen/aussenansicht-medium.jpg" alt="Stadtarchiv Kerpen Außenansicht" class="img-fluid">
+            </a>
+        </div>
+    </div>
+    <div class="row row-gap">
+        <div class="col-md-6">
+            <div id="help-required-carousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for document in documents %}
+                        <div class="carousel-item{% if loop.first %} active{% endif %}">
+                            <img class="d-block w-100"  src="{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document['_id'] }}/{{ document['_source']['files'][0]['id'] }}/600/1.jpg" alt="{{ document['_source']['title'] }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#help-required-carousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">vorher</span>
+                </a>
+                <a class="carousel-control-next" href="#help-required-carousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">nachher</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>Ihr Archiv noch besser machen</h2>
+            <p>Stadtarchive erhalten hin und wieder Dokumente ohne Kontext. Es wäre doch aber schön, wenn wir auch diese Dokumente einordnen könnten.</p>
+            <p>Gemeinsam mit Ihnen, den Bürgerinnen und Bürgern dieser Stadt, können wir das schaffen - damit unser Archiv noch besser wird. Wenn Sie also etwas über die auf dem Bild dargestellte Situation, über den Ort oder die Personen schreiben können, so kommentieren Sie einfach das Dokument.</p>
+            <p>Anbei im Slider finden Sie einige dieser Dokumente. Schauen Sie doch mal rein!</p>
+        </div>
+    </div>
+    <div class="row row-gap">
+        <div class="col-md-6">
+            <h2>Noch mehr Stadtgeschichte vor Ort</h2>
+            <p>Nicht alle Dokumente sind digital verfügbar. Wenn Sie Interesse an der Geschichte Ihrer Stadt haben, so besuchen Sie Ihr Stadtarchiv doch einfach!</p>
+            <p>
+                Stadtarchiv Kerpen<br>
+                im Haus für Kunst und Geschichte<br>
+                Stiftsstraße 8<br>
+                50171 Kerpen
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div id="frontpage-map"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        stadtarchiv_config = {
+            mapbox_token: '{{ config['MAPBOX_TOKEN'] }}'
+        }
+    </script>
+    {{ super() }}
+{% endblock %}
