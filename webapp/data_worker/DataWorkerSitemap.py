@@ -30,8 +30,9 @@ class DataWorkerSitemap():
 
     def tidy_up(self):
         for sitemap_file in os.listdir(current_app.config['SITEMAP_DIR']):
-            file_path = os.path.join(current_app.config['SITEMAP_DIR'], sitemap_file)
-            os.unlink(file_path)
+            if sitemap_file[0] != '.':
+                file_path = os.path.join(current_app.config['SITEMAP_DIR'], sitemap_file)
+                os.unlink(file_path)
 
     def generate_document_sitemap(self):
         document_count = Document.objects.count()

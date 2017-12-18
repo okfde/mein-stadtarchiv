@@ -19,7 +19,7 @@
                 <div class="carousel-inner">
                     {% for document in documents %}
                         <div class="carousel-item{% if loop.first %} active{% endif %}">
-                            <img class="d-block w-100"  src="{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document['_id'] }}/{{ document['_source']['files'][0]['id'] }}/600/1.jpg" alt="{{ document['_source']['title'] }}">
+                            <a href="/document/{{ document['_id'] }}"><img class="d-block w-100"  src="{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document['_id'] }}/{{ document['_source']['files'][0]['id'] }}/600/1.jpg" alt="{{ document['_source']['title'] }}"></a>
                         </div>
                     {% endfor %}
                 </div>

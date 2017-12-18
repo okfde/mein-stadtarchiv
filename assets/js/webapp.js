@@ -54,6 +54,7 @@ $(document).ready(function () {
             }
         });
     }
+
 });
 
 function init_front_page() {
@@ -353,7 +354,7 @@ function get_children(categories) {
 
 function search() {
     if (!storage.form_active)
-        return
+        return;
     category = get_category_data(stadtarchiv_config.categories, $('#category-current').data('id'), 0);
     var categories = [];
     if (category.children) {

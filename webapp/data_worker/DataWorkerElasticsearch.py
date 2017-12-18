@@ -35,6 +35,11 @@ class DataWorkerElasticsearch():
             index_name = current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-' + now.strftime('%Y%m%d-%H%M')
             mapping = self.es_mapping_generator(Document, 'deref_document')
 
+            """
+            mapping['properties']['slider_height'] = {
+                'type': 'integer'
+            }
+            """
             mapping['properties']['category_full'] = {
                 'type': 'string'
             }
@@ -90,8 +95,16 @@ class DataWorkerElasticsearch():
 
         for document in Document.objects():
             document_dict = document.to_dict('deref_document', format_datetime=True, delete='delete_document')
+
             if document.files:
                 document_dict['file_count'] = len(document.files)
+                """
+                if document.files[0].thumbnails:
+                    if '1' in document.files[0].thumbnails:
+                        if 'sizes' in document.files[0].thumbnails['1']:
+                            if '600' in document.files[0].thumbnails['1']['sizes']:
+                                document_dict['slider_height'] = document.files[0].thumbnails['1']['sizes']['600']['height']
+                """
             else:
                 document_dict['file_count'] = 0
 
