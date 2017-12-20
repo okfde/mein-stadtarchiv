@@ -1,11 +1,15 @@
 {% extends "layout.html" %}
 
+{% block title %}Startseite | {{ super() }}{% endblock %}
+{% block og_title %}Startseite | {{ super() }}{% endblock %}
+
 {% block content %}
     <div class="row row-gap">
         <div class="col-md-6">
             <h1>Tauchen Sie in die Geschichte Ihrer Stadt ein!</h1>
             <p>In den Archiven Ihrer Stadt schlummern Dokumente aus vielen Jahrhunderten. Das ist Ihre eigene Geschichte!</p>
-            <p>Für die Kolpingstadt Kerpen haben <a href="/info/ueber-uns">wir</a> dieses Archiv für Sie geöffnet. Viel Spaß beim Durchstäbern Ihrer Stadtgeschichte!</p>
+            <p>Für die Kolpingstadt Kerpen haben <a href="/info/ueber-uns">wir</a> dieses Archiv für Sie geöffnet. Viel Spaß beim Durchstöbern Ihrer Stadtgeschichte!</p>
+            <p class="orientation-center"><a href="/recherche" class="btn btn-success">jetzt durchstöbern</a></p>
         </div>
         <div class="col-md-6">
             <a href="/static/images/kerpen/aussenansicht-fullscreen.jpg" data-toggle="lightbox">
@@ -37,7 +41,8 @@
             <h2>Ihr Archiv noch besser machen</h2>
             <p>Stadtarchive erhalten hin und wieder Dokumente ohne Kontext. Es wäre doch aber schön, wenn wir auch diese Dokumente einordnen könnten.</p>
             <p>Gemeinsam mit Ihnen, den Bürgerinnen und Bürgern dieser Stadt, können wir das schaffen - damit unser Archiv noch besser wird. Wenn Sie also etwas über die auf dem Bild dargestellte Situation, über den Ort oder die Personen schreiben können, so kommentieren Sie einfach das Dokument.</p>
-            <p>Anbei im Slider finden Sie einige dieser Dokumente. Schauen Sie doch mal rein!</p>
+            <p>Anbei im Slider finden Sie einige dieser Dokumente.</p>
+            <p class="orientation-center"><a href="/recherche?help=1" class="btn btn-success">alle anzeigen</a></p>
         </div>
     </div>
     <div class="row row-gap">
@@ -50,6 +55,7 @@
                 Stiftsstraße 8<br>
                 50171 Kerpen
             </p>
+            <p class="orientation-center"><a href="/info/archive" class="btn btn-success">Mehr Informationen</a></p>
         </div>
         <div class="col-md-6">
             <div id="frontpage-map"></div>

@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 
+{% block title %}Archive | {{ super() }}{% endblock %}
+{% block og_title %}Archive | {{ super() }}{% endblock %}
+
 {% block content %}
     <div class="row row-gap">
         <div class="col-md-12">
@@ -14,7 +17,7 @@
         </div>
         <div class="col-md-6">
             <p>Auf unserem neuen Portal „Mein Stadtarchiv“ finden Sie Informationen über die Unterlagen, die sich im Stadtarchiv Kerpen befinden. Sie können sich mit einem einfachen Klick durch unsere verschiedenen Bestände bewegen und sehen, was es hier zu welchem Thema gibt. Die schon digitalisierten Unterlagen – Fotos,  Akten, Pläne – werden nicht nur angezeigt, sondern stehen auch zum Download bereit. Wenn Sie Ihr Wissen über Fotos mit uns teilen wollen, freuen wir uns sehr!</p>
-            <p>Wenn Sie darüberhinaus Fragen haben, sind wir im Stadtarchiv im Haus für Kunst und Geschichte gern für Sie da! Die Benutzung des Stadtarchivs ist für alle interessierten Bürgerinnen und Bürger unentgeltlich möglich.</p>
+            <p>Wenn Sie darüberhinaus Fragen haben, sind wir im Stadtarchiv im Haus für Kunst und Geschichte gern für Sie da! Die <a href="https://www.stadt-kerpen.de/benutzungsordnung_archiv">Benutzung</a> des Stadtarchivs ist für alle interessierten Bürgerinnen und Bürger unentgeltlich möglich.</p>
             <p>
                 Adresse: Stiftsstraße 8, 50171 Kerpen<br>
                 Geöffnet: Di und Mi 09.00–12.00 Uhr, Do 14.00–18.00 Uhr sowie nach Vereinbarung<br>

@@ -9859,37 +9859,12 @@ table#admin-comments a.btn {
 #help-required-carousel .carousel-inner {
   max-height: 330px; }
 
-/* slider based content */
-/*
-#title, #details {
-  text-align: center;
-}
+.orientation-right {
+  text-align: right; }
 
-#title {
-  padding-bottom: 20px;
-}
+.orientation-center {
+  text-align: center; }
 
-#title h3 {
-  font-size: 1rem;
-}
-
-#slider-image {
-  width: 75%;
-  margin: 0 auto;
-}
-
-#slider-control-ui {
-  width: 100%;
-}
-
-.carousel-control-prev {
-  left: -15%;
-}
-
-.carousel-control-next {
-  right: -15%;
-}
-
-#details {
-  padding: 20px 0 20px 0;
-}*/
+#ueber-uns-questionmark {
+  font-size: 8rem;
+  text-align: center; }

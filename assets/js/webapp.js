@@ -434,7 +434,7 @@ function get_search_list_item(id, document) {
     if (document.title)
         html += '<h2><a href="/document/' + document.id + '">' + document.title.replace('<', '&lt;').replace('>', '&gt;') + '</a></h2>';
     else
-        html += '<h2><a href="/document/' + document.id + '">Namenloses Dokument</a></h2>';
+        html += '<h2><a href="/document/' + document.id + '">Unbekannte Darstellung</a></h2>';
 
     meta = [];
     if (document.date) {
@@ -466,7 +466,7 @@ function get_search_list_item(id, document) {
     html += '</div>';
     if (document.files) {
         if (document.files.length) {
-            html += '<div class="search-item-image"><img src="' + stadtarchiv_config.media_url + '/thumbnails/' + document.id + '/' + document.files[0].id + '/150/1.jpg"></div>';
+            html += '<div class="search-item-image"><a href="/document/' + document.id + '"><img src="' + stadtarchiv_config.media_url + '/thumbnails/' + document.id + '/' + document.files[0].id + '/150/1.jpg"></a></div>';
         }
     }
     html += '</li>';

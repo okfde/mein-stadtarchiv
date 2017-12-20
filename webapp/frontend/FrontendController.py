@@ -67,6 +67,11 @@ def impressum():
     return render_template('impressum.html')
 
 
+@frontend.route('/code-of-conduct')
+def code_of_conduct():
+    return render_template('code-of-conduct.html')
+
+
 @frontend.route('/datenschutz')
 def datenschutz():
     return render_template('datenschutz.html')

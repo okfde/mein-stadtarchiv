@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 
+{% block title %}Über Uns | {{ super() }}{% endblock %}
+{% block og_title %}Über Uns | {{ super() }}{% endblock %}
+
 {% block content %}
     <div class="row row-gap">
         <div class="col-md-12">
@@ -10,14 +13,14 @@
     <div class="row row-gap">
         <div class="col-md-8">
             <h2>Stadtarchiv Kerpen</h2>
-            <p>Kein Online-Archiv ohne Offline-Dokumente, soviel ist klar. Das Archiv der Kolpingstadt Kerpen hat für den Anfang die Federführung übernommen und ihr Archiv für die Öffentlichkeit geöffnet. Mehr Informationen finden Sie auf der <a href="/info/archive">Archiv-Seite</a>.</p>
+            <p>Kein Online-Archiv ohne Offline-Dokumente, soviel ist klar. Das Archiv der Kolpingstadt Kerpen hat für den Anfang die Federführung übernommen und seine Bestände für alle geöffnet. Mehr Informationen finden Sie auf der <a href="/info/archive">Archiv-Seite</a>. Die Umsetzung mit freundlicher Unterstützung unserer Archiv-Software-Firma AUGIAS.</p>
         </div>
         <div class="col-md-4 logo-box">
-            <img src="/static/images/logos/kerpen.png" alt="Kolpingstadt Kerpen" class="img-fluid">
+            <img src="/static/images/logos/kerpen.jpg" alt="Kolpingstadt Kerpen" class="img-fluid">
         </div>
     </div>
     <div class="row row-gap">
-        <div class="col-md-8 order-md-2">
+        <div class="col-md-8 order-md-2 orientation-right">
             <h2>KDVZ Rhein-Erft-Rur</h2>
             <p>Ohne IT-Dienstleister keine IT-Anwendungen.</p>
         </div>
@@ -37,12 +40,21 @@
         </div>
     </div>
     <div class="row row-gap">
-        <div class="col-md-8 order-md-2">
-            <h2>OpenNRW</h2>
+        <div class="col-md-8 order-md-2 orientation-right">
+            <h2>Open.NRW</h2>
             <p>Ohne Geld geht es dann doch nicht, und so waren alle oben genannten Projektpartner glücklich, als das Land NRW im Frühjahr 2017 eine Förderung für neue, innovative OpenData-Angebote aufgesetzt hat. Nach einem kurzen und erfolgreichen Bewerbungsprozess hatten wir so die Chance, unsere Ideen realisieren zu können.</p>
         </div>
         <div class="col-md-4 order-md-1">
             <img src="/static/images/logos/open-nrw.png" alt="OpenNRW" class="img-fluid">
+        </div>
+    </div>
+    <div class="row row-gap">
+        <div class="col-md-8">
+            <h2>Ihre Organisation hier?</h2>
+            <p>"Mein Stadtarchiv" ist darauf ausgelegt, mehr als ein Archiv darzustellen. Möchten Sie also mitmachen - sei als Stadtarchiv, welches Daten bereitstellt, sei als Unternehmen, welches Ressourcen bereitstellt - dann <a href="mailt:kontakt@mein-stadtarchiv.de">kontaktieren Sie uns bitte</a>. Herzlichen Dank!</p>
+        </div>
+        <div class="col-md-4" id="ueber-uns-questionmark">
+            <i class="fa fa-question-circle-o" aria-hidden="true"></i>
         </div>
     </div>
 {% endblock %}

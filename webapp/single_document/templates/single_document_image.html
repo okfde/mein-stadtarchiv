@@ -29,6 +29,6 @@
                 {% endif %}
             </a>
         </p>
-        <p>Quelle &amp; Lizenz: <a href="https://www.stadt-kerpen.de/index.phtml?NavID=1708.39&La=1" target="_blank">Stadtarchiv Kerpen</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons BY 4.0</a></p>
+        <p>Quelle: <a href="https://www.stadt-kerpen.de/stadtarchiv" target="_blank">Stadtarchiv Kerpen</a> | Name: <a href="{{ config['PROJECT_URL'] }}/document/{{ document.id }}">{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}</a> | Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons BY 4.0</a></p>
     </div>
 {% endif %}

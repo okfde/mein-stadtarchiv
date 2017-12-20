@@ -26,12 +26,6 @@
                     <input type="number" id="year-start" name="year-start" class="form-control"> -
                     <input type="number" id="year-end" name="year-end" class="form-control">
                 </p>
-                <div id="category-label">Kategorien (<span data-toggle="modal" data-target="#category-overview">Übersicht</span>)</div>
-                <div id="category-box">
-                    <div id="category-current" data-id="root">Alle Archive</div>
-                    <div id="category-parent" class="category-inactive">Eine Ebene hoch</div>
-                    <div id="category-children"></div>
-                </div>
                 <p>
                     <label for="with-files"><input type="checkbox" id="with-files" name="with-files"> Nur Dokumente mit
                         Medien</label>
@@ -40,6 +34,12 @@
                     <label for="help-required"><input type="checkbox" id="help-required" name="help-required">
                         Unbekannte Inhalte</label>
                 </p>
+                <div id="category-label">Kategorien (<span data-toggle="modal" data-target="#category-overview">Übersicht</span>)</div>
+                <div id="category-box">
+                    <div id="category-current" data-id="root">Alle Archive</div>
+                    <div id="category-parent" class="category-inactive">Eine Ebene hoch</div>
+                    <div id="category-children"></div>
+                </div>
                 <p>
                     <input type="submit" name="submit" value="suchen" class="form-control">
                 </p>
