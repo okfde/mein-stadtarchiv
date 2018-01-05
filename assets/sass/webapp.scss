@@ -278,6 +278,10 @@ label[for="year-start"] {
   cursor: pointer;
 }
 
+.category-child i {
+  position: relative;
+}
+
 #category-current {
   border-bottom: 1px solid #ced4da;
 }
@@ -294,6 +298,29 @@ label[for="year-start"] {
 
 .category-child:before {
   content: '\f0a9\00a0';
+}
+
+.category-child i {
+  margin-top: 4px;
+  float: right;
+}
+
+.category-child i:hover div {
+  display: block;
+}
+
+.category-child div {
+  display: none;
+  font-family: 'Open Sans', 'sans-serif';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 400px;
+  background-color: #FFF;
+  padding: 10px;
+  border: 1px solid #666;
+  z-index: 5000;
+  line-height: 1.25rem;
 }
 
 .category-inactive {

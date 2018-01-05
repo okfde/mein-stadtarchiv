@@ -77,6 +77,7 @@ def ead_ddb_push_data():
         # save collection
         collection_uid = collection_xml.get('id')
         collection_title = collection_xml.xpath('./ns:did/ns:unittitle', namespaces=namespaces)
+        collection_descr = collection_xml.xpath('./ns:scopecontent/ns:p', namespaces=namespaces)
         collection_order_id = collection_xml.xpath('./ns:did/ns:unitid', namespaces=namespaces)
         upsert_values = {
             'set__uid': collection_uid,
@@ -88,6 +89,9 @@ def ead_ddb_push_data():
         if len(collection_order_id):
             if collection_order_id[0].text:
                 upsert_values['set__order_id'] = collection_order_id[0].text
+        if len(collection_descr):
+            if collection_descr[0].text:
+                upsert_values['set__description'] = collection_descr[0].text.replace('<lb/>', ' ')
 
         collection = Category.objects(uid=collection_uid).upsert_one(**upsert_values)
         category_count += 1

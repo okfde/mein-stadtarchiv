@@ -11,18 +11,21 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 from flask import current_app
-from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, StringField, ListField, DecimalField, IntField, GeoJsonBaseField
+from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, StringField, ListField, DecimalField, \
+    IntField, GeoJsonBaseField
 from .ArchivDocument import ArchivDocument
 
-class Category(Document, ArchivDocument):
-  uid = StringField(index=True)
-  order_id = StringField()
-  title = StringField()
-  slug = StringField()
-  parent = ReferenceField('Category', deref_document=False)
 
-  def __init__(self, *args, **kwargs):
-    super(Document, self).__init__(*args, **kwargs)
-  
-  def __repr__(self):
-    return '<Category %r>' % self.title
+class Category(Document, ArchivDocument):
+    uid = StringField(index=True)
+    order_id = StringField()
+    title = StringField()
+    description = StringField(fulltext=True)
+    slug = StringField()
+    parent = ReferenceField('Category', deref_document=False)
+
+    def __init__(self, *args, **kwargs):
+        super(Document, self).__init__(*args, **kwargs)
+
+    def __repr__(self):
+        return '<Category %r>' % self.title

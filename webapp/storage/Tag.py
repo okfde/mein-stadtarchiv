@@ -11,15 +11,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 from flask import current_app
-from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, StringField, ListField, DecimalField, IntField, GeoJsonBaseField
+from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, StringField, ListField, DecimalField, \
+    IntField, GeoJsonBaseField
+
 
 class Tag(Document):
-  title = StringField()
-  order_number = StringField()
+    title = StringField()
+    order_number = StringField()
 
+    def __init__(self, *args, **kwargs):
+        super(Document, self).__init__(*args, **kwargs)
 
-  def __init__(self, *args, **kwargs):
-    super(Document, self).__init__(*args, **kwargs)
-  
-  def __repr__(self):
-    return '<Tag %r>' % self.name
+    def __repr__(self):
+        return '<Tag %r>' % self.name

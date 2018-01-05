@@ -280,8 +280,9 @@ function get_category_list(categories) {
 
 function select_category(category_id) {
     category = get_category_data(stadtarchiv_config.categories, category_id, 0);
+    console.log(category);
     $('#category-current').text(category.title).data('id', category.id);
-    if (category.level == 0) {
+    if (category.level === 0) {
         $('#category-parent').addClass('category-inactive');
         $('#category-parent').text('Eine Ebene hoch');
     }
@@ -299,7 +300,7 @@ function select_category(category_id) {
     $('#category-children').html('');
     if (category.children) {
         for (i = 0; i < category.children.length; i++) {
-            $('#category-children').append('<div class="category-child" data-id="' + category.children[i].id + '">' + category.children[i].title + ' (<span>0</span>)</div>');
+            $('#category-children').append('<div class="category-child" data-id="' + category.children[i].id + '">' + category.children[i].title + ' (<span>0</span>)' + ((category.children[i].description) ? ' <i class="fa fa-info-circle" aria-hidden="true"><div>' + category.children[i].description + '</div></i>' : '') + '</div>');
         }
         $('.category-child').click(function () {
             select_category($(this).data('id'));
@@ -309,7 +310,7 @@ function select_category(category_id) {
 }
 
 function get_category_data(categories, category_id, level) {
-    if (category_id == 'root') {
+    if (category_id === 'root') {
         return {
             title: 'Alle Archive',
             id: 'root',
@@ -319,7 +320,7 @@ function get_category_data(categories, category_id, level) {
     }
     else {
         for (var i = 0; i < categories.length; i++) {
-            if (categories[i].id == category_id) {
+            if (categories[i].id === category_id) {
                 categories[i].level = level + 1;
                 return (categories[i]);
             }
@@ -330,6 +331,7 @@ function get_category_data(categories, category_id, level) {
                         child.parent = {
                             id: categories[i].id,
                             title: categories[i].title,
+                            description: categories[i].description,
                             level: level + 1
                         };
                     }
@@ -360,7 +362,7 @@ function search() {
     if (category.children) {
         categories = categories.concat(get_children(category.children));
     }
-    if (category.id != 'root') {
+    if (category.id !== 'root') {
         categories.push(category.id);
     }
 

@@ -26,11 +26,14 @@ recherche = Blueprint('recherche', __name__, template_folder='templates')
 def recherche_main():
     categories = []
     for category_raw in Category.objects(parent__exists=False).all():
-        categories.append({
+        category = {
             'id': str(category_raw.id),
             'title': category_raw.title,
             'children': category_get_children(category_raw.id)
-        })
+        }
+        if category_raw.description:
+            category['description'] = category_raw.description
+        categories.append(category)
     return render_template('recherche.html', categories=categories)
 
 def category_get_children(category_id):
@@ -40,6 +43,8 @@ def category_get_children(category_id):
             'id': str(category_raw.id),
             'title': category_raw.title
         }
+        if category_raw.description:
+            category['description'] = category_raw.description
         children = category_get_children(category_raw.id)
         if len(children):
             category['children'] = children
