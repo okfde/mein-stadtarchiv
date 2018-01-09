@@ -96,17 +96,11 @@ class DataWorkerElasticsearch():
         for document in Document.objects():
             document_dict = document.to_dict('deref_document', format_datetime=True, delete='delete_document')
 
+            document_dict['file_count'] = 0
             if document.files:
-                document_dict['file_count'] = len(document.files)
-                """
-                if document.files[0].thumbnails:
-                    if '1' in document.files[0].thumbnails:
-                        if 'sizes' in document.files[0].thumbnails['1']:
-                            if '600' in document.files[0].thumbnails['1']['sizes']:
-                                document_dict['slider_height'] = document.files[0].thumbnails['1']['sizes']['600']['height']
-                """
-            else:
-                document_dict['file_count'] = 0
+                for file in document.files:
+                    if file.binary_exists:
+                        document_dict['file_count'] += 1
 
             replace_punctuation_re = re.compile('[%s\n\r]' % re.escape(string.punctuation))
             extra_fields = []
