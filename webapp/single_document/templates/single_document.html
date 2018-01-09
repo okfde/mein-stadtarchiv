@@ -79,18 +79,24 @@
 
             <div id="share">
                 <a class="facebook"
-                   href="https://www.facebook.com/share.php?u={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}"
+                   href="https://www.facebook.com/share.php?u={{ config['PROJECT_URL'] }}{{ request.path }}&title=
+                           {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}"
                    target="blank"><i class="fa fa-facebook"></i></a>
                 <a class="twitter"
-                   href="https://twitter.com/intent/tweet?status={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}+{{ config['PROJECT_URL'] }}{{ request.path }}"
+                   href="https://twitter.com/intent/tweet?status=
+                           {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}+
+                           {{ config['PROJECT_URL'] }}{{ request.path }}"
                    target="blank"><i class="fa fa-twitter"></i></a>
                 <a class="googleplus"
                    href="https://plus.google.com/share?url={{ config['PROJECT_URL'] }}{{ request.path }}"
                    target="blank"><i class="fa fa-google-plus"></i></a>
                 <a class="linkedin"
-                   href="https://www.linkedin.com/shareArticle?mini=true&url={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}&source=Unser%20Stadtarchiv"
+                   href="https://www.linkedin.com/shareArticle?mini=true&url=
+                           {{ config['PROJECT_URL'] }}{{ request.path }}&title=
+                           {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}&source=Unser%20Stadtarchiv"
                    target="blank"><i class="fa fa-linkedin"></i></a>
                 <a class="pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media=
+
                         {% if document.files|length %}{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg
                             {% else %}{{ config['PROJECT_URL'] }}/static/images/stadtarchiv.jpg{% endif %}&url=
                         {{ config['PROJECT_URL'] }}{{ request.path }}&is_video=false&description=
@@ -125,13 +131,15 @@
                     {{ form_field(form.submit, 12, 'input-submit') }}
                     {{ form.csrf_token }}
                     <div class="col-md-12">
+                        <p>Mit dem Schreiben eines Kommentars erklären Sie sich mit unseren <a
+                                href="/nutzungsbedingungen">Nutzungsbedingungen</a> einverstanden.</p>
                         <h5>Wie Sie uns helfen können</h5>
                         {% if document.help_required %}
                             <p>Erkennen Sie, was auf dem Bild zu sehen ist und wann es entstanden sein könnte?</p>
                         {% else %}
-                            <p>Dieses Dokument ist Teil des Stadtarchives. Wir kennen den Kontext des Bildes, aber vielleicht können Sie spannende Details ergänzen?</p>
+                            <p>Dieses Dokument ist Teil des Stadtarchives. Wir kennen den Kontext des Bildes, aber
+                                vielleicht können Sie spannende Details ergänzen?</p>
                         {% endif %}
-                        <p>Mit dem Schreiben eines Kommentars erklären Sie sich mit unseren <a gref="/nutzungsbedingungen">Nutzungsbedingungen</a> einverstanden.</p>
                     </div>
                 </div>
             </form>
