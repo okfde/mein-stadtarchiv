@@ -42,8 +42,8 @@ def root():
                                     }
                                 },
                                 {
-                                    'file_count': {
-                                        'help_required': {
+                                    'range': {
+                                        'file_count': {
                                             'gte': 1
                                         }
                                     }
@@ -59,13 +59,6 @@ def root():
         size = 5,
         from_ = 1
     )
-    """
-    max_height = 0
-    for item in result_raw['hits']['hits']:
-        if 'slider_height' in item['_source']:
-            if item['_source']['slider_height'] > max_height:
-                max_height = item['_source']['slider_height']
-    """
     return render_template('index.html', documents=result_raw['hits']['hits'])
 
 
