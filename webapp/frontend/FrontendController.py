@@ -40,6 +40,13 @@ def root():
                                             'gte': 1
                                         }
                                     }
+                                },
+                                {
+                                    'file_count': {
+                                        'help_required': {
+                                            'gte': 1
+                                        }
+                                    }
                                 }
                             ]
                         }
