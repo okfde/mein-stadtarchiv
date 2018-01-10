@@ -105,7 +105,12 @@ class DataWorkerThumbnails():
                 max_path = max_folder + os.sep + '1.png'
                 im = Image.open(file_path)
                 if im.mode == 'YCbCr':
-                    im = im.convert('RGB')
+                    try:
+                        im = im.convert('RGB')
+                    except IOError:
+                        current_app.logger.error('FATAL: File %s seems to be corrupt.' % file.id)
+                        im.close()
+                        continue
                 im.save(max_path)
                 im.close()
 

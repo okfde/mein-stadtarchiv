@@ -1,10 +1,6 @@
 config.py
 *.py[cod]
 
-*.komodoedit
-.komodotools
-*.komodoproject
-
 .DS_Store
 ._*
 *~
@@ -15,5 +11,8 @@ venv
 node_modules
 tmp
 logs
-temp
+temp/upload/*
+!temp/upload/.gitkeep
+temp/thumbnails/*
+!temp/thumbnails/.gitkeep
 static/sitemap/*.xml*
