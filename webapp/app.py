@@ -17,7 +17,7 @@ from webapp import config as Config
 from .common import Response
 from .common import constants as COMMON_CONSTANTS
 from .common.filter import register_global_filters
-from .extensions import db, es, login_manager, csrf, mail, celery
+from .extensions import db, es, login_manager, csrf, mail, celery, cache
 from .models import User
 
 # Blueprints
@@ -110,6 +110,8 @@ def configure_extensions(app):
     # celery
     celery.init_app(app)
 
+    # flask-cache
+    cache.init_app(app)
 
 def configure_blueprints(app, blueprints):
     for blueprint in blueprints:

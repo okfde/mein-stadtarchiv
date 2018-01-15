@@ -5,10 +5,12 @@ Flask-ElasticSearch
 Flask-WTF
 Flask-Login
 Flask-Mail
+Flask-Cache
 Flask-MongoEngine
 Flask-Celery-Helper
 python-dateutil
 translitcodec
+python-memcached
 pytz
 passlib
 bcrypt
