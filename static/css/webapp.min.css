@@ -9891,3 +9891,6 @@ table#admin-comments a.btn {
 #ueber-uns-questionmark {
   font-size: 8rem;
   text-align: center; }
+
+#team-gallery img {
+  margin-bottom: 30px; }
