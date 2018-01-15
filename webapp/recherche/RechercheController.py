@@ -16,7 +16,7 @@ from flask import (Flask, Blueprint, render_template, current_app, request, flas
                    jsonify, send_from_directory)
 from ..common.response import json_response
 from ..models import Category
-from ..extensions import es, csrf
+from ..extensions import es, csrf, cache
 from .RechercheHelper import *
 
 recherche = Blueprint('recherche', __name__, template_folder='templates')
@@ -24,6 +24,10 @@ recherche = Blueprint('recherche', __name__, template_folder='templates')
 
 @recherche.route('/recherche')
 def recherche_main():
+    return render_template('recherche.html', categories=get_categories())
+
+@cache.memoize(600)
+def get_categories():
     categories = []
     for category_raw in Category.objects(parent__exists=False).all():
         category = {
@@ -34,7 +38,8 @@ def recherche_main():
         if category_raw.description:
             category['description'] = category_raw.description
         categories.append(category)
-    return render_template('recherche.html', categories=categories)
+    return categories
+
 
 def category_get_children(category_id):
     categories = []
