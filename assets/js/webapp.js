@@ -484,3 +484,4 @@ function generate_pagination_html(total, current_page, items_per_page) {
     list_html += '<div class="pagination-center-box">Seite ' + current_page + ' von ' + max_pages + '</div>';
     return (list_html);
 }
+
