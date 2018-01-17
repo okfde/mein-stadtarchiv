@@ -104,7 +104,7 @@ class DataWorkerThumbnails():
             else:
                 max_path = max_folder + os.sep + '1.png'
                 im = Image.open(file_path)
-                if im.mode == 'YCbCr':
+                if im.mode in ['YCbCr', 'RGBA']:
                     try:
                         im = im.convert('RGB')
                     except IOError:
