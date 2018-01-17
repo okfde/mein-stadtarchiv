@@ -33,4 +33,9 @@
             <p>Quelle: <a href="https://www.stadt-kerpen.de/stadtarchiv" target="_blank">Stadtarchiv Kerpen</a> | Name: <a href="{{ config['PROJECT_URL'] }}/document/{{ document.id }}">{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}</a> | Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons BY 4.0</a></p>
         </div>
     {% endif %}
+{% else %}
+    <div id="document-image-missing">
+        Dieses Dokument wurde noch nicht digitalisiert. Sie können es sich aber vort Ort im Stadtarchiv anschauen. Es werden über die Zeit immer mehr Dokumente digitalisiert und hier veröffentlicht, da dies aber geld- und zeitaufwändig ist, haben Sie bitte ein wenig (mehr) Geduld.
+        Wenn Sie auf der Suche nach Medien sind, können Sie bei der Suche dies ganz einfach einstellen.
+    </div>
 {% endif %}

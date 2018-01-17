@@ -9885,3 +9885,6 @@ table#admin-comments a.btn {
 
 #team-gallery img {
   margin-bottom: 30px; }
+
+#document-image-missing {
+  font-style: italic; }
