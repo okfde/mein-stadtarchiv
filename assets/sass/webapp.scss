@@ -144,14 +144,14 @@ label[for="year-start"] {
   width: auto;
 }
 
-.search-pagination {
+#search-pagination {
   border: 1px solid #ddd;
   height: 50px;
   text-align: center;
   margin-bottom: 10px;
 }
 
-.search-pagination .pagination-page {
+#search-pagination .pagination-page {
   width: 50px;
   height: 50px;
   text-align: center;
@@ -159,41 +159,41 @@ label[for="year-start"] {
   padding-top: 8px;
 }
 
-.search-pagination .pagination-page.inactive {
+#search-pagination .pagination-page.inactive {
   color: #AAAAAA;
   cursor: not-allowed;
 }
 
-.search-pagination .pagination-page.active {
+#search-pagination .pagination-page.active {
   color: #666666;
   cursor: pointer;
 }
 
-.search-pagination .position-left {
+#search-pagination .position-left {
   float: left;
   border-right: 1px solid #ddd;
 }
 
-.search-pagination .position-right {
+#search-pagination .position-right {
   float: right;
   border-left: 1px solid #ddd;
 }
 
-.search-pagination .pagination-center-box {
+#search-pagination .pagination-center-box {
   display: inline-block;
 }
 
-.search-pagination .pagination-center-box {
+#search-pagination .pagination-center-box {
   color: #666666;
   font-size: 20px;
   padding-top: 10px;
 }
 
-.search-pagination .position-center {
+#search-pagination .position-center {
   border-right: 1px solid #ddd;
 }
 
-.search-pagination .pagination-page.active {
+#search-pagination .pagination-page.active {
   font-weight: bold;
 }
 

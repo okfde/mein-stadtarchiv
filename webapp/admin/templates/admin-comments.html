@@ -36,7 +36,7 @@
                     <tr>
                         <td>{{ comment.created|datetime }}</td>
                         <td><a href="mailto:{{ comment.author_email }}">{{ comment.author_name }}</a></td>
-                        <td><a href="/document/{{ comment.document.id }}">{{ comment.document.title }}</a></td>
+                        <td><a href="/document/{{ comment.document.id }}">{% if comment.document.title %}{{ comment.document.title }}{% else %}Unbekannte Darstellung{% endif %}</a></td>
                         <td>{{ comment.content }}</td>
                         <td>{% if comment.status == 1 %}freigeschaltet{% elif comment.status == 0 %}offen{% else %}gelöscht{% endif %}</td>
                         <td>
