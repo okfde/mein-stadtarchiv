@@ -280,7 +280,6 @@ function get_category_list(categories) {
 
 function select_category(category_id) {
     category = get_category_data(stadtarchiv_config.categories, category_id, 0);
-    console.log(category);
     $('#category-current').text(category.title).data('id', category.id);
     if (category.level === 0) {
         $('#category-parent').addClass('category-inactive');

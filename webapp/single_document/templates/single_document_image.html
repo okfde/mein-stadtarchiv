@@ -20,10 +20,10 @@
                     <i class="fa fa-download" aria-hidden="true"></i> Download der Datei in Originalgröße
                     {% if document.files[0].mimeType %}
                         ({% if document.files[0].mimeType == 'image/jpeg' %}JPEG,
-                        {% elif document.files[0].mimeType == 'image/tiff' %}TIFF,
-                        {% elif document.files[0].mimeType == 'application/pdf' %}PDF,
-                        {% else %}{{ document.files[0].mimeType }},
-                    {% endif %}
+                            {% elif document.files[0].mimeType == 'image/tiff' %}TIFF,
+                            {% elif document.files[0].mimeType == 'application/pdf' %}PDF,
+                            {% else %}{{ document.files[0].mimeType }},
+                        {% endif %}
                     {% endif %}
                     {% if document.files[0].size %}
                         {{ document.files[0].size|filesize }})
