@@ -25,7 +25,7 @@
                     Kategorie{% if document.categories|length > 1 %}n{% endif %}:
                     {% for categories in document.categories %}
                         {% for category in categories %}
-                            {{ category.title }}{% if not loop.last %}
+                            <a href="/recherche?category={{ category.id }}">{{ category.title }}</a>{% if not loop.last %}
                                 <span class="category-arrow">→</span>{% endif %}
                         {% endfor %}
                         {% if not loop.last %}, {% endif %}
