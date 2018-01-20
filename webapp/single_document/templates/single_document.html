@@ -63,6 +63,12 @@
                     <div class="col-6">Laufende Nummer</div>
                     <div class="col-6">{{ document.order_id }}</div>
                 </div>
+                {% if document.origination %}
+                <div class="row">
+                    <div class="col-6">Herkunft</div>
+                    <div class="col-6">{{ document.origination }}</div>
+                </div>
+                {% endif %}
                 {% if document.extra_fields %}
                     {% for extra_field_key, extra_field_value in document.extra_fields.items() %}
                         <div class="row">
