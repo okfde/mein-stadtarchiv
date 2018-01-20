@@ -132,6 +132,7 @@ function init_search_page() {
     }
     $('.category-child, #category-parent').click(function() {
         if (!$(this).hasClass('category-inactive')) {
+            storage.current_page = 1;
             select_category($(this).data('id'));
         }
     });
