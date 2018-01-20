@@ -228,6 +228,7 @@ class DataWorkerElasticsearch():
                         'limit': 2000
                     }
                 },
+                'max_result_window': 32000,
                 'analysis': {
                     'filter': {
                         'german_stop': {
