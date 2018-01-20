@@ -23,7 +23,7 @@ user = Blueprint('user', __name__, template_folder='templates')
 @user.route('/login', methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
-        return redirect('/dashboard')
+        return redirect('/admin')
     form = LoginForm()
     if form.validate_on_submit():
         user, authenticated = User.authenticate(form.email.data, form.password.data, form.remember_me.data)
