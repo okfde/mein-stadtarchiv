@@ -132,7 +132,6 @@ function init_search_page() {
     }
     $('.category-child, #category-parent').click(function() {
         if (!$(this).hasClass('category-inactive')) {
-            storage.current_page = 1;
             select_category($(this).data('id'));
         }
     });
@@ -306,6 +305,7 @@ function select_category(category_id) {
             select_category($(this).data('id'));
         });
     }
+    storage.current_page = 1;
     search();
 }
 
