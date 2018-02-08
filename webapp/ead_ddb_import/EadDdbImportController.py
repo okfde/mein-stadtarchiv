@@ -148,6 +148,7 @@ def save_document(document_xml, category, namespaces):
     }
     # title
     title = document_xml.xpath('./ns:did/ns:unittitle', namespaces=namespaces)
+    upsert_values['set__help_required'] = 0
     if len(title):
         if title[0].text:
             title = title[0].text.replace('<lb/>', ' ')
