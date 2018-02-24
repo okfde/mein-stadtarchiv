@@ -112,13 +112,18 @@
                     {% else %}{{ comments|length }} Kommentare{% endif %}</h3>
                 {% for comment in comments %}
                     <div class="document-comment{% if loop.index % 2 == 1 %} document-comment-alt{% endif %}">
-                        <p class="document-comment-meta">{{ comment.author_name }} schrieb
-                            am {{ comment.created|datetime }}:</p>
+                        <p class="document-comment-meta">
+                            {% if comment.status == 2 %}<i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            {% else %}<i class="fa fa-check-circle" aria-hidden="true"></i>{% endif %}
+                            {{ comment.author_name }} schrieb am {{ comment.created|datetime }}:
+                        </p>
                         <div class="document-comment-content">{{ comment.content }}</div>
                     </div>
                 {% else %}
-                    <p>Es wurden noch keine Kommentare geschrieben. Aber vielleicht können Sie uns helfen, das Dokument
-                        besser einzuordnen? Schreiben Sie gerne etwas dazu!</p>
+                    <p>
+                        Es wurden noch keine Kommentare geschrieben. Aber vielleicht können Sie uns helfen, das Dokument
+                        besser einzuordnen? Schreiben Sie gerne etwas dazu!
+                    </p>
                 {% endfor %}
             </div>
             <form class="container" method="POST" action="/document/{{ document.id }}" id="comment-form">
@@ -141,6 +146,7 @@
                             <p>Dieses Dokument ist Teil des Stadtarchives. Wir kennen den Kontext des Bildes, aber
                                 vielleicht können Sie spannende Details ergänzen?</p>
                         {% endif %}
+                        <p><i class="fa fa-check-circle" aria-hidden="true"></i> Gesichteter Kommentar | <i class="fa fa-plus-circle" aria-hidden="true"></i> Neuer Kommentar</p>
                     </div>
                 </div>
             </form>

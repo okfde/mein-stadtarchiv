@@ -18,6 +18,7 @@ from webapp.extensions import db, celery
 import webapp.models as Models
 from webapp.config import DefaultConfig
 from webapp.data_worker.DataWorkerHelper import worker as data_worker_run, upsert_login as upsert_login_run
+from webapp.data_worker.DataWorkerFixValues import fix_values as fix_values_worker
 
 app = launch()
 
@@ -36,6 +37,10 @@ def data_worker():
 @manager.command
 def upsert_login(email, password):
     upsert_login_run(email, password)
+
+@manager.command
+def fix_values():
+    fix_values_worker()
 
 
 @manager.command

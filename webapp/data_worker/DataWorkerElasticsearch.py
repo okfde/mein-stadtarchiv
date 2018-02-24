@@ -41,7 +41,7 @@ class DataWorkerElasticsearch():
             }
             """
             mapping['properties']['category_full'] = {
-                'type': 'string'
+                'type': 'text'
             }
             mapping['properties']['date_sort'] = {
                 'type': 'date',
@@ -49,11 +49,10 @@ class DataWorkerElasticsearch():
             }
 
             mapping['properties']['extra_field_text'] = {
-                'type': 'string',
+                'type': 'text',
                 'fields': {
                     'fulltext': {
-                        'type': 'string',
-                        'index': 'analyzed',
+                        'type': 'text',
                         'analyzer': 'default_analyzer'
                     }
                 }
@@ -178,7 +177,7 @@ class DataWorkerElasticsearch():
     def es_mapping_field_generator(self, field):
         result = {'store': True}
         if field.__class__.__name__ == 'ObjectIdField':
-            result['type'] = 'string'
+            result['type'] = 'text'
             result['fielddata'] = True
         elif field.__class__.__name__ == 'IntField':
             result['type'] = 'integer'
@@ -190,18 +189,16 @@ class DataWorkerElasticsearch():
                 result['format'] = 'date'
         elif field.__class__.__name__ == 'StringField':
             result['fields'] = {}
-            result['type'] = 'string'
+            result['type'] = 'text'
+            result['fielddata'] = True
             if hasattr(field, 'fulltext'):
                 result['fields']['fulltext'] = {
-                    'index': 'analyzed',
-                    'type': 'string',
+                    'type': 'text',
                     'analyzer': 'default_analyzer'
                 }
-            else:
-                result['index'] = 'not_analyzed'
             if hasattr(field, 'sortable'):
                 result['fields']['sort'] = {
-                    'type': 'string',
+                    'type': 'text',
                     'analyzer': 'sort_analyzer',
                     'fielddata': True
                 }
@@ -214,7 +211,7 @@ class DataWorkerElasticsearch():
     def es_mapping_field_object(self):
         return {
             'store': True,
-            'type': 'string'
+            'type': 'text'
         }
 
     def es_settings(self):

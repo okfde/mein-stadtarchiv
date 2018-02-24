@@ -19,7 +19,8 @@
                         </p>
                         <p>{{ comment.content }}</p>
                         <p class="admin-comment-actions">
-                            {% if comment.status != 1 %}<a href="/admin/comment?id={{ comment.id }}&status=1" class="btn btn-success">freischalten</a>{% endif %}
+                            {% if comment.status < 1 %}<a href="/admin/comment?id={{ comment.id }}&status=1" class="btn btn-success">freischalten</a>{% endif %}
+                            {% if comment.status < 2 %}<a href="/admin/comment?id={{ comment.id }}&status=2" class="btn btn-success">sichten</a>{% endif %}
                             <a href="/admin/comment?id={{ comment.id }}&status=-1" class="btn btn-danger">löschen</a></p>
                     </div>
                 {% endfor %}

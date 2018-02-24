@@ -38,10 +38,15 @@
                         <td><a href="mailto:{{ comment.author_email }}">{{ comment.author_name }}</a></td>
                         <td><a href="/document/{{ comment.document.id }}">{% if comment.document.title %}{{ comment.document.title }}{% else %}Unbekannte Darstellung{% endif %}</a></td>
                         <td>{{ comment.content }}</td>
-                        <td>{% if comment.status == 1 %}freigeschaltet{% elif comment.status == 0 %}offen{% else %}gelöscht{% endif %}</td>
+                        <td>{% if comment.status == 2 %}gesichtet{% elif comment.status == 1 %}freigeschaltet{% elif comment.status == 0 %}offen{% else %}gelöscht{% endif %}</td>
                         <td>
-                            {% if comment.status != 1 %}<a href="/admin/comment?id={{ comment.id }}&status=1&page={{ page }}" class="btn btn-success">freischalten</a>
-                            {% endif %}<a href="/admin/comment?id={{ comment.id }}&status=-1&page={{ page }}" class="btn btn-danger">löschen</a>
+                            {% if comment.status < 1 %}
+                                <a href="/admin/comment?id={{ comment.id }}&status=1&page={{ page }}" class="btn btn-success">freischalten</a>
+                            {% endif %}
+                            {% if comment.status < 2 %}
+                                <a href="/admin/comment?id={{ comment.id }}&status=2&page={{ page }}" class="btn btn-success">sichten</a>
+                            {% endif %}
+                            <a href="/admin/comment?id={{ comment.id }}&status=-1&page={{ page }}" class="btn btn-danger">löschen</a>
                         </td>
                     </tr>
                 {% endfor %}

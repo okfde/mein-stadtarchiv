@@ -152,7 +152,6 @@ def recherche_api():
         index=current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
         doc_type='document',
         body={
-            'query': {},
             'aggs': aggs_query
         },
         _source='',

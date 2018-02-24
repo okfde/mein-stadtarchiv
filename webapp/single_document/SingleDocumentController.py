@@ -38,7 +38,7 @@ def single_document_main(id):
             category = category.parent
     document.categories = categories
 
-    comments = Comment.objects(document=document, status=1).order_by('-created').all()
+    comments = Comment.objects(document=document, status__gte=1).order_by('-created').all()
 
     form = CommentForm()
     if form.validate_on_submit():
