@@ -61,7 +61,7 @@ class DataWorkerSitemap():
                 for document in documents.all():
                     f.write("  <url><loc>%s/document/%s</loc><lastmod>%s</lastmod></url>\n" % (current_app.config['PROJECT_URL'], document.id, document.modified.strftime('%Y-%m-%d')))
                 f.write("</urlset>\n")
-            subprocess.call(['gzip', sitemap_path])
+            subprocess.call([current_app.config['GZIP_PATH'], sitemap_path])
             self.sitemaps.append('documents-%s.xml' % sitemap_number)
             sitemap_number += 1
 
