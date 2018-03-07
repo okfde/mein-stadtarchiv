@@ -14,7 +14,7 @@ import datetime
 from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
                    jsonify, send_from_directory)
 from flask_login import login_required, login_user, current_user, logout_user, confirm_login, login_fresh
-from ..extensions import db
+from ..extensions import db, logger
 from ..models import Comment
 
 admin = Blueprint('admin', __name__, template_folder='templates')
@@ -48,6 +48,7 @@ def admin_comment():
         return redirect('/admin/comments')
     comment.status = status
     comment.save()
+    logger.info('comment', 'comment %s changes status to %s' % (comment.id, comment.status))
     if status == 1:
         flash('Kommentar erfolgreich freigeschaltet', 'success')
     if status == 2:

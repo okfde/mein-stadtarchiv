@@ -1,9 +1,6 @@
 config.py
 *.py[cod]
 
-.DS_Store
-._*
-*~
 .idea
 
 migrations
@@ -11,6 +8,7 @@ venv
 node_modules
 tmp
 logs
+!logs/.gitkeep
 temp/upload/*
 !temp/upload/.gitkeep
 temp/thumbnails/*

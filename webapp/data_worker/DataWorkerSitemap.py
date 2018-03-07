@@ -15,17 +15,33 @@ import math
 import subprocess
 from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
                    jsonify, send_from_directory)
-from ..models import Document
+from ..models import Document, Option
+from ..extensions import logger
 
 class DataWorkerSitemap():
     def __init__(self):
         pass
 
     def run(self, *args):
+        logger.info('worker.sitemap', 'create sitemap')
+        lock = Option.objects(key='sitemap_lock').first()
+        if lock:
+            if lock.value == '1':
+                return
+        else:
+            lock = Option()
+            lock.key = 'sitemap_lock'
+        lock.value = '1'
+        lock.save()
+
         self.sitemaps = []
         self.tidy_up()
         self.generate_document_sitemap()
         self.generate_meta_sitemap()
+
+        lock = Option.objects(key='sitemap_lock').first()
+        lock.value = '0'
+        lock.save()
         # Create meta-sitemap
 
     def tidy_up(self):
@@ -49,10 +65,6 @@ class DataWorkerSitemap():
             self.sitemaps.append('documents-%s.xml' % sitemap_number)
             sitemap_number += 1
 
-
-
-
-
     def generate_meta_sitemap(self):
         meta_sitemap_path = os.path.join(current_app.config['SITEMAP_DIR'], 'sitemap.xml')
         with open(meta_sitemap_path, 'w') as f:
@@ -61,5 +73,3 @@ class DataWorkerSitemap():
             for sitemap_name in self.sitemaps:
                 f.write("  <sitemap><loc>%s/static/sitemap/%s.gz</loc></sitemap>\n" % (current_app.config['PROJECT_URL'], sitemap_name))
             f.write("</sitemapindex>\n")
-
-

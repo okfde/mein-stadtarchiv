@@ -18,3 +18,4 @@ from .File import File
 from .Person import Person
 from .Comment import Comment
 from .User import User
+from .Option import Option

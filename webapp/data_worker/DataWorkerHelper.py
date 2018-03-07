@@ -16,7 +16,8 @@ from flask import (Flask, Blueprint, render_template, current_app, request, flas
 from .DataWorkerElasticsearch import DataWorkerElasticsearch
 from .DataWorkerThumbnails import DataWorkerThumbnails
 from .DataWorkerSitemap import DataWorkerSitemap
-from ..models import User
+from ..models import User, Document
+from ..extensions import celery
 
 
 def worker():
@@ -26,6 +27,27 @@ def worker():
     data_worker_elasticsearch.run()
     data_worker_sitemap = DataWorkerSitemap()
     data_worker_sitemap.run()
+
+@celery.task()
+def worker_celery_full():
+    data_worker_thumbnails = DataWorkerThumbnails()
+    data_worker_thumbnails.run()
+    data_worker_sitemap = DataWorkerSitemap()
+    data_worker_sitemap.run()
+
+@celery.task()
+def worker_celery_single(document_id):
+    document = Document.objects(id=document_id).first()
+
+    data_worker_thumbnails = DataWorkerThumbnails()
+    data_worker_thumbnails.prepare()
+    if document.files:
+        for file in document.files:
+            data_worker_thumbnails.file_thumbnails(file)
+
+    data_worker_elasticsearch = DataWorkerElasticsearch()
+    data_worker_elasticsearch.prepare()
+    data_worker_elasticsearch.index_document(document)
 
 
 def upsert_login(email, password):

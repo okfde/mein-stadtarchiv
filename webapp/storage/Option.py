@@ -10,16 +10,11 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
+import datetime
+from flask import current_app
+from mongoengine import Document, ReferenceField, DateTimeField, StringField, ListField, DecimalField, IntField, BooleanField, DictField
+from .ArchivDocument import ArchivDocument
 
-from .DataWorkerElasticsearch import DataWorkerElasticsearch
-from .DataWorkerThumbnails import DataWorkerThumbnails
-from .DataWorkerSitemap import DataWorkerSitemap
-from ..models import Document, File
-
-def fix_values():
-    for document in Document.objects().no_cache().all():
-        for file in document.files:
-            if document.uid + '-' + document.order_id != file.externalId:
-                print('strange document %s %s with file %s found' % (document.id, document.order_id, file.externalId))
+class Option(Document):
+    key = StringField()
+    value = StringField()

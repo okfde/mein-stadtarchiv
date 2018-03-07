@@ -16,7 +16,7 @@ from flask import (Flask, Blueprint, render_template, current_app, request, flas
 from flask_login import login_required, login_user, current_user, logout_user, confirm_login, login_fresh
 from .UserForms import *
 from ..models import User
-from ..extensions import db
+from ..extensions import db, logger
 user = Blueprint('user', __name__, template_folder='templates')
 
 
@@ -28,6 +28,7 @@ def index():
     if form.validate_on_submit():
         user, authenticated = User.authenticate(form.email.data, form.password.data, form.remember_me.data)
         if authenticated:
+            logger.info('user', 'user %s logged in' % user.id)
             flash('Login erfolgreich.', 'success')
             return redirect('/admin')
         flash('Zugangsdaten nicht korrekt', 'danger')

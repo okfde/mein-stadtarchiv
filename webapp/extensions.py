@@ -34,3 +34,6 @@ es = FlaskElasticsearch()
 
 from flask_cache import Cache
 cache = Cache(config={'CACHE_TYPE': 'memcached'})
+
+from .common.logger import Logger
+logger = Logger()
