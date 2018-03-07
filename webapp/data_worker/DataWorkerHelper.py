@@ -30,8 +30,8 @@ def worker():
 
 @celery.task()
 def worker_celery_full():
-    data_worker_thumbnails = DataWorkerThumbnails()
-    data_worker_thumbnails.run()
+    data_worker_elasticsearch = DataWorkerElasticsearch()
+    data_worker_elasticsearch.run()
     data_worker_sitemap = DataWorkerSitemap()
     data_worker_sitemap.run()
 
