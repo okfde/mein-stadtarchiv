@@ -15,7 +15,7 @@ import datetime
 from flask import current_app, request, abort
 from ..common.response import json_response, xml_response
 from ..common.helpers import get_minio_connection, slugify
-from ..extensions import csrf
+from ..extensions import csrf, logger
 from ..models import Document, File
 from minio.error import ResponseError, SignatureDoesNotMatch
 from urllib3.exceptions import MaxRetryError
@@ -42,6 +42,8 @@ def ead_ddb_push_media():
     document_uid = request.form.get('document_uid')
     if not file_name or not document_uid:
         return xml_response(generate_xml_answer('data missing', 'file not saved'))
+
+    logger.info('api.eadddb.file', 'file %s was uploaded for document %s' % (file_name, document_uid))
 
     file = File.objects(externalId=document_uid + '-' + file_name).first()
     if not file:

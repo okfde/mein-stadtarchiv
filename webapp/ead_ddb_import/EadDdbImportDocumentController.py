@@ -15,7 +15,7 @@ import datetime
 from lxml import etree
 from flask import current_app, request, abort
 from ..common.response import json_response, xml_response
-from ..extensions import csrf
+from ..extensions import csrf, logger
 from ..models import Dump, Category, Document, File
 from ..data_worker.DataWorkerHelper import worker_celery_full
 
@@ -59,6 +59,7 @@ def ead_ddb_push_data():
     # we support multible collections (does this ever happen?)
     collections_xml = xml_data.xpath('.//ns:archdesc[@level="collection"]/ns:dsc/ns:c[@level="collection"]',
                                      namespaces=namespaces)
+
     for collection_xml in collections_xml:
         # save collection
         collection_uid = collection_xml.get('id')
@@ -78,6 +79,8 @@ def ead_ddb_push_data():
         if len(collection_descr):
             if collection_descr[0].text:
                 upsert_values['set__description'] = collection_descr[0].text.replace('<lb/>', ' ')
+
+        logger.info('api.eadddb.document', '%s has uploaded %s' % (archive_title, collection_title))
 
         collection = Category.objects(uid=collection_uid).upsert_one(**upsert_values)
         category_count += 1

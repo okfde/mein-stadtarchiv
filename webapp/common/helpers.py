@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 from flask.json import JSONEncoder as BaseJSONEncoder
 from minio import Minio
 from minio.error import (ResponseError, BucketAlreadyOwnedByYou, BucketAlreadyExists)
-from minio.policy import Policy
+#from minio.policy import Policy
 
 
 slugify_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
@@ -52,10 +52,10 @@ def get_minio_connection():
         pass
     except BucketAlreadyExists as err:
         pass
-    if s3.get_bucket_policy(current_app.config['S3_BUCKET'], 'files') != 'readonly':
-        s3.set_bucket_policy(current_app.config['S3_BUCKET'], 'files', Policy.READ_ONLY)
-    if s3.get_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails') != 'readonly':
-        s3.set_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails', Policy.READ_ONLY)
+    #if s3.get_bucket_policy(current_app.config['S3_BUCKET'], 'files') != 'readonly':
+    #    s3.set_bucket_policy(current_app.config['S3_BUCKET'], 'files', Policy.READ_ONLY)
+    #if s3.get_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails') != 'readonly':
+    #    s3.set_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails', Policy.READ_ONLY)
     return s3
 
 

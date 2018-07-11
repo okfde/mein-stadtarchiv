@@ -50,8 +50,9 @@ class DataWorkerElasticsearch():
         start_with = False
         last_run = Option.objects(key='elasticsearch_last_run').first()
         if last_run:
-            if last_run.value:
-                start_with = datetime.fromtimestamp(int(last_run.value))
+            pass
+            #if last_run.value:
+            #    start_with = datetime.fromtimestamp(int(last_run.value))
         else:
             last_run = Option()
             last_run.key = 'elasticsearch_last_run'

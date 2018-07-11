@@ -32,7 +32,7 @@ celery = Celery()
 from flask_elasticsearch import FlaskElasticsearch
 es = FlaskElasticsearch()
 
-from flask_cache import Cache
+from flask_caching import Cache
 cache = Cache(config={'CACHE_TYPE': 'memcached'})
 
 from .common.logger import Logger

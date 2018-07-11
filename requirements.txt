@@ -5,7 +5,8 @@ Flask-ElasticSearch
 Flask-WTF
 Flask-Login
 Flask-Mail
-Flask-Cache
+Flask-Caching
+Flask-Failsafe
 Flask-MongoEngine
 Flask-Celery-Helper
 python-dateutil
@@ -18,3 +19,4 @@ lxml
 minio
 pillow
 bs4
+redis
