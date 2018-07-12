@@ -41,7 +41,7 @@ class ElasticRequest():
         })
 
     def escape_query_string(self, search_string):
-        search_string.replace('/', '\\/')
+        search_string = search_string.replace('/', '\\/')
         return search_string
 
     def set_fqs(self, data):
