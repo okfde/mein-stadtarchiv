@@ -22,6 +22,8 @@ from ..common.helpers import get_minio_connection
 from minio.error import ResponseError, NoSuchKey
 from ..extensions import logger
 
+Image.MAX_IMAGE_PIXELS = None
+
 class DataWorkerThumbnails():
     def __init__(self):
         ImageFile.LOAD_TRUNCATED_IMAGES = True

@@ -24,6 +24,7 @@ from ..data_worker.DataWorkerHelper import worker_celery_single
 
 from .EadDdbImportController import ead_ddb_import, generate_xml_answer
 
+Image.MAX_IMAGE_PIXELS = None
 
 file_endings = {
     'image/tiff': 'tif',
