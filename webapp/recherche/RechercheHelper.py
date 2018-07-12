@@ -47,6 +47,7 @@ def filter_year(query_parts, year_start, year_end):
 
 def filter_search_string(query_parts, search_string):
     if search_string:
+        search_string = search_string.replace('/', '\\/')
         query_parts.append(
             {
                 'bool': {

@@ -39,6 +39,7 @@ class ElasticRequest():
                 'default_operator': 'and',
             }
         })
+        print(self.query_parts_must)
 
     def escape_query_string(self, search_string):
         search_string = search_string.replace('/', '\\/')
