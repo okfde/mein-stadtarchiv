@@ -32,12 +32,17 @@ class ElasticRequest():
         self.result_raw = False
 
     def set_q(self, search_string):
+        search_string = self.escape_query_string(search_string)
         self.query_parts_must.append({
             'simple_query_string': {
                 'query': search_string,
                 'default_operator': 'and',
             }
         })
+
+    def escape_query_string(self, search_string):
+        search_string.replace('/', '\\/')
+        return search_string
 
     def set_fqs(self, data):
         for key, value in data.items():
