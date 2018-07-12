@@ -33,7 +33,7 @@ class ElasticRequest():
 
     def set_q(self, search_string):
         self.query_parts_must.append({
-            'query_string': {
+            'simple_query_string': {
                 'query': search_string,
                 'default_operator': 'and',
             }
