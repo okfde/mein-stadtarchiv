@@ -22,6 +22,7 @@ class Category(Document, ArchivDocument):
     title = StringField()
     description = StringField(fulltext=True)
     slug = StringField()
+    auth = StringField()
     parent = ReferenceField('Category', deref_document=False)
 
     def __init__(self, *args, **kwargs):

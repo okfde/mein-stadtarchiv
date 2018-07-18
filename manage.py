@@ -18,6 +18,7 @@ from webapp.extensions import db, celery
 import webapp.models as Models
 from webapp.config import DefaultConfig
 from webapp.data_worker.DataWorkerHelper import worker as data_worker_run, upsert_login as upsert_login_run
+from webapp.admin.AdminHelper import set_auth as set_auth_run, missing_media as missing_media_run
 
 app = launch()
 
@@ -38,9 +39,16 @@ def upsert_login(email, password):
     upsert_login_run(email, password)
 
 @manager.command
-def fix_values():
-    fix_values_worker()
+def data_worker():
+    data_worker_run()
 
+@manager.command
+def set_auth(uid, auth):
+    set_auth_run(uid, auth)
+
+@manager.command
+def missing_media():
+    missing_media_run()
 
 @manager.command
 def celery_worker():

@@ -26,8 +26,6 @@ from .EadDdbImportController import ead_ddb_import, generate_xml_answer
 @csrf.exempt
 def ead_ddb_push_data():
     # save data dump
-    if request.args.get('auth', '') != current_app.config['AUTH']:
-        abort(403)
 
     dump = Dump()
     dump.data = request.get_data(as_text=True)
@@ -54,6 +52,9 @@ def ead_ddb_push_data():
     archive_title = archive_title[0].text
     archive = Category.objects(uid=archive_title).upsert_one(set__title=archive_title, set__uid=archive_title)
     category_count += 1
+
+    if archive.auth != request.args.get('auth', ''):
+        return xml_response(generate_xml_answer('incomplete', 'invalid auth'))
 
     file_missing_binaries = []
     # we support multible collections (does this ever happen?)
