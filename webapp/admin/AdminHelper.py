@@ -32,13 +32,16 @@ def set_auth(id, auth):
 def missing_media():
     for file in File.objects(binary_exists__ne=True).all():
         if file.document:
-            print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category.title))
+            if file.fileName:
+                print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category.title))
+            else:
+                print('missing %s at document id %s in category %s' % (file.id, file.document.uid, file.document.category.title))
         else:
             print('missing %s at unknown document' % (file.fileName))
 
 def file_document_reverse():
     for file in File.objects():
-        document = Document.objects(file=file.id).first()
+        document = Document.objects(files=file.id).first()
         if not document:
             print('file %s is not part of any document')
             continue
