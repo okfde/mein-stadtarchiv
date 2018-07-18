@@ -15,7 +15,7 @@ from flask import (Flask, Blueprint, render_template, current_app, request, flas
                    jsonify, send_from_directory)
 from flask_login import login_required, login_user, current_user, logout_user, confirm_login, login_fresh
 from ..extensions import db, logger
-from ..models import Comment, Category, File, Document
+from ..models import Comment, Category, File, Document, Option
 
 def set_auth(id, auth):
     category = Category.objects(id=id).first()
@@ -47,3 +47,6 @@ def file_document_reverse():
             continue
         file.document = document.id
         file.save()
+
+def reset_elasticsearch_last_run():
+    Option.objects(key='elasticsearch_last_run').delete()

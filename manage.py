@@ -18,7 +18,8 @@ from webapp.extensions import db, celery
 import webapp.models as Models
 from webapp.config import DefaultConfig
 from webapp.data_worker.DataWorkerHelper import worker as data_worker_run, upsert_login as upsert_login_run
-from webapp.admin.AdminHelper import set_auth as set_auth_run, missing_media as missing_media_run, file_document_reverse as file_document_reverse_run
+from webapp.admin.AdminHelper import set_auth as set_auth_run, missing_media as missing_media_run, \
+    file_document_reverse as file_document_reverse_run, reset_elasticsearch_last_run as reset_elasticsearch_last_run_run
 
 app = launch()
 
@@ -53,6 +54,10 @@ def missing_media():
 @manager.command
 def file_document_reverse():
     file_document_reverse_run()
+
+@manager.command
+def reset_elasticsearch_last_run():
+    reset_elasticsearch_last_run_run()
 
 @manager.command
 def celery_worker():
