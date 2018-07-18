@@ -54,7 +54,7 @@ def ead_ddb_push_data():
     category_count += 1
 
     if archive.auth != request.args.get('auth', ''):
-        return xml_response(generate_xml_answer('incomplete', 'invalid auth'))
+        return xml_response(generate_xml_answer('invalid-auth', 'invalid auth'))
 
     file_missing_binaries = []
     # we support multible collections (does this ever happen?)

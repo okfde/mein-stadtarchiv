@@ -43,7 +43,7 @@ def file_document_reverse():
     for file in File.objects():
         document = Document.objects(files=file.id).first()
         if not document:
-            print('file %s is not part of any document')
+            print('file %s is not part of any document' % file.id)
             continue
         file.document = document.id
         file.save()
