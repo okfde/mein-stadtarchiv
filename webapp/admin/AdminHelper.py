@@ -33,9 +33,9 @@ def missing_media():
     for file in File.objects(binary_exists__ne=True).all():
         if file.document:
             if file.fileName:
-                print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category.title))
+                print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category[0].title))
             else:
-                print('missing %s at document id %s in category %s' % (file.id, file.document.uid, file.document.category.title))
+                print('missing %s at document id %s in category %s' % (file.id, file.document.uid, file.document.category[0].title))
         else:
             print('missing %s at unknown document' % (file.fileName))
 
