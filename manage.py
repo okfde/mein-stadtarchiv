@@ -43,8 +43,8 @@ def data_worker():
     data_worker_run()
 
 @manager.command
-def set_auth(uid, auth):
-    set_auth_run(uid, auth)
+def set_auth(id, auth):
+    set_auth_run(id, auth)
 
 @manager.command
 def missing_media():

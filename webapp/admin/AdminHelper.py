@@ -17,8 +17,8 @@ from flask_login import login_required, login_user, current_user, logout_user, c
 from ..extensions import db, logger
 from ..models import Comment, Category, File
 
-def set_auth(uid, auth):
-    category = Category.objects(uid=uid).first()
+def set_auth(id, auth):
+    category = Category.objects(id=id).first()
     if not category:
         print("category does not exist")
         return
@@ -30,5 +30,5 @@ def set_auth(uid, auth):
     print('auth saved.')
 
 def missing_media():
-    for file in File.objects(binary_exists__not=True):
+    for file in File.objects(binary_exists__ne=True).all():
         print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category.title))
