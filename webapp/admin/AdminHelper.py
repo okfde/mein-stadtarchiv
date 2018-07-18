@@ -15,7 +15,7 @@ from flask import (Flask, Blueprint, render_template, current_app, request, flas
                    jsonify, send_from_directory)
 from flask_login import login_required, login_user, current_user, logout_user, confirm_login, login_fresh
 from ..extensions import db, logger
-from ..models import Comment, Category, File
+from ..models import Comment, Category, File, Document
 
 def set_auth(id, auth):
     category = Category.objects(id=id).first()
@@ -31,4 +31,16 @@ def set_auth(id, auth):
 
 def missing_media():
     for file in File.objects(binary_exists__ne=True).all():
-        print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category.title))
+        if file.document:
+            print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category.title))
+        else:
+            print('missing %s at unknown document' % (file.fileName))
+
+def file_document_reverse():
+    for file in File.objects():
+        document = Document.objects(file=file.id).first()
+        if not document:
+            print('file %s is not part of any document')
+            continue
+        file.document = document.id
+        file.save()
