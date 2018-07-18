@@ -19,7 +19,8 @@ import webapp.models as Models
 from webapp.config import DefaultConfig
 from webapp.data_worker.DataWorkerHelper import worker as data_worker_run, upsert_login as upsert_login_run
 from webapp.admin.AdminHelper import set_auth as set_auth_run, missing_media as missing_media_run, \
-    file_document_reverse as file_document_reverse_run, reset_elasticsearch_last_run as reset_elasticsearch_last_run_run
+    file_document_reverse as file_document_reverse_run, reset_elasticsearch_last_run as reset_elasticsearch_last_run_run, \
+    init_archive as init_archive_run
 
 app = launch()
 
@@ -58,6 +59,11 @@ def file_document_reverse():
 @manager.command
 def reset_elasticsearch_last_run():
     reset_elasticsearch_last_run_run()
+
+@manager.command
+def init_archive(title, auth):
+    init_archive_run(title, auth)
+
 
 @manager.command
 def celery_worker():

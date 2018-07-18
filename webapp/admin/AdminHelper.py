@@ -50,3 +50,15 @@ def file_document_reverse():
 
 def reset_elasticsearch_last_run():
     Option.objects(key='elasticsearch_last_run').delete()
+
+def init_archive(title, auth):
+    category = Category.objects(uid=title).first()
+    if category:
+        print('archive already exists with id %s' % category.id)
+        return
+    category = Category()
+    category.uid = title
+    category.title = title
+    category.auth = auth
+    category.save()
+    print('archive %s created' % category.id)
