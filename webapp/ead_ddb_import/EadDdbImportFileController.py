@@ -39,8 +39,6 @@ file_endings = {
 def ead_ddb_push_media():
     if not Category.objects(auth=request.args.get('auth', '')).first():
         return xml_response(generate_xml_answer('invalid-auth', 'invalid auth'))
-    if request.args.get('auth', '') != current_app.config['AUTH']:
-        abort(403)
     file_name = request.form.get('name')
     document_uid = request.form.get('document_uid')
     if not file_name or not document_uid:
