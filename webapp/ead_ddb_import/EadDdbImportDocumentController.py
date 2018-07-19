@@ -74,6 +74,7 @@ def ead_ddb_push_data():
         if len(collection_title):
             if collection_title[0].text:
                 upsert_values['set__title'] = collection_title[0].text
+                logger.info('api.eadddb.document', '%s has uploaded %s' % (archive_title, collection_title[0].text))
         if len(collection_order_id):
             if collection_order_id[0].text:
                 upsert_values['set__order_id'] = collection_order_id[0].text
@@ -81,7 +82,7 @@ def ead_ddb_push_data():
             if collection_descr[0].text:
                 upsert_values['set__description'] = collection_descr[0].text.replace('<lb/>', ' ')
 
-        logger.info('api.eadddb.document', '%s has uploaded %s' % (archive_title, collection_title))
+
 
         collection = Category.objects(uid=collection_uid).upsert_one(**upsert_values)
         category_count += 1
