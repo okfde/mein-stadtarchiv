@@ -34,6 +34,7 @@ def ead_ddb_push_data():
     try:
         xml_data = etree.fromstring(request.data)
     except etree.XMLSyntaxError:
+        logger.info('api.eadddb.document', 'xml data could not be parsed')
         return xml_response(generate_xml_answer('incomplete', 'xml data could not be parsed'))
 
     # prepare namespace
@@ -48,18 +49,23 @@ def ead_ddb_push_data():
     # read and save archive
     archive_title = xml_data.xpath('.//ns:archdesc[@level="collection"]/ns:did/ns:repository/ns:corpname', namespaces=namespaces)
     if not len(archive_title):
+        logger.info('api.eadddb.document', 'no archive title found')
         return xml_response(generate_xml_answer('incomplete', 'no archive title found'))
     archive_title = archive_title[0].text
     archive = Category.objects(uid=archive_title).upsert_one(set__title=archive_title, set__uid=archive_title)
     category_count += 1
 
-    if archive.auth != request.args.get('auth', ''):
+    auth = request.headers.get('X-Auth', None)
+    if not auth:
+        auth = request.args.get('auth', None)
+
+    if archive.auth != auth:
+        logger.info('api.eadddb.document', 'invalid auth')
         return xml_response(generate_xml_answer('invalid-auth', 'invalid auth'))
 
     file_missing_binaries = []
     # we support multible collections (does this ever happen?)
-    collections_xml = xml_data.xpath('.//ns:archdesc[@level="collection"]/ns:dsc/ns:c[@level="collection"]',
-                                     namespaces=namespaces)
+    collections_xml = xml_data.xpath('.//ns:archdesc[@level="collection"]/ns:dsc/ns:c[@level="collection"]', namespaces=namespaces)
 
     for collection_xml in collections_xml:
         # save collection

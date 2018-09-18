@@ -26,6 +26,7 @@ recherche = Blueprint('recherche', __name__, template_folder='templates')
 def recherche_main():
     return render_template('recherche.html', categories=get_categories())
 
+
 @cache.memoize(600)
 def get_categories():
     categories = []
@@ -55,7 +56,6 @@ def category_get_children(category_id):
             category['children'] = children
         categories.append(category)
     return categories
-
 
 
 @recherche.route('/api/search', methods=['POST'])
@@ -185,7 +185,6 @@ def recherche_api():
         'status': 0
     }
     return json_response(result)
-
 
 
 @recherche.route('/api/live-search', methods=['GET', 'POST'])

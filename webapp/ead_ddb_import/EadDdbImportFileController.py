@@ -34,17 +34,27 @@ file_endings = {
     'image/png': 'png'
 }
 
+
 @ead_ddb_import.route('/api/ead-ddb/push-file', methods=['POST'])
 @csrf.exempt
 def ead_ddb_push_media():
-    if not Category.objects(auth=request.args.get('auth', '')).first():
+    logger.info('api.eadddb.file.debug', request.headers)
+    logger.info('api.eadddb.file.debug', request.form)
+
+    auth = request.headers.get('X-Auth', None)
+    if not auth:
+        auth = request.args.get('auth', None)
+
+    if not Category.objects(auth=auth).first():
         return xml_response(generate_xml_answer('invalid-auth', 'invalid auth'))
     file_name = request.form.get('name')
+    if not file_name:
+        file_name = request.form.get('fileName')
+        if file_name:
+            file_name = '.'.join(file_name.split('.')[0:-1])
     document_uid = request.form.get('document_uid')
     if not file_name or not document_uid:
         return xml_response(generate_xml_answer('data missing', 'file not saved'))
-
-    logger.info('api.eadddb.file', 'file %s was uploaded for document %s' % (file_name, document_uid))
 
     file = File.objects(externalId=document_uid + '-' + file_name).first()
     if not file:
@@ -60,6 +70,8 @@ def ead_ddb_push_media():
     file.sha1Checksum = request.form.get('sha1Checksum')
     file.modified = datetime.datetime.now()
     file.binary_exists = True
+
+    logger.info('api.eadddb.file', 'file %s was uploaded for document %s' % (file_name, document_uid))
 
     file_path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], '%s-%s' % (document_uid, file_name))
     request.files['file'].save(file_path)
