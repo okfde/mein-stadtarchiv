@@ -40,6 +40,7 @@ file_endings = {
 def ead_ddb_push_media():
     logger.info('api.eadddb.file.debug', request.headers)
     logger.info('api.eadddb.file.debug', request.form)
+    logger.info('api.eadddb.file.debug', request.files)
 
     auth = request.headers.get('X-Auth', None)
     if not auth:
@@ -74,7 +75,7 @@ def ead_ddb_push_media():
     logger.info('api.eadddb.file', 'file %s was uploaded for document %s' % (file_name, document_uid))
 
     file_path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], '%s-%s' % (document_uid, file_name))
-    request.files['file'].save(file_path)
+    request.files.get('file').save(file_path)
     metadata = {
         'Content-Disposition': 'filename=%s.%s' % (slugify(document.title) if document.title else document.id, file_endings[file.mimeType])
     }
