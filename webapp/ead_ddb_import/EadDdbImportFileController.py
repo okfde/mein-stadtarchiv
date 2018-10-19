@@ -47,6 +47,7 @@ def ead_ddb_push_media():
         auth = request.args.get('auth', None)
 
     if not Category.objects(auth=auth).first():
+        logger.info('api.eadddb.file.reply', 'invalid-auth')
         return xml_response(generate_xml_answer('invalid-auth', 'invalid auth'))
     file_name = request.form.get('name')
     if not file_name:
@@ -55,14 +56,17 @@ def ead_ddb_push_media():
             file_name = '.'.join(file_name.split('.')[0:-1])
     document_uid = request.form.get('document_uid')
     if not file_name or not document_uid:
+        logger.info('api.eadddb.file.reply', 'data missing')
         return xml_response(generate_xml_answer('data missing', 'file not saved'))
 
     file = File.objects(externalId=document_uid + '-' + file_name).first()
     if not file:
+        logger.info('api.eadddb.file.reply', '%s %s: file not registered' % (file_name, document_uid))
         return xml_response(generate_xml_answer('file not registered', 'file not registered'))
 
     document = Document.objects(uid=document_uid).first()
     if not document:
+        logger.info('api.eadddb.file.reply', '%s %s: document not registered' % (file_name, document_uid))
         return xml_response(generate_xml_answer('document not registered', 'document not registered'))
 
     file.size = request.form.get('size')
@@ -71,7 +75,9 @@ def ead_ddb_push_media():
     file.sha1Checksum = request.form.get('sha1Checksum')
     file.modified = datetime.datetime.now()
     file.binary_exists = True
-
+    if file.mimeType not in file_endings.keys():
+        logger.info('api.eadddb.file.reply', '%s %s: invalid mime type' % (file_name, document_uid))
+        return xml_response(generate_xml_answer('invalid mime type', 'invalid mime type'))
     logger.info('api.eadddb.file', 'file %s was uploaded for document %s' % (file_name, document_uid))
 
     file_path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], '%s-%s' % (document_uid, file_name))
@@ -89,6 +95,7 @@ def ead_ddb_push_media():
             metadata=metadata
         )
     except (ResponseError, SignatureDoesNotMatch, MaxRetryError) as err:
+        logger.info('api.eadddb.file.reply', '%s %s: minio server error' % (file_name, document_uid))
         return xml_response(generate_xml_answer('server error', 'saving file to minio failed'))
 
     if file.mimeType in ['application/pdf']:
