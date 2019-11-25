@@ -10,87 +10,56 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import os
-from .common.constants import INSTANCE_FOLDER_PATH
+from .common.constants import BaseConfig
 
 
-class DefaultConfig(object):
-    PROJECT_NAME = ''
-    PROJECT_URL = ''
-    PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-    PROJECT_VERSION = '0.0.1'
-    LOG_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'logs'))
-    DATA_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'data'))
-    SITEMAP_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'static', 'sitemap'))
-    TEMP_DIR = os.path.join(PROJECT_ROOT, os.pardir, 'temp')
-    TEMP_UPLOAD_DIR = os.path.abspath(os.path.join(TEMP_DIR, 'upload'))
-    TEMP_THUMBNAIL_DIR = os.path.abspath(os.path.join(TEMP_DIR, 'thumbnails'))
+class DefaultConfig(BaseConfig):
+    PROJECT_URL = 'http://srv:5000'
 
     DEBUG = True
-    TESTING = False
 
-    ADMINS = ['']
-    MAILS_FROM = ''
+    ADMINS = ['mail@ernestoruge.de']
+    MAILS_FROM = 'mail@ernestoruge.de'
 
     SECRET_KEY = ''
     SECURITY_PASSWORD_SALT = ''
 
-    MAIL_SERVER = ''
-    MAIL_PORT = 465
-    MAIL_USE_SSL = True
-    MAIL_USERNAME = ''
-    MAIL_PASSWORD = ''
-    MAIL_DEBUG = False
+    MONGODB_HOST = 'mongodb'
 
-    MONGODB_HOST = 'localhost'
-    MONGODB_PORT = 27017
-    MONGODB_DB = ''
+    S3_ENDPOINT = 'minio'
+    S3_ACCESS_KEY = 'DEVELOPMENT'
+    S3_SECRET_KEY = 'DEVELOPMENT'
+    S3_MEDIA_URL = 'http://srv:9000'
 
-    S3_ENDPOINT = ''
-    S3_ACCESS_KEY = ''
-    S3_SECRET_KEY = ''
-    S3_SECURE = False
-    S3_BUCKET = ''
-    S3_LOCATION = 'us-east-1'
-    S3_MEDIA_URL = ''
+    CELERY_RESULT_BACKEND = 'amqp://rabbitmq'
+    CELERY_BROKER_URL = 'amqp://rabbitmq'
 
-    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-    CELERY_BROKER_URL = 'redis://localhost:6379'
+    MAPBOX_TOKEN = 'pk.eyJ1IjoiZXJuZXN0by1ydWdlIiwiYSI6ImNpcWljOWVrMDAwYjdocG1jM2dlcno0dWIifQ.uFojO1A56WY5j6LoHPg2IA'
 
-    AUTH = ''
-
-    MAPBOX_TOKEN = ''
-    MAPBOX_CENTER_LAT = 51.470915
-    MAPBOX_CENTER_LON = 7.219874
-    MAPBOX_ZOOM = 10
-
-    ELASTICSEARCH_HOST = ''
-    ELASTICSEARCH_DOCUMENT_INDEX = ''
-
-    PDFTOTEXT_COMMAND = '/usr/bin/pdftotext'
-    ABIWORD_COMMAND = '/usr/bin/abiword'
-    GHOSTSCRIPT_COMMAND = '/usr/bin/gs'
-    JPEGOPTIM_PATH = '/usr/bin/jpegoptim'
-
-    THUMBNAIL_SIZES = [150, 300, 600, 1200]
+    ELASTICSEARCH_HOST = 'elasticsearch'
 
 
 class DevelopmentConfig(DefaultConfig):
-    pass
+    MODE = 'DEVELOPMENT'
 
 
 class StagingConfig(DefaultConfig):
-    pass
+    MODE = 'STAGING'
 
 
 class ProductionConfig(DefaultConfig):
-    pass
+    MODE = 'PRODUCTION'
+
+
+class SandboxConfig(DefaultConfig):
+    MODE = 'SANDBOX'
 
 
 def get_config(MODE):
     SWITCH = {
         'DEVELOPMENT': DevelopmentConfig,
         'STAGING': StagingConfig,
-        'PRODUCTION': ProductionConfig
+        'PRODUCTION': ProductionConfig,
+        'SANDBOX': SandboxConfig
     }
     return SWITCH[MODE]
