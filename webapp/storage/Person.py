@@ -11,11 +11,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 import datetime
-from flask import current_app
-from mongoengine import Document, ReferenceField, DateTimeField, StringField, ListField, DecimalField, GeoJsonBaseField
+from mongoengine import ReferenceField, DateTimeField, StringField, ListField
+from .Base import Base
 
 
-class Person(Document):
+class Person(Base):
     created = DateTimeField(default=datetime.datetime.now)
     modified = DateTimeField(default=datetime.datetime.now)
 
@@ -30,9 +30,6 @@ class Person(Document):
     parents = ListField(ReferenceField('Person'))
     children = ListField(ReferenceField('Person'))
     spouses = ListField(ReferenceField('Person'))
-
-    def __init__(self, *args, **kwargs):
-        super(Document, self).__init__(*args, **kwargs)
 
     def __repr__(self):
         return '<Person %r %r>' % (self.givenName, self.familyName)

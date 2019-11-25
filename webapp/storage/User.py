@@ -10,21 +10,17 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from werkzeug.security import check_password_hash
 from passlib.hash import bcrypt
-from datetime import datetime
+from werkzeug.security import check_password_hash
+from mongoengine import Document, StringField, ListField
 from flask_login import login_user
-from flask import current_app
-from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, StringField, ListField, \
-    DecimalField, EmailField, IntField, GeoJsonBaseField
+from .Base import Base
 
 
-class User(Document):
-    created = DateTimeField(default=datetime.now())
-    modified = DateTimeField(default=datetime.now())
-
+class User(Base):
     email = StringField()
     _password = StringField(db_field='password')
+    capabilities = ListField(StringField())
     active = 1
     type = 'admin'
 
@@ -40,10 +36,20 @@ class User(Document):
     def get_id(self):
         return str(self.id)
 
+    def has_capability(self, *capabilities):
+        if not self.capabilities:
+            return False
+        if 'admin' in self.capabilities:
+            return True
+        check_capabilities = self.capabilities
+        for capability in capabilities:
+            if capability in check_capabilities:
+                return True
+        return False
+
     @staticmethod
     def validate_login(password_hash, password):
         return check_password_hash(password_hash, password)
-
 
     # password should be encrypted
     @property
@@ -82,3 +88,23 @@ class User(Document):
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+
+class AnonymousUser:
+    id = None
+    type = 'guest'
+
+    def is_authenticated(self):
+        return False
+
+    def is_active(self):
+        return False
+
+    def is_anonymous(self):
+        return True
+
+    def get_id(self):
+        return str(self.id)
+
+    def has_capability(self, *capabilities):
+        return False

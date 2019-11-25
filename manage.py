@@ -36,17 +36,16 @@ def make_shell_context():
 def data_worker():
     data_worker_run()
 
+
 @manager.command
 def upsert_login(email, password):
     upsert_login_run(email, password)
 
-@manager.command
-def data_worker():
-    data_worker_run()
 
 @manager.command
 def set_auth(id, auth):
     set_auth_run(id, auth)
+
 
 @manager.command
 def missing_media():
@@ -56,9 +55,11 @@ def missing_media():
 def file_document_reverse():
     file_document_reverse_run()
 
+
 @manager.command
 def reset_elasticsearch_last_run():
     reset_elasticsearch_last_run_run()
+
 
 @manager.command
 def init_archive(title, auth):

@@ -15,6 +15,7 @@ from flask import Blueprint
 
 ead_ddb_import = Blueprint('ead_ddb_import', __name__, template_folder='templates')
 
+
 def generate_xml_answer(status, description=None, missing_files=None):
     nsmap = {
         'soapenv': 'http://schemas.xmlsoap.org/soap/envelope',

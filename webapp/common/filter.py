@@ -12,13 +12,18 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import math
 import pytz
-import datetime
+import json
 from urllib.parse import quote_plus
+from flask import current_app
 
 
 def register_global_filters(app):
     @app.template_filter('datetime')
     def template_datetime(value, format='medium'):
+        if not value:
+            return ''
+        if not value.tzinfo:
+            value = pytz.UTC.localize(value)
         if value.tzname() == 'UTC':
             value = value.astimezone(pytz.timezone('Europe/Berlin'))
         if format == 'full':
@@ -52,3 +57,9 @@ def register_global_filters(app):
             return "%s kB" % round(value / 1000)
         else:
             return "%s MB" % round(value / 1000000)
+
+    @app.context_processor
+    def static_content():
+        with open('/%s/../static/webpack-assets.json' % current_app.config['PROJECT_ROOT']) as json_file:
+            data = json.load(json_file)
+            return dict(static_content=data)

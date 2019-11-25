@@ -26,8 +26,8 @@ from flask_mail import Mail
 mail = Mail()
 
 # Celery
-from flask_celery import Celery
-celery = Celery()
+from .common.celery import LogErrorsCelery
+celery = LogErrorsCelery()
 
 from flask_elasticsearch import FlaskElasticsearch
 es = FlaskElasticsearch()

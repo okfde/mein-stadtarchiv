@@ -10,23 +10,19 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from flask import current_app
-from mongoengine import Document as MongoDocument, BooleanField, ReferenceField, DateTimeField, StringField, ListField, \
-    DecimalField, IntField, GeoJsonBaseField, DictField
-from .ArchivDocument import ArchivDocument
+from mongoengine import ReferenceField, DateTimeField, StringField, ListField, IntField, DictField
+from .Base import Base
 
 
-class Document(MongoDocument, ArchivDocument):
+class Document(Base):
     uid = StringField()
     order_id = StringField()
-    created = DateTimeField(datetime_format='datetime')
-    modified = DateTimeField(datetime_format='datetime')
 
     title = StringField(fulltext=True, sortable=True)
     description = StringField(fulltext=True)
     note = StringField(fulltext=True)
     origination = StringField()
-    help_required = IntField()
+    help_required = IntField(default=0)
 
     date = DateTimeField(datetime_format='date')
     date_begin = DateTimeField(datetime_format='date')
@@ -39,9 +35,6 @@ class Document(MongoDocument, ArchivDocument):
 
     extra_fields = DictField(delete_document=True)
     document_type = StringField()
-
-    def __init__(self, *args, **kwargs):
-        super(MongoDocument, self).__init__(*args, **kwargs)
 
     def __repr__(self):
         return '<Document %r>' % self.title

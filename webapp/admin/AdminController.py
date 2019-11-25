@@ -26,6 +26,7 @@ def admin_main():
     comments = Comment.objects(status__gt = -1).order_by('-created')[0:5].all()
     return render_template('admin.html', comments=comments)
 
+
 @admin.route('/admin/comments', methods=['GET', 'POST'])
 @login_required
 def admin_comments():
@@ -33,6 +34,7 @@ def admin_comments():
     count = Comment.objects(status__gt = -1).count()
     comments = Comment.objects(status__gt = -1).order_by('-created')[(page - 1) * 10:(page - 1) * 10 + 10].all()
     return render_template('admin-comments.html', comments=comments, count=count, page=page)
+
 
 @admin.route('/admin/comment')
 @login_required

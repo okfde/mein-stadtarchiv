@@ -24,6 +24,7 @@ from ..extensions import logger
 
 Image.MAX_IMAGE_PIXELS = None
 
+
 class DataWorkerThumbnails():
     def __init__(self):
         ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -122,7 +123,6 @@ class DataWorkerThumbnails():
                     return
             im.save(max_path)
             im.close()
-
 
         # generate thumbnails based on max images
         for max_file in os.listdir(max_folder):

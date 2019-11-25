@@ -12,7 +12,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from .Category import Category
 from .Document import Document
-from .Dump import Dump
 from .Tag import Tag
 from .File import File
 from .Person import Person

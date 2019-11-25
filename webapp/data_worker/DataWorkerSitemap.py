@@ -18,6 +18,7 @@ from flask import (Flask, Blueprint, render_template, current_app, request, flas
 from ..models import Document, Option
 from ..extensions import logger
 
+
 class DataWorkerSitemap():
     def __init__(self):
         pass

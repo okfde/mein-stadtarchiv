@@ -1,38 +1,55 @@
-{% macro form_field(field, box_width=12, form_type='input-text') -%}
-    <div class="col-md-{{ box_width }}{% if field.errors %} error{% endif %}">
-        {% if form_type == 'input-text' %}
-            {{ field.label }}
-            {{ field(class="form-control") }}
-        {% elif form_type == 'input-checkbox' %}
-            <label>{{ field(class="") }} {{ field.label.text }}</label>
-        {% elif form_type == 'input-submit' %}
-            {{ field(class="form-control") }}
-        {% endif %}
-        {% if field.description %}
-            <p>{{ field.description|safe }}</p>
-        {% endif %}
-        {% if field.errors %}
-            <p class="text-danger">
-                {% for error in field.errors %}
-                    {{ error }}
-                {% endfor %}
-            </p>
-        {% endif %}
-    </div>
-{%- endmacro %}
-
-{% macro pagination(count, page, base_url) %}
-    <div class="row">
-        <div class="col-md-6"><h3>{{ count }} Ergebnisse</h3></div>
-        {% set page_max = (count / 10)|ceil %}
-        <div class="col-md-6">
-            <div class="search-pagination">
-                <{% if page == 1 %}span{% else %}a href="{{ base_url }}?page=1"{% endif %} class="pagination-page position-left"><i class="fa fa-angle-double-left" aria-hidden="true"></i></{% if page == 1 %}span{% else %}a{% endif %}>
-                <{% if page == 1 %}span{% else %}a href="{{ base_url }}?page={{ page - 1 }}"{% endif %} class="pagination-page position-left"><i class="fa fa-angle-left" aria-hidden="true"></i></{% if page == 1 %}span{% else %}a{% endif %}>
-                <{% if page == page_max %}span{% else %}a href="{{ base_url }}?page={{ page_max }}"{% endif %} class="pagination-page position-right"><i class="fa fa-angle-double-right" aria-hidden="true"></i></{% if page == page_max %}span{% else %}a{% endif %}>
-                <{% if page == page_max %}span{% else %}a href="{{ base_url }}?page={{ page + 1 }}"{% endif %} class="pagination-page position-right"><i class="fa fa-angle-right" aria-hidden="true"></i></{% if page == page_max %}span{% else %}a{% endif %}>
-                <div class="pagination-center-box">Seite {{ page }} von {{ page_max }}</div>
-            </div>
+{% macro form_field(field, box_width=12, form_type='input-text', unit=None, extra_classes=None, box_classes=None) -%}
+    {% if form_type == 'hidden' %}
+        {{ field(class='hidden ' + (' '.join(extra_classes) if extra_classes else '')) }}
+    {% else %}
+        <div class="col-md-{{ box_width }}{% if field.errors %} error{% endif %}{{ (' ' + ' '.join(box_classes) if box_classes else '') }}">
+            {% if form_type == 'input-text' %}
+                {{ field.label }}
+                {% if unit %}
+                    <span class="unit unit-{{ unit }}">
+                {% endif %}
+                {{ field(class="form-control" + (' ' + ' '.join(extra_classes) if extra_classes else ''), required=False) }}
+                {% if unit %}
+                    </span>
+                {% endif %}
+            {% elif form_type == 'input-checkbox' %}
+                <label>{{ field(class="") }} {{ field.label.text }}</label>
+            {% elif form_type == 'input-checkbox-emptylabel' %}
+                <br>
+                <label>{{ field(class="") }} {{ field.label.text }}</label>
+            {% elif form_type == 'input-submit' %}
+                {{ field(class="form-control") }}
+            {% elif form_type == 'input-submit-emptylabel' %}
+                <label>&nbsp;</label>
+                {{ field(class="form-control") }}
+            {% endif %}
+            {% if field.description %}
+                <p>{{ field.description|safe }}</p>
+            {% endif %}
+            {% if field.errors %}
+                <p class="text-danger">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </p>
+            {% endif %}
         </div>
-    </div>
-{%- endmacro %}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro action_button(type, link, text=None, icon=None) %}
+    {% if type == 'edit' %}
+        <a href="{{ link }}" class="btn btn-default btn-icon" data-toggle="tooltip" title="bearbeiten"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+    {% elif type == 'delete' %}
+        <a href="{{ link }}" class="btn btn-default btn-icon" data-toggle="tooltip" title="löschen"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+    {% elif type == 'show' %}
+        <a href="{{ link }}" class="btn btn-default btn-icon" data-toggle="tooltip" title="anzeigen"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+    {% elif type == 'download' %}
+        <a href="{{ link }}" class="btn btn-default btn-icon" data-toggle="tooltip" title="download"><i class="fa fa-download" aria-hidden="true"></i></a>
+    {% elif type == 'new' %}
+        <a href="{{ link }}" class="btn btn-default btn-icon" data-toggle="tooltip" title="neu"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+    {% elif type == 'custom' %}
+        <a href="{{ link }}" class="btn btn-default btn-icon" data-toggle="tooltip" title="{{ text }}"><i class="fa fa-{{ icon }}" aria-hidden="true"></i></a>
+    {% endif %}
+{% endmacro %}

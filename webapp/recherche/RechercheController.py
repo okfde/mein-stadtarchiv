@@ -10,23 +10,28 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import time
-import json
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
-from ..common.response import json_response
+
+from flask import Blueprint, render_template
 from ..models import Category
-from ..extensions import es, csrf, cache
-from .RechercheHelper import *
+from .RechercheForm import ArchiveSearchForm
 
 recherche = Blueprint('recherche', __name__, template_folder='templates')
+
+from . import RechercheApi
 
 
 @recherche.route('/recherche')
 def recherche_main():
-    return render_template('recherche.html', categories=get_categories())
+    form = ArchiveSearchForm()
+    print(form.csrf_token.data)
+    archives = []
+    for archive in Category.objects(parent__exists=False).order_by('+title').all():
+        archives.append(
+            archive.to_dict()
+        )
+    return render_template('recherche.html', archives=archives, form=form)
 
-
+"""
 @cache.memoize(600)
 def get_categories():
     categories = []
@@ -235,3 +240,4 @@ def live_search():
         'status': 0
     }
     return json_response(result)
+"""

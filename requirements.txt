@@ -19,4 +19,5 @@ lxml
 minio
 pillow
 bs4
-redis
+celery==4.4.0rc3
+elasticsearch>=6.0.0,<7.0.0

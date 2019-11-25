@@ -12,13 +12,18 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import os
 import logging
+from logging.handlers import WatchedFileHandler
 from flask import current_app
+from ..extensions import mail, celery
+from flask_mail import Message
+from ..config import DefaultConfig
 
-class Logger():
+
+class Logger:
     registered_logs = []
 
     def __init__(self):
-        pass
+        self.config = DefaultConfig
 
     def get_log(self, log_name):
         logger = logging.getLogger(log_name)
@@ -27,23 +32,23 @@ class Logger():
         logger.setLevel(logging.INFO)
 
         # Init File Handler
-        file_name = os.path.join(current_app.config['LOG_DIR'], '%s.log' % log_name)
-        file_handler = logging.handlers.TimedRotatingFileHandler(file_name, when='midnight', utc=True)
+        file_name = os.path.join(self.config.LOG_DIR, '%s.log' % log_name)
+        file_handler = WatchedFileHandler(file_name)
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(logging.Formatter(
             '%(asctime)s %(levelname)s: %(message)s ')
         )
         logger.addHandler(file_handler)
 
-        file_name = os.path.join(current_app.config['LOG_DIR'], '%s.err' % log_name)
-        file_handler = logging.handlers.TimedRotatingFileHandler(file_name, when='midnight', utc=True)
+        file_name = os.path.join(self.config.LOG_DIR, '%s.err' % log_name)
+        file_handler = WatchedFileHandler(file_name)
         file_handler.setLevel(logging.ERROR)
         file_handler.setFormatter(logging.Formatter(
             '%(asctime)s %(levelname)s: %(message)s ')
         )
         logger.addHandler(file_handler)
 
-        if current_app.config['DEBUG']:
+        if self.config.DEBUG:
             console_handler = logging.StreamHandler()
             console_handler.setLevel(logging.DEBUG)
             console_format = logging.Formatter('%(message)s')
@@ -60,13 +65,39 @@ class Logger():
         self.get_log(log_name).info(message)
 
     def warn(self, log_name, message):
-        self.get_log(log_name).warn(message)
+        self.get_log(log_name).warning(message)
 
-    def error(self, log_name, message):
+    def error(self, log_name, message, details=None):
         self.get_log(log_name).error(message)
+        send_notification.delay('error', log_name, message, details)
 
-    def exception(self, log_name, message):
+    def exception(self, log_name, message, details=None):
         self.get_log(log_name).exception(message)
+        send_notification.delay('exception', log_name, message, details)
 
-    def critical(self, log_name, message):
+    def critical(self, log_name, message, details=None):
         self.get_log(log_name).critical(message)
+        send_notification.delay('critical', log_name, message, details)
+
+
+@celery.task
+def send_notification(level, log_name, message, details):
+    try:
+        if current_app.config['DEBUG']:
+            return
+        msg = Message(
+            "%s %s Fehler" % (current_app.config['PROJECT_NAME'], current_app.config['MODE']),
+            sender=current_app.config['MAILS_FROM'],
+            recipients=current_app.config['ADMINS'],
+            body="Auf %s %s ist im Bereich %s folgender Fehler der Klasse %s aufgetreten %s\n\nDetails:\n%s" % (
+                current_app.config['PROJECT_NAME'],
+                current_app.config['MODE'],
+                log_name,
+                level,
+                message,
+                details if details else 'keine'
+            )
+        )
+        mail.send(msg)
+    except:
+        pass

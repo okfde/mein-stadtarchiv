@@ -21,7 +21,7 @@ from ..extensions import es, logger
 from .DataWorkerElasticsearchIndex import create_index
 
 
-class DataWorkerElasticsearch():
+class DataWorkerElasticsearch:
     def __init__(self):
         pass
 
@@ -47,35 +47,18 @@ class DataWorkerElasticsearch():
 
     def run(self, *args):
         start = datetime.utcnow()
-        start_with = False
-        last_run = Option.objects(key='elasticsearch_last_run').first()
-        if last_run:
-            pass
-            #if last_run.value:
-            #    start_with = datetime.fromtimestamp(int(last_run.value))
-        else:
-            last_run = Option()
-            last_run.key = 'elasticsearch_last_run'
-            last_run.save()
-
-        last_run = Option.objects(key='elasticsearch_last_run').first()
 
         self.prepare()
-
         if not es.indices.exists_alias(name=current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest'):
             create_index()
-        
-        if start_with:
-            documents = Document.objects(modified__gte=start_with)
-        else:
-            documents = Document.objects()
+        document_kwargs = {}
+        if Option.get('elasticsearch-last-run'):
+            document_kwargs['modified__gte'] = Option.get('elasticsearch-last-run')
 
-        for document in documents.all():
+        for document in Document.objects(**document_kwargs).all():
             self.index_document(document)
 
-        last_run.value = str(int(start.timestamp()))
-        last_run.save()
-
+        Option.set('elasticsearch-last-run', start, 'datetime')
         logger.info('worker.elasticsearch', 'ElasticSearch import successfull: %s created, %s updated' % (self.statistics['created'], self.statistics['updated']))
 
     def index_document(self, document):

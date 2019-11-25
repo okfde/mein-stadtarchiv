@@ -16,20 +16,19 @@ from lxml import etree
 from flask import current_app, request, abort
 from ..common.response import json_response, xml_response
 from ..extensions import csrf, logger
-from ..models import Dump, Category, Document, File
+from ..models import Category, Document, File
 from ..data_worker.DataWorkerHelper import worker_celery_full
 
 
 from .EadDdbImportController import ead_ddb_import, generate_xml_answer
 
+
 @ead_ddb_import.route('/api/ead-ddb/push-data', methods=['POST'])
 @csrf.exempt
 def ead_ddb_push_data():
     # save data dump
+    logger.info('dump', request.get_data(as_text=True))
 
-    dump = Dump()
-    dump.data = request.get_data(as_text=True)
-    dump.save()
     # read xml
     try:
         xml_data = etree.fromstring(request.data)

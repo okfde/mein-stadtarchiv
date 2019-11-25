@@ -23,7 +23,7 @@ frontend = Blueprint('frontend', __name__, template_folder='templates')
 @frontend.route('/')
 def root():
     # todo: random query
-
+    """
     result_raw = es.search(
         index=current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
         doc_type='document',
@@ -59,7 +59,8 @@ def root():
         size = 5,
         from_ = 1
     )
-    return render_template('index.html', documents=result_raw['hits']['hits'])
+    """
+    return render_template('index.html', documents=[])
 
 
 @frontend.route('/impressum')

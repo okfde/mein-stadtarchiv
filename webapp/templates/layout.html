@@ -22,7 +22,10 @@
         <link rel="icon" href="/static/images/favicon/book-icon-32.png" sizes="32x32">
     {% endblock %}
     {% block styles %}
-        <link rel="stylesheet" href="/static/css/webapp.min.css?v={{ config['PROJECT_VERSION'] }}">{% endblock %}
+        <link rel="stylesheet" type="text/css" href="{{ static_content['main']['css'] }}">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    {% endblock %}
 </head>
 <body class="{% block bodyclass %}default{% endblock %}">
 <div id="header-wrapper" class="main-wrapper">
@@ -52,6 +55,16 @@
                                 <a class="dropdown-item" href="/info/daten">Daten</a>
                             </div>
                         </li>
+                        {% if current_user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <div class="dropdown-menu" aria-labelledby="info-dropdown">
+                                    <a class="dropdown-item" href="/admin/archives">Archive</a>
+                                    <a class="dropdown-item" href="/admin/comments">Kommentare</a>
+                                </div>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </nav>
@@ -97,7 +110,7 @@
     {% endblock %}
 </div>
 {% block scripts %}
-    <script type="text/javascript" src="/static/js/webapp.min.js?v={{ config['PROJECT_VERSION'] }}"></script>
+    <script type="text/javascript" src="{{ static_content['main']['js'] }}"></script>
 {% endblock %}
 {% if config.PIWIK_HOST and config.PIWIK_ID %}
     <!-- Piwik -->

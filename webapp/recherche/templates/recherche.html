@@ -1,13 +1,35 @@
 {% extends "layout.html" %}
 
 {% block title %}Recherche | {{ super() }}{% endblock %}
-{% block description %}Nutzen Sie unsere schnelle Suche, um in den vielen tausend Dokumenten und Photos Ihrer Stadt zu
-    recherchieren!{% endblock %}
+{% block description %}
+    Nutzen Sie unsere schnelle Suche, um in den vielen tausend Dokumenten und Photos Ihrer Stadt zu
+    recherchieren!
+{% endblock %}
 {% block og_title %}Recherche | {{ super() }}{% endblock %}
-{% block og_description %}Nutzen Sie unsere schnelle Suche, um in den vielen tausend Dokumenten und Photos Ihrer Stadt
-    zu recherchieren!{% endblock %}
+{% block og_description %}
+    Nutzen Sie unsere schnelle Suche, um in den vielen tausend Dokumenten und Photos Ihrer Stadt
+    zu recherchieren!
+{% endblock %}
 
 {% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Recherche</h1>
+        </div>
+    </div>
+    <div class="row" id="search-list-box">
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var archives = {{ archives|tojson }};
+        var csrf_token = '{{ csrf_token() }}';
+    </script>
+    {{ super() }}
+{% endblock %}
+
+
     <div class="row">
         <div class="col-md-12">
             <h1>Recherche</h1>
@@ -68,9 +90,8 @@
             <div class="search-pagination"></div>
         </div>
     </div>
-{% endblock %}
 
-{% block scripts %}
+
     <div class="modal fade" id="category-overview" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -94,4 +115,3 @@
         }
     </script>
     {{ super() }}
-{% endblock %}

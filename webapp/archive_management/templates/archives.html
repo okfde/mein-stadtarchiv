@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                Archive
+                {{ action_button('new', '/admin/archive/new') }}
+            </h1>
+        </div>
+    </div>
+    <form
+            method="POST"
+            action="/archives" id="archive-search-form"
+    >
+        <div class="row row-form">
+            {{ form_field(form.title, 9) }}
+            {{ form_field(form.submit, 3, 'input-submit-emptylabel') }}
+        </div>
+        {{ form.csrf_token }}
+        <div id="archive-search-results"></div>
+    </form>
+{% endblock %}

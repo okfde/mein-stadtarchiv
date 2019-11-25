@@ -9,11 +9,10 @@ services:
     container_name: stadtarchiv-flask
     volumes:
       - .:/app
-    depends_on:
-      - mongodb
-      - redis
-      - minio
-      - elasticsearch
+    networks:
+      stadtarchiv:
+        aliases:
+        - flask
     entrypoint: ["python3", "runserver.py"]
 
   worker:
@@ -23,31 +22,51 @@ services:
     container_name: stadtarchiv-worker
     volumes:
       - .:/app
-    depends_on:
-      - redis
-      - mongodb
-    links:
-      - redis
-      - mongodb
+    networks:
+      stadtarchiv:
+        aliases:
+        - worker
     entrypoint: ["celery", "-A", "webapp.celery_entry_point", "worker"]
 
-  gulp:
+  webpack:
     build:
       context: .
-      dockerfile: Dockerfile.gulp
-    container_name: stadtarchiv-gulp
+      dockerfile: Dockerfile.webpack
+    container_name: stadtarchiv-webpack
     volumes:
       - .:/app
       - stadtarchiv_node_modules:/app/node_modules
-    entrypoint: ["gulp", 'watch']
+    networks:
+      stadtarchiv:
+        aliases:
+        - gulp
+    #entrypoint: ['sleep', '600000']
+    entrypoint: ["webpack", "--watch", "--config", "assets/webpack.config.js"]
 
-  redis:
-    image: redis
-    container_name: stadtarchiv-redis
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: stadtarchiv-rabbitmq
+    networks:
+      stadtarchiv:
+        aliases:
+        - rabbitmq
 
   mongodb:
     image: mongo:3.6
     container_name: stadtarchiv-mongodb
+    networks:
+      stadtarchiv:
+        aliases:
+        - mongodb
+
+  memcached:
+    image: memcached:latest
+    container_name: stadtarchiv-memcached
+    networks:
+      stadtarchiv:
+        aliases:
+        - memcached
 
   minio:
     image: minio/minio
@@ -59,10 +78,14 @@ services:
       - MINIO_SECRET_KEY=DEVELOPMENT
     volumes:
       - stadtarchiv_minio:/data
+    networks:
+      stadtarchiv:
+        aliases:
+        - minio
     command: server /data
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.4
     container_name: stadtarchiv-elasticsearch
     ports:
       - 9200:9200
@@ -74,9 +97,15 @@ services:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      stadtarchiv:
+        aliases:
+        - elasticsearch
 
 
 volumes:
   stadtarchiv_node_modules:
-  stadtarchiv_mysql:
   stadtarchiv_minio:
+
+networks:
+  stadtarchiv:

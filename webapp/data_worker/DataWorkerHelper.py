@@ -21,12 +21,13 @@ from ..extensions import celery
 
 
 def worker():
-    data_worker_thumbnails = DataWorkerThumbnails()
-    data_worker_thumbnails.run()
+    #data_worker_thumbnails = DataWorkerThumbnails()
+    #data_worker_thumbnails.run()
     data_worker_elasticsearch = DataWorkerElasticsearch()
     data_worker_elasticsearch.run()
     data_worker_sitemap = DataWorkerSitemap()
     data_worker_sitemap.run()
+
 
 @celery.task()
 def worker_celery_full():
@@ -35,9 +36,10 @@ def worker_celery_full():
     data_worker_sitemap = DataWorkerSitemap()
     data_worker_sitemap.run()
 
+
 @celery.task()
 def worker_celery_single(document_id):
-    document = Document.objects(id=document_id).first()
+    document = Document.get(document_id).first()
 
     data_worker_thumbnails = DataWorkerThumbnails()
     data_worker_thumbnails.prepare()
@@ -55,5 +57,6 @@ def upsert_login(email, password):
     if not user:
         user = User()
         user.email = email
+    user.capabilities = ['admin']
     user.password = password
     user.save()

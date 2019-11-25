@@ -27,10 +27,10 @@ def create_index():
     mapping = es_mapping_generator(Document, 'deref_document')
 
     mapping['properties']['category_full'] = {
-        'type': 'text'
+        'type': 'keyword'
     }
     mapping['properties']['category_with_parents'] = {
-        'type': 'text'
+        'type': 'keyword'
     }
     mapping['properties']['date_sort'] = {
         'type': 'date',
@@ -76,8 +76,7 @@ def es_mapping_generator(base_object, deref=None, nested=False):
         if base_object._fields[field].__class__.__name__ == 'ListField':
             if base_object._fields[field].field.__class__.__name__ == 'ReferenceField':
                 if getattr(base_object._fields[field].field, deref):
-                    mapping[field] = es_mapping_generator(base_object._fields[field].field.document_type,
-                                                               deref, True)
+                    mapping[field] = es_mapping_generator(base_object._fields[field].field.document_type, deref, True)
                 else:
                     mapping[field] = es_mapping_field_object()
             else:
@@ -99,7 +98,6 @@ def es_mapping_generator(base_object, deref=None, nested=False):
     if nested:
         mapping['type'] = 'nested'
     return mapping
-
 
 
 def es_mapping_field_generator(field):
@@ -135,6 +133,7 @@ def es_mapping_field_generator(field):
     else:
         return None
     return result
+
 
 def es_mapping_field_object():
     return {
@@ -232,6 +231,7 @@ def es_settings():
             }
         }
     }
+
 
 def generate_stopword_list():
     return []

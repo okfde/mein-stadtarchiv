@@ -12,5 +12,68 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import os
 
-# Instance folder path, make it independent.
-INSTANCE_FOLDER_PATH = os.path.join('/tmp', 'instance')
+
+class BaseConfig:
+    INSTANCE_FOLDER_PATH = os.path.join('/tmp', 'instance')
+
+    PROJECT_NAME = 'mein-stadtarchiv'
+    PROJECT_VERSION = '1.9.0'
+
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+    LOG_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'logs'))
+    DATA_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'data'))
+    SITEMAP_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'static', 'sitemap'))
+    TEMP_DIR = os.path.join(PROJECT_ROOT, os.pardir, 'temp')
+    TEMP_UPLOAD_DIR = os.path.abspath(os.path.join(TEMP_DIR, 'upload'))
+    TEMP_THUMBNAIL_DIR = os.path.abspath(os.path.join(TEMP_DIR, 'thumbnails'))
+
+    REQUIRED_CONFIG_FIELDS = [
+        'PROJECT_URL',
+        'SECRET_KEY',
+        'SECURITY_PASSWORD_SALT',
+        'ADMINS',
+        'MAILS_FROM',
+        'MAIL_SERVER',
+        'MAIL_USERNAME',
+        'MAIL_PASSWORD',
+        'S3_ACCESS_KEY',
+        'S3_ACCESS_KEY',
+        'S3_MEDIA_URL',
+        'AUTH',
+        'MAPBOX_TOKEN'
+    ]
+
+    DEBUG = False
+    TESTING = False
+
+    MAIL_PORT = 587
+    MAIL_USE_SSL = False
+    MAIL_USE_TLS = True
+
+    MONGODB_HOST = 'localhost'
+    MONGODB_PORT = 27017
+    MONGODB_DB = 'stadtarchiv'
+
+    S3_ENDPOINT = 'localhost'
+    S3_SECURE = False
+    S3_BUCKET = 'stadtarchiv'
+    S3_LOCATION = 'us-east-1'
+
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+    CELERY_BROKER_URL = 'redis://localhost:6379'
+
+    MAPBOX_CENTER_LAT = 51.470915
+    MAPBOX_CENTER_LON = 7.219874
+    MAPBOX_ZOOM = 10
+
+    ELASTICSEARCH_HOST = 'localhost'
+    ELASTICSEARCH_DOCUMENT_INDEX = 'stadtarchiv-documents'
+
+    PDFTOTEXT_COMMAND = '/usr/bin/pdftotext'
+    ABIWORD_COMMAND = '/usr/bin/abiword'
+    GHOSTSCRIPT_COMMAND = '/usr/bin/gs'
+    JPEGOPTIM_PATH = '/usr/bin/jpegoptim'
+
+    ITEMS_PER_PAGE = 10
+
+    THUMBNAIL_SIZES = [150, 300, 600, 1200]
