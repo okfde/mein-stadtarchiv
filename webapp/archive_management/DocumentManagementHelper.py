@@ -34,6 +34,7 @@ def process_file(file_id):
     file = File.get(file_id)
     if not file:
         return
+    file.binary_exists = True
     path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], str(file.id))
     metadata = {
         'Content-Disposition': 'filename=%s.%s' % (
