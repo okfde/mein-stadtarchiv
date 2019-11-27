@@ -18,7 +18,7 @@ from flask_wtf.csrf import CSRFError
 from webapp import config as Config
 from .common.constants import BaseConfig
 from .common.filter import register_global_filters
-from .extensions import db, es, login_manager, csrf, mail, celery, cache
+from .extensions import db, es, login_manager, csrf, mail, celery, cache, minio
 from .models import User
 
 # Blueprints
@@ -92,21 +92,25 @@ def configure_extensions(app):
     # mongoengine
     db.init_app(app)
 
+    minio.init_app(app)
+
     es.init_app(app)
 
-    #flask-login
-    @login_manager.user_loader
-    def load_user(id):
-        return User.objects(id=id).first()
 
-    login_manager.init_app(app)
 
     @login_manager.unauthorized_handler
     def unauthorized(msg=None):
         return redirect('/login')
 
+    #flask-login
+    @login_manager.user_loader
+    def load_user(uid):
+        return User.objects(id=uid).first()
+
     from .storage.User import AnonymousUser
     login_manager.anonymous_user = AnonymousUser
+
+    login_manager.init_app(app)
 
     # flask-wtf
     csrf.init_app(app)
@@ -119,6 +123,7 @@ def configure_extensions(app):
 
     # flask-cache
     cache.init_app(app)
+
 
 def configure_blueprints(app, blueprints):
     for blueprint in blueprints:

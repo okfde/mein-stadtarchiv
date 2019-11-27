@@ -54,10 +54,10 @@ class BaseConfig:
     MONGODB_PORT = 27017
     MONGODB_DB = 'stadtarchiv'
 
-    S3_ENDPOINT = 'localhost'
-    S3_SECURE = False
-    S3_BUCKET = 'stadtarchiv'
-    S3_LOCATION = 'us-east-1'
+    MINIO_ENDPOINT = 'localhost'
+    MINIO_SECURE = False
+    MINIO_REGION = 'us-east-1'
+    MINIO_BUCKET = 'stadtarchiv'
 
     CELERY_RESULT_BACKEND = 'redis://localhost:6379'
     CELERY_BROKER_URL = 'redis://localhost:6379'

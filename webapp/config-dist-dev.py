@@ -26,10 +26,10 @@ class DefaultConfig(BaseConfig):
 
     MONGODB_HOST = 'mongodb'
 
-    S3_ENDPOINT = 'minio'
-    S3_ACCESS_KEY = 'DEVELOPMENT'
-    S3_SECRET_KEY = 'DEVELOPMENT'
-    S3_MEDIA_URL = 'http://srv:9000'
+    MINIO_ENDPOINT = 'minio:9000'
+    MINIO_ACCESS_KEY = 'DEVELOPMENT'
+    MINIO_SECRET_KEY = 'DEVELOPMENT'
+    MINIO_MEDIA_URL = 'http://srv:9000'
 
     CELERY_RESULT_BACKEND = 'amqp://rabbitmq'
     CELERY_BROKER_URL = 'amqp://rabbitmq'

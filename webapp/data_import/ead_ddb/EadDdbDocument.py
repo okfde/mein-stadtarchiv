@@ -16,15 +16,35 @@ from webapp.models import Document, File
 from ...extensions import logger
 
 
-def get_document(data, parent):
-    return Document.objects(category=[parent], uid=data.get('id')).first()
+def get_document(data, parent, nsmap):
+    return Document.objects(category=[parent], uid=get_identifier(data, nsmap)).first()
+
+
+def get_identifier(data, nsmap):
+    document_id = data.get('id')
+    if not document_id:
+        document_id = data.xpath('./ns:did/ns:unitid', namespaces=nsmap)
+        if len(document_id):
+            document_id = document_id[0].text
+        else:
+            document_id = None
+    if not document_id:
+        document_id = data.xpath('./ns:did/ns:unittitle', namespaces=nsmap)
+        if len(document_id):
+            document_id = document_id[0].text
+        else:
+            document_id = None
+    if not document_id:
+        return
+    return document_id
 
 
 def save_document(data, parent, nsmap):
-    if not data.get('id'):
-        return
+    document_id = get_identifier(data, nsmap)
+    if not document_id:
+        return document_id
 
-    document = get_document(data, parent)
+    document = get_document(data, parent, nsmap)
     if not document:
         document = Document()
         document.uid = data.get('id')
@@ -111,6 +131,7 @@ def save_document(data, parent, nsmap):
 
     # save document
     document.save()
+    logger.info('dataimport.eadddb.document', 'document %s saved' % document.id)
     return document
 
 

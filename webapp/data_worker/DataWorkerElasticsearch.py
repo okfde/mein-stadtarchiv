@@ -65,10 +65,13 @@ class DataWorkerElasticsearch:
         document_dict = document.to_dict('deref_document', format_datetime=True, delete='delete_document')
 
         document_dict['file_count'] = 0
+        document_dict['file_missing_count'] = 0
         if document.files:
             for file in document.files:
                 if file.binary_exists:
                     document_dict['file_count'] += 1
+                else:
+                    document_dict['file_missing_count'] += 1
 
         replace_punctuation_re = re.compile('[%s\n\r]' % re.escape(string.punctuation))
         extra_fields = []

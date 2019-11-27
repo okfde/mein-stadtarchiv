@@ -20,6 +20,7 @@ archive_management = Blueprint('archive_management', __name__, template_folder='
 
 from . import ArchiveManagementApi
 from . import CategoryManagementController
+from . import DocumentManagementController
 
 
 @archive_management.route('/admin/archives')

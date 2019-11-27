@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% from "macros.html" import form_field with context %}
+{% from "macros.html" import form_field, action_button with context %}
 
 {% block title %}{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %} | {{ super() }}{% endblock %}
 {% block description %}{% if document.description %}{{ document.description }}{% else %}{{ super() }}{% endif %}{% endblock %}
@@ -10,18 +10,24 @@
 {% block content %}
     <div class="row">
         <div class="col-md-12">
-            <h1>{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}</h1>
+            <h1>
+                {% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}
+                {% if current_user.has_capability('admin') %}
+                    {{ action_button('show', '/admin/document/%s/show' % document.id) }}
+                    {{ action_button('edit', '/admin/document/%s/edit' % document.id) }}
+                {% endif %}
+            </h1>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            {% if  document.categories|length %}
+            {% if document.categories|length %}
                 <p>
                     Kategorie{% if document.categories|length > 1 %}n{% endif %}:
                     {% for categories in document.categories %}
                         {% for category in categories %}
-                            <a href="/recherche?category={{ category.id }}">{{ category.title }}</a>{% if not loop.last %}
-                                <span class="category-arrow">→</span>{% endif %}
+                            <a href="/recherche?category={{ category.id }}">{{ category.title }}</a>
+                            {% if not loop.last %}<span class="category-arrow">→</span>{% endif %}
                         {% endfor %}
                         {% if not loop.last %}, {% endif %}
                     {% endfor %}
@@ -88,9 +94,6 @@
                            {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}+
                            {{ config['PROJECT_URL'] }}{{ request.path }}"
                    target="blank"><i class="fa fa-twitter"></i></a>
-                <a class="googleplus"
-                   href="https://plus.google.com/share?url={{ config['PROJECT_URL'] }}{{ request.path }}"
-                   target="blank"><i class="fa fa-google-plus"></i></a>
                 <a class="linkedin"
                    href="https://www.linkedin.com/shareArticle?mini=true&url=
                            {{ config['PROJECT_URL'] }}{{ request.path }}&title=

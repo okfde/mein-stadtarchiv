@@ -13,7 +13,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from flask import Blueprint, render_template
 from ..models import Category
-from .RechercheForm import ArchiveSearchForm
+from .RechercheForm import SearchForm
 
 recherche = Blueprint('recherche', __name__, template_folder='templates')
 
@@ -22,8 +22,7 @@ from . import RechercheApi
 
 @recherche.route('/recherche')
 def recherche_main():
-    form = ArchiveSearchForm()
-    print(form.csrf_token.data)
+    form = SearchForm()
     archives = []
     for archive in Category.objects(parent__exists=False).order_by('+title').all():
         archives.append(

@@ -13,11 +13,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from passlib.hash import bcrypt
 from werkzeug.security import check_password_hash
 from mongoengine import Document, StringField, ListField
-from flask_login import login_user
+from flask_login import login_user, UserMixin, AnonymousUserMixin
 from .Base import Base
 
 
-class User(Base):
+class User(Base, UserMixin):
     email = StringField()
     _password = StringField(db_field='password')
     capabilities = ListField(StringField())
@@ -90,21 +90,9 @@ class User(Base):
         return '<User %r>' % self.email
 
 
-class AnonymousUser:
+class AnonymousUser(AnonymousUserMixin):
     id = None
     type = 'guest'
-
-    def is_authenticated(self):
-        return False
-
-    def is_active(self):
-        return False
-
-    def is_anonymous(self):
-        return True
-
-    def get_id(self):
-        return str(self.id)
 
     def has_capability(self, *capabilities):
         return False

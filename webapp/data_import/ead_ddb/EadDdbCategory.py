@@ -14,18 +14,37 @@ from webapp.models import Category
 from ...extensions import logger
 
 
-def get_category(data, parent):
-    return Category.objects(parent=parent, uid=data.get('id')).first()
+def get_category(data, parent, nsmap):
+    return Category.objects(parent=parent, uid=get_identifier(data, nsmap)).first()
+
+
+def get_identifier(data, nsmap):
+    collection_id = data.get('id')
+    if not collection_id:
+        collection_id = data.xpath('./ns:did/ns:unitid', namespaces=nsmap)
+        if len(collection_id):
+            collection_id = collection_id[0].text
+        else:
+            collection_id = None
+    if not collection_id:
+        collection_id = data.xpath('./ns:did/ns:unittitle', namespaces=nsmap)
+        if len(collection_id):
+            collection_id = collection_id[0].text
+        else:
+            collection_id = None
+    if not collection_id:
+        return
+    return collection_id
 
 
 def save_category(data, parent, nsmap, status):
-    if not data.get('id'):
+    collection_id = get_identifier(data, nsmap)
+    if not collection_id:
         return
-
-    category = get_category(data, parent)
+    category = get_category(data, parent, nsmap)
     if not category:
         category = Category()
-        category.uid = data.get('id')
+        category.uid = collection_id
         category.parent = parent
 
     category.status = status

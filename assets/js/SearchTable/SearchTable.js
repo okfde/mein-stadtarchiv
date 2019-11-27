@@ -56,6 +56,14 @@ export default class SearchTable extends Component {
             });
     }
 
+    daterangepickerSubmit(start, end, label) {
+        this.params.page = 1;
+        this.updateParams({
+            daterange: start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY')
+        });
+        this.updateData();
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         $(".selectpicker").selectpicker('refresh');
         $('.btn-icon').tooltip()
@@ -126,8 +134,9 @@ export default class SearchTable extends Component {
                 this.params[item.attr('name')] = overwrite[item.attr('name')];
                 continue;
             }
-            if (item.val() && item.val() !== '_default' && item.val() !== '_all') {
-                this.params[item.attr('name')] = item.val();
+            let sub = item.val();
+            if (sub && sub !== '_default' && sub !== '_all') {
+                this.params[item.attr('name')] = sub;
                 continue;
             }
             delete this.params[item.attr('name')];
@@ -217,34 +226,37 @@ export default class SearchTable extends Component {
             if (!this.operatorEnabled && this.sortDef[i].key === 'operator')
                 continue;
             let attrib = {};
-            if (this.params.sort_field === this.sortDef[i].key) {
-                attrib['selected'] = 'selected';
-            }
             sort_list.push(
-                <option value={this.sortDef[i].key} {...attrib}>{this.sortDef[i].name}</option>
+                <option key={this.sortDef[i].key} value={this.sortDef[i].key}>{this.sortDef[i].name}</option>
             )
-        }
-        let attrib_asc = {};
-        let attrib_desc = {};
-        if (this.params.sort_order === 'asc') {
-            attrib_asc['selected'] = 'selected';
-        }
-        else {
-            attrib_desc['selected'] = 'selected';
         }
         return (
             <div className="d-flex justify-content-start search-table-result-header-text">
                 <span>
                     {this.state.resultCount} Ergebnis{this.state.resultCount === 1 ? '' : 'se'}
                 </span>
-                <select id="sort_order" name="sort_order" onChange={(event) => this.formSubmit(event)} className="selectpicker" data-width="fit">
-                    <option value="asc" {...attrib_asc}>aufsteigend</option>
-                    <option value="desc" {...attrib_desc}>absteigend</option>
+                <select
+                    id="sort_order"
+                    name="sort_order"
+                    onChange={(event) => this.formSubmit(event)}
+                    className="selectpicker"
+                    data-width="fit"
+                    value={this.params.sort_order}
+                >
+                    <option value="asc">aufsteigend</option>
+                    <option value="desc">absteigend</option>
                 </select>
                 <span>
                     sortiert nach
                 </span>
-                <select id="sort_field" name="sort_field" onChange={(event) => this.formSubmit(event)} className="selectpicker" data-width="fit" data-showIcon="false">
+                <select
+                    id="sort_field"
+                    name="sort_field"
+                    onChange={(event) => this.formSubmit(event)}
+                    className="selectpicker"
+                    data-width="fit"
+                    value={this.params.sort_field}
+                >
                     {sort_list}
                 </select>
             </div>
@@ -272,7 +284,7 @@ export default class SearchTable extends Component {
     renderTableHead() {
         let cols = [];
         for (let i = 0; i < this.colDef.length; i++) {
-            let click = false;
+            let click = function () {};
             let classes = [];
             if (this.colDef[i].sortField) {
                 classes.push('sortable');
@@ -283,7 +295,7 @@ export default class SearchTable extends Component {
                 }
             }
             cols.push(
-                <th onClick={click} className={classes.join(' ')}>{this.colDef[i].text}</th>
+                <th onClick={click} className={classes.join(' ')} key={this.colDef[i].text}>{this.colDef[i].text}</th>
             )
         }
         return(

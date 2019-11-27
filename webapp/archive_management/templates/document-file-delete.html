@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field with context %}
+
+{% block content %}
+    <form method="POST" action="/admin/document/{{ document.id }}/file/{{ file.id }}/edit" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Datei löschen</h1>
+                <p>Soll die Datei {% if file.name %} als Teil von Dokument {{ document.title }} gelöscht werden?</p>
+            </div>
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.abort, 6, 'input-submit') }}
+            {{ form_field(form.submit, 6, 'input-submit') }}
+        </div>
+        {{ form.csrf_token }}
+    </form>
+{% endblock %}

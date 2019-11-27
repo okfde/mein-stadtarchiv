@@ -46,9 +46,9 @@
                 {{ category['title'] }}
                 {% if category['status'] == 'importing' %}
                     <i class="fa fa-spinner fa-spin fa-fw"></i>
-                {% endif %}
-                {% if level == 4 %}
-                    {{ action_button('custom', '/admin/archive/%s/category/%s/edit' % (archive.id, category['id']), 'Bestand aktualisieren', 'upload') }}
+                {% elif level == 4 %}
+                    {{ action_button('show', '/admin/archive/%s/category/%s/show' % (archive.id, category['id'])) }}
+                    {{ action_button('edit', '/admin/archive/%s/category/%s/edit' % (archive.id, category['id'])) }}
                 {% endif %}
             </h{{ level }}>
             {% if category.get('children', [])|length %}

@@ -46,7 +46,7 @@ def slugify(text, delim='-'):
 def get_current_time_plus(days=0, hours=0, minutes=0, seconds=0):
     return get_current_time() + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
 
-
+"""
 def get_minio_connection():
     s3 = Minio(
         current_app.config['S3_ENDPOINT'],
@@ -65,5 +65,5 @@ def get_minio_connection():
     #if s3.get_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails') != 'readonly':
     #    s3.set_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails', Policy.READ_ONLY)
     return s3
-
+"""
 

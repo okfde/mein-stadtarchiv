@@ -13,13 +13,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import os
 from uuid import uuid4
-from flask import current_app, abort, render_template, request, flash, redirect
+from flask import current_app, abort, render_template, flash, redirect
 from flask_login import current_user
 from ..models import Category
 from .CategoryManagementForms import CategoryFileForm
-from ..data_import.DataImportWorker import import_delayed
+from ..data_import.DataImportSelect import import_delayed
 
 from .ArchiveManagementController import archive_management
+
+from . import CategoryManagementApi
 
 
 @archive_management.route('/admin/archive/<string:archive_id>/category/new', methods=['GET', 'POST'])
@@ -38,9 +40,16 @@ def admin_archive_category_new(archive_id):
 
         import_delayed(filename, archive_id)
         flash('Bestand erfolgreich hochgeladen und Importvorgang gestartet', 'success')
-        return redirect('/admin/archive/%s/show' % archive.id)
-
+        #return redirect('/admin/archive/%s/show' % archive.id)
     return render_template('category-new.html', archive=archive, form=form)
 
+
+@archive_management.route('/admin/archive/<string:archive_id>/category/<string:category_id>/show')
+def archive_category_show(archive_id, category_id):
+    if not current_user.has_capability('admin'):
+        abort(403)
+    archive = Category.get_or_404(archive_id)
+    category = Category.get_or_404(category_id)
+    return render_template('category-show.html', archive=archive, category=category)
 
 

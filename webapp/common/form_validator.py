@@ -10,10 +10,11 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from datetime import datetime
 from flask import request
 from wtforms import ValidationError
 from wtforms.validators import DataRequired, StopValidation
-from ..data_import.DataImportWorker import DataImportWorker
+from ..data_import.DataImportSelect import select_standard
 
 
 class ValidateMimeType:
@@ -41,7 +42,10 @@ class ValidateKnownXml:
         self.message = message
 
     def __call__(self, form, field):
-        field.data_import_worker = DataImportWorker(file=request.files.get(field.name)).select_standard()
+        field.data_import_worker = select_standard(file=request.files.get(field.name))
+
+        if not field.data_import_worker:
+            raise ValidationError(self.message)
         if not field.data_import_worker.identifier:
             raise ValidationError(self.message)
 
@@ -61,3 +65,20 @@ class DataRequiredIf(DataRequired):
         else:
             field.errors = []
             raise StopValidation()
+
+
+class ValidateDateRange:
+    def __init__(self, message=None):
+        self.message = message
+
+    def __call__(self, form, field):
+        if not field.data:
+            raise ValidationError(self.message)
+        dates = field.data.split(' - ')
+        if len(dates) != 2:
+            raise ValidationError(self.message)
+        for date_str in dates:
+            try:
+                datetime.strptime(date_str, '%d.%m.%Y').date()
+            except ValueError:
+                raise ValidationError(self.message)

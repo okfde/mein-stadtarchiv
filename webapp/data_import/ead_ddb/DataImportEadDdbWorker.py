@@ -19,13 +19,6 @@ from .EadDdbDocument import save_document
 class DataImportEadDdbWorker(DataImportWorker):
     identifier = 'ead-ddb'
 
-    def __init__(self, path, file, data, xml):
-        super(DataImportWorker).__init__()
-        self.path = path
-        self._file = file
-        self._data = data
-        self._xml = xml
-
     def is_valid(self):
         if self.xml is None:
             return False
@@ -44,30 +37,44 @@ class DataImportEadDdbWorker(DataImportWorker):
         collections_xml = self.xml.xpath(
             './/ns:archdesc[@level="collection"]/ns:dsc/ns:c[@level="collection"]',
             namespaces=self.nsmap
+        ) or self.xml.xpath(
+            './/ns:archdesc[@level="collection"]/ns:dsc/ns:c01[@level="collection"]',
+            namespaces=self.nsmap
         )
         for collection_xml in collections_xml:
             category = save_category(collection_xml, self._parent, self.nsmap, 'importing')
             if not category:
                 continue
-            for subcollection_xml in collection_xml.xpath('.//ns:c[@level="class"]', namespaces=self.nsmap):
+            subcollections = collection_xml.xpath('.//ns:c[@level="class"]', namespaces=self.nsmap) \
+                or collection_xml.xpath('.//ns:c02[@level="class"]', namespaces=self.nsmap)
+            for subcollection_xml in subcollections:
                 save_category(subcollection_xml, category, self.nsmap, 'ready')
 
     def save_data(self):
         collections_xml = self.xml.xpath(
             './/ns:archdesc[@level="collection"]/ns:dsc/ns:c[@level="collection"]',
             namespaces=self.nsmap
+        ) or self.xml.xpath(
+            './/ns:archdesc[@level="collection"]/ns:dsc/ns:c01[@level="collection"]',
+            namespaces=self.nsmap
         )
         for collection_xml in collections_xml:
-            category = get_category(collection_xml, self._parent)
+            category = get_category(collection_xml, self._parent, self.nsmap)
             if not category:
                 continue
-            for document in collection_xml.xpath('./ns:c[@level="file"]', namespaces=self.nsmap):
+            documents = collection_xml.xpath('./ns:c[@level="file"]', namespaces=self.nsmap) \
+                or collection_xml.xpath('./ns:c02[@level="file"]', namespaces=self.nsmap)
+            for document in documents:
                 save_document(document, category, self.nsmap)
-            for subcollection_xml in collection_xml.xpath('.//ns:c[@level="class"]', namespaces=self.nsmap):
-                subcategory = get_category(subcollection_xml, category)
+            subcollections = collection_xml.xpath('.//ns:c[@level="class"]', namespaces=self.nsmap) \
+                or collection_xml.xpath('.//ns:c02[@level="class"]', namespaces=self.nsmap)
+            for subcollection_xml in subcollections:
+                subcategory = get_category(subcollection_xml, category, self.nsmap)
                 if not subcategory:
                     continue
-                for document in subcollection_xml.xpath('./ns:c[@level="file"]', namespaces=self.nsmap):
+                subdocuments = subcollection_xml.xpath('./ns:c[@level="file"]', namespaces=self.nsmap) \
+                    or subcollection_xml.xpath('./ns:c03[@level="file"]', namespaces=self.nsmap)
+                for document in subdocuments:
                     save_document(document, subcategory, self.nsmap)
             category.status = 'ready'
             category.save()

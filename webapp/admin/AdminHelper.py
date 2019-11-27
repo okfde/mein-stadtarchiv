@@ -17,6 +17,7 @@ from flask_login import login_required, login_user, current_user, logout_user, c
 from ..extensions import db, logger
 from ..models import Comment, Category, File, Document, Option
 
+
 def set_auth(id, auth):
     category = Category.objects(id=id).first()
     if not category:
@@ -29,6 +30,7 @@ def set_auth(id, auth):
     category.save()
     print('auth saved.')
 
+
 def missing_media():
     for file in File.objects(binary_exists__ne=True).all():
         if file.document:
@@ -39,6 +41,7 @@ def missing_media():
         else:
             print('missing %s at unknown document' % (file.fileName))
 
+
 def file_document_reverse():
     for file in File.objects():
         document = Document.objects(files=file.id).first()
@@ -48,8 +51,10 @@ def file_document_reverse():
         file.document = document.id
         file.save()
 
+
 def reset_elasticsearch_last_run():
-    Option.objects(key='elasticsearch_last_run').delete()
+    Option.remove('elasticsearch-last-run')
+
 
 def init_archive(title, auth):
     category = Category.objects(uid=title).first()

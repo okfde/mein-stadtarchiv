@@ -10,13 +10,10 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import re
-import string
-from bs4 import BeautifulSoup
+import elasticsearch
 from datetime import datetime
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
-from ..models import Document, Category
+from flask import current_app
+from ..models import Document
 from ..extensions import es, logger
 
 
@@ -35,6 +32,12 @@ def create_index():
     mapping['properties']['date_sort'] = {
         'type': 'date',
         'format': 'date'
+    }
+    mapping['properties']['file_count'] = {
+        'type': 'integer'
+    }
+    mapping['properties']['file_missing_count'] = {
+        'type': 'integer'
     }
 
     mapping['properties']['extra_field_text'] = {
@@ -60,14 +63,30 @@ def create_index():
         }
     })
 
-    es.indices.update_aliases({
-        'actions': {
-            'add': {
-                'index': index_name,
-                'alias': current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest'
+    latest_name = current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest'
+    alias_update = []
+    try:
+        latest_before = es.indices.get_alias(latest_name).keys()
+    except elasticsearch.exceptions.NotFoundError:
+        latest_before = []
+    for single_before in latest_before:
+        alias_update.append({
+            'remove': {
+                'index': single_before,
+                'alias': latest_name
             }
+        })
+    alias_update.append({
+        'add': {
+            'index': index_name,
+            'alias': latest_name
         }
     })
+    es.indices.update_aliases({'actions': alias_update})
+    index_before = es.indices.get('%s*' % current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'])
+    for single_index in index_before:
+        if index_name != single_index:
+            es.indices.delete(single_index)
 
 
 def es_mapping_generator(base_object, deref=None, nested=False):

@@ -26,7 +26,7 @@ export default class SearchTableArchives extends SearchTable {
 
     renderTableRow(row) {
         return (
-            <tr>
+            <tr key={row.id}>
                 {this.renderTableCellName(row)}
                 {this.renderTableCellActions(row)}
             </tr>

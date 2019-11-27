@@ -2,54 +2,95 @@ import React from "react";
 
 const { Component } = React;
 
+import SearchListCategories from './SearchListCategories';
+
+
 export default class SearchList extends Component {
     state = {
         page: 1,
         data: [],
         resultCount: 0,
         documents: [],
+        params: {
+            fulltext: '',
+            year_start: '',
+            year_end: '',
+            files_required: false,
+            help_required: false,
+            category: 'all',
+            sort_field: 'random',
+            sort_order: 'asc',
+            page: 1
+        },
         initialized: false
     };
+    sortDef = [
+        { key: 'random', name: 'Zufall' },
+        { key: 'title', name: 'Titel'}
+    ];
     itemsPerPage = 10;
+    excerptLength = 250;
     apiUrl = '/api/documents';
 
     componentDidMount() {
-        this.init();
-    }
-
-    init() {
+        let params = this.state.params;
+        params.csrf_token = csrf_token;
+        params.random_seed = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         this.setState({
             initialized: true,
-            categories: {
-                current: {
-                    id: 'all',
-                    title: 'Alle Archive'
-                },
-                parent: null,
-                children: archives
-            },
-            csrf_token: csrf_token
+            params: params
         });
-        this.search();
+        this.search(params);
+        document.getElementById('search-form').onsubmit = (evt) => {
+            evt.preventDefault();
+            this.search(this.state.params);
+        };
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        $(".selectpicker").selectpicker('refresh');
+        $('.btn-icon').tooltip()
+    }
+
+    search(params) {
+        $.post(this.apiUrl, params)
+            .then((data) => {
+                this.setState({
+                    documents: data.documents,
+                    page: this.state.params.page,
+                    resultCount: data.count,
+                    pageMax: (data.count) ? Math.ceil(data.count / this.itemsPerPage) : 1
+                });
+            });
     }
 
     setPage(page) {
         if (page < 1 || page > this.state.pageMax)
             return;
-        this.params.page = page;
-        this.updateData();
+        let params = this.state.params;
+        params.page = page;
+        this.setState({
+            params: params
+        });
+        this.search(params);
     }
 
-    search() {
-        let params = {
-            csrf_token: csrf_token
-        };
-        $.post(this.apiUrl, params)
-            .then((data) => {
-                this.setState({
-                    documents: data.data
-                });
-            });
+    updateCategory(category) {
+        let params = this.state.params;
+        params.category = category;
+        this.setState({
+            params: params
+        });
+        this.search(params);
+    }
+
+    handleChange(event) {
+        let params = this.state.params;
+        params[event.target.id] = (event.target.type === 'checkbox') ? event.target.checked : event.target.value;
+        this.setState({params: params});
+        if (event.target.type === 'checkbox' || event.target.tagName.toLowerCase() === 'select') {
+            this.search(params);
+        }
     }
 
     render() {
@@ -63,63 +104,103 @@ export default class SearchList extends Component {
         return ([
             <div className="col-md-4" key="sidebar">
                 <h3>Suche</h3>
-                <form id="search-form">
-                    <p>
-                        <label htmlFor="fulltext">Volltext</label>
-                        <input type="text" id="fulltext" name="fulltext" className="form-control" />
-                    </p>
-                    <div className="container no-gutters" style={{marginBottom: '1rem'}}>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <label htmlFor="year_start">Zeitraum</label>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-5">
-                                <input type="text" id="year_start" name="year_start" className="form-control" />
-                            </div>
-                            <div className="col-2 orientation-center">
-                                -
-                            </div>
-                            <div className="col-5">
-                                <input type="text" id="year_end" name="year_end" className="form-control" />
-                            </div>
+                <p>
+                    <label htmlFor="fulltext">Volltext</label>
+                    <input
+                        type="text"
+                        id="fulltext"
+                        name="fulltext"
+                        className="form-control"
+                        value={this.state.params.fulltext}
+                        onChange={this.handleChange.bind(this)}
+                    />
+                </p>
+                <div className="container no-gutters" style={{marginBottom: '1rem'}}>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <label htmlFor="year_start">Zeitraum</label>
                         </div>
                     </div>
-                    <p>
-                        <label htmlFor="files_required">
-                            <input type="checkbox" name="files_required" id="files_required" />
-                            {' '}Nur Dokumente mit Medien
-                        </label>
-                    </p>
-                    <p>
-                        <label htmlFor="help_required">
-                            <input type="checkbox" name="help_required" id="help_required" />
-                            {' '}Unbekannte Inhalte
-                        </label>
-                    </p>
-                    {this.renderCategories()}
-                </form>
+                    <div className="row">
+                        <div className="col-5">
+                            <input
+                                type="text"
+                                id="year_start"
+                                name="year_start"
+                                className="form-control"
+                                value={this.state.params.year_start}
+                                onChange={this.handleChange.bind(this)}
+                            />
+                        </div>
+                        <div className="col-2 orientation-center">
+                            -
+                        </div>
+                        <div className="col-5">
+                            <input
+                                type="text"
+                                id="year_end"
+                                name="year_end"
+                                className="form-control"
+                                value={this.state.params.year_end}
+                                onChange={this.handleChange.bind(this)}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <p>
+                    <label htmlFor="files_required">
+                        <input
+                            type="checkbox"
+                            name="files_required"
+                            id="files_required"
+                            checked={this.state.params.files_required}
+                            onChange={this.handleChange.bind(this)}
+                        />
+                        {' '}Nur Dokumente mit Medien
+                    </label>
+                </p>
+                <p>
+                    <label htmlFor="help_required">
+                        <input
+                            type="checkbox"
+                            name="help_required"
+                            id="help_required"
+                            checked={this.state.params.help_required}
+                            onChange={this.handleChange.bind(this)}
+                        />
+                        {' '}Unbekannte Inhalte
+                    </label>
+                </p>
+                <SearchListCategories
+                  onUpdate={(category) => this.updateCategory(category)}
+                >
+                </SearchListCategories>
+                <p>
+                    <input type="submit" name="submit" value="suchen" className="form-control"/>
+                </p>
             </div>,
             <div className="col-md-8" key="results">
-                {this.renderPagination()}
+                {this.renderStatusLineTop()}
                 {this.renderDocuments()}
+                {this.renderStatusLineBottom()}
             </div>
-            ]
-        );
+        ]);
     }
 
     renderDocuments() {
-        let result = [];
+        let results = [];
         for (let i = 0; i < this.state.documents.length; i++) {
-            result.push(this.renderDocument(this.state.documents[i]));
+            results.push(this.renderDocument(this.state.documents[i]));
         }
-        return result;
+        return (
+            <ul id="search-results">
+                {results}
+            </ul>
+        );
     }
 
     renderDocument(document) {
         let meta = [];
-        console.log(document)
         if (document.date_begin && document.date_end) {
             meta.push('Jahr ' + this.formatYear(document.date_begin) + ' - ' + this.formatYear(document.date_end));
         }
@@ -133,59 +214,28 @@ export default class SearchList extends Component {
             meta.push('Kategorie: ' + document.category_full[i]);
         }
         return(
-            <div key={document.id}>
-                <h2>{document.title}</h2>
-                <p>{meta.join(' | ')}</p>
-            </div>
-        );
-    }
-
-    renderCategories() {
-        let options = [];
-        if (this.state.categories.parent) {
-            options.push(this.renderCategory(this.state.categories.parent, 'parent'))
-        }
-        else {
-            options.push(this.renderCategory({id: 'root', title: 'Eine Ebene hoch'}, 'parent', true))
-        }
-        for (let i = 0; i < this.state.categories.children.length; i++) {
-            options.push(this.renderCategory(this.state.categories.children[i], 'child'));
-        }
-        return (
-            <div id="category-field">
-                <input type="hidden" name="category" id="category" />
-                <p id="category-current">
-                    {this.state.categories.current.title}
-                </p>
-                <ul id="category-search">
-                    {options}
-                </ul>
-            </div>
-        );
-    }
-
-    renderCategory(category, type, disabled) {
-        return (
-            <li data-uid={category.id} className={`category-${type} ${(disabled) ? 'disabled' : ''}`} key={category.id}>
-                {type === 'parent' &&
-                    <i className="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
-                }
-                {type === 'child' &&
-                    <i className="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
-                }
-                {' '}{category.title}
+            <li key={document.id}>
+                <div className="search-result-text">
+                    <h2><a href={`/document/${document.id}`}>{document.title}</a></h2>
+                    <p className="search-result-meta">{meta.join(' | ')}</p>
+                    {document.description &&
+                        <p className="search-result-description">{this.formatExcept(document.description)}</p>
+                    }
+                </div>
             </li>
         );
     }
 
     renderStatusLineTop() {
         return (
-            <div className="row">
-                <div className="col-md-12 search-table-result-header">
-                    <div className="d-flex justify-content-between bd-highlight">
-                        {this.renderStatusLineText()}
-                        <div className="d-flex justify-content-end">
-                            {this.renderPagination()}
+            <div className="container no-gutters">
+                <div className="row">
+                    <div className="col-md-12 search-table-result-header">
+                        <div className="d-flex justify-content-between bd-highlight">
+                            {this.renderStatusLineText()}
+                            <div className="d-flex justify-content-end">
+                                {this.renderPagination()}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -195,10 +245,12 @@ export default class SearchList extends Component {
 
     renderStatusLineBottom() {
         return (
-            <div className="row">
-                <div className="col-md-12 search-table-result-footer">
-                    <div className="d-flex justify-content-end">
-                        {this.renderPagination()}
+            <div className="container no-gutters">
+                <div className="row">
+                    <div className="col-md-12 search-table-result-footer">
+                        <div className="d-flex justify-content-end">
+                            {this.renderPagination()}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -208,37 +260,36 @@ export default class SearchList extends Component {
     renderStatusLineText() {
         let sort_list = [];
         for (let i = 0; i < this.sortDef.length; i++) {
-            if (!this.operatorEnabled && this.sortDef[i].key === 'operator')
-                continue;
-            let attrib = {};
-            if (this.params.sort_field === this.sortDef[i].key) {
-                attrib['selected'] = 'selected';
-            }
             sort_list.push(
-                <option value={this.sortDef[i].key} {...attrib}>{this.sortDef[i].name}</option>
+                <option value={this.sortDef[i].key} key={this.sortDef[i].key}>{this.sortDef[i].name}</option>
             )
-        }
-        let attrib_asc = {};
-        let attrib_desc = {};
-        if (this.params.sort_order === 'asc') {
-            attrib_asc['selected'] = 'selected';
-        }
-        else {
-            attrib_desc['selected'] = 'selected';
         }
         return (
             <div className="d-flex justify-content-start search-table-result-header-text">
                 <span>
                     {this.state.resultCount} Ergebnis{this.state.resultCount === 1 ? '' : 'se'}
                 </span>
-                <select id="sort_order" name="sort_order" onChange={(event) => this.formSubmit(event)} className="selectpicker" data-width="fit">
-                    <option value="asc" {...attrib_asc}>aufsteigend</option>
-                    <option value="desc" {...attrib_desc}>absteigend</option>
+                <select
+                    id="sort_order"
+                    name="sort_order"
+                    onChange={this.handleChange.bind(this)}
+                    className="selectpicker"
+                    data-width="fit"
+                    value={this.state.params.sort_order}
+                >
+                    <option value="asc">aufsteigend</option>
+                    <option value="desc">absteigend</option>
                 </select>
                 <span>
                     sortiert nach
                 </span>
-                <select id="sort_field" name="sort_field" onChange={(event) => this.formSubmit(event)} className="selectpicker" data-width="fit" data-showIcon="false">
+                <select
+                    id="sort_field"
+                    name="sort_field"
+                    onChange={this.handleChange.bind(this)}
+                    className="selectpicker"
+                    data-width="fit"
+                >
                     {sort_list}
                 </select>
             </div>
@@ -303,6 +354,12 @@ export default class SearchList extends Component {
 
     formatYear(date) {
         return date.substr(0, 4);
+    }
+
+    formatExcept(text) {
+        if (text.length > this.excerptLength)
+            return text.substr(0, this.excerptLength) + ' ...';
+        return text;
     }
 }
 

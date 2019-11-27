@@ -1,12 +1,30 @@
 {% extends "layout.html" %}
-{% from "macros.html" import pagination with context %}
+{% from "macros.html" import form_field, action_button with context %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-12">
-            <h1>Admin-Bereich: Kommentare</h1>
+            <h1>
+                Kommentare
+            </h1>
         </div>
     </div>
+    <form
+            method="POST"
+            action="/comments" id="comment-search-form"
+    >
+        <div class="row row-form">
+            {{ form_field(form.daterange, 3) }}
+            {{ form_field(form.status, 3) }}
+            {{ form_field(form.submit, 6, 'input-submit-emptylabel') }}
+        </div>
+        {{ form.csrf_token }}
+        <div id="comment-search-results"></div>
+    </form>
+{% endblock %}
+
+
+
     {{ pagination(count, page, '/admin/comments') }}
     <div class="row">
         <div class="col-md-12">
@@ -54,4 +72,3 @@
             </table>
         </div>
     </div>
-{% endblock %}

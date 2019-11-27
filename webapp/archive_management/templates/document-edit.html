@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field with context %}
+
+{% block content %}
+    <form method="POST" action="/admin/document/{{ document.id }}/edit" id="document-form" >
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Dokument bearbeiten</h1>
+            </div>
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.address, 6) }}
+            {{ form_field(form.postcode, 2) }}
+            {{ form_field(form.locality, 4) }}
+            {{ form_field(form.lat, 6, 'hidden') }}
+            {{ form_field(form.lon, 6, 'hidden') }}
+        </div>
+        <div class="row row-form" id="geocoding-error">
+            <div class="col-md-12">
+                <strong>
+                    Es konnte keine Geoposition festgestellt werden. Bitte Adresse korrigieren oder nochmals
+                    speichern klicken, um den Datensatz ohne Geokoordinaten zu speichern.
+                </strong>
+            </div>
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.submit, 12, 'input-submit') }}
+        </div>
+        {{ form.csrf_token }}
+    </form>
+{% endblock %}

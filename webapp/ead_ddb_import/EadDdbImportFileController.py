@@ -12,10 +12,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import os
 import datetime
-from flask import current_app, request, abort
-from ..common.response import json_response, xml_response
-from ..common.helpers import get_minio_connection, slugify
-from ..extensions import csrf, logger
+from flask import current_app, request
+from ..common.response import xml_response
+from ..common.helpers import slugify
+from ..extensions import csrf, logger, minio
 from ..models import Document, File, Category
 from minio.error import ResponseError, SignatureDoesNotMatch
 from urllib3.exceptions import MaxRetryError
@@ -86,8 +86,7 @@ def ead_ddb_push_media():
         'Content-Disposition': 'filename=%s.%s' % (slugify(document.title) if document.title else document.id, file_endings[file.mimeType])
     }
     try:
-        s3 = get_minio_connection()
-        s3.fput_object(
+        minio.connection.fput_object(
             current_app.config['S3_BUCKET'],
             "files/%s/%s" % (document.id, file.id),
             file_path,

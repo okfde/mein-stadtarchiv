@@ -11,9 +11,24 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, BooleanField, FileField
+from wtforms import StringField, SubmitField, TextAreaField, BooleanField, FileField, SelectField
 from wtforms.validators import DataRequired
 from ..common.form_validator import ValidateMimeType, ValidateKnownXml
+from ..common.form import SearchBaseForm
+
+
+class CategorySearchForm(SearchBaseForm):
+    title = StringField(
+        label='Name'
+    )
+    sort_field = SelectField(
+        label='Sortier-Feld',
+        choices=[
+            ('title', 'Name'),
+            ('created', 'Erstellt'),
+            ('modified', 'Verändert')
+        ]
+    )
 
 
 class CategoryFileForm(FlaskForm):
@@ -31,6 +46,9 @@ class CategoryFileForm(FlaskForm):
                 message='Bitte stellen Sie eine XML Datei in einem bekannten Format bereit'
             )
         ]
+    )
+    title = StringField(
+        label='Name'
     )
     description = TextAreaField(
         label='Beschreibung'

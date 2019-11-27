@@ -15,12 +15,10 @@ import subprocess
 from PIL import Image, ImageFile
 import shutil
 from datetime import datetime
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
+from flask import current_app
 from ..models import Document, File
-from ..common.helpers import get_minio_connection
 from minio.error import ResponseError, NoSuchKey
-from ..extensions import logger
+from ..extensions import logger, minio
 
 Image.MAX_IMAGE_PIXELS = None
 
@@ -28,10 +26,8 @@ Image.MAX_IMAGE_PIXELS = None
 class DataWorkerThumbnails():
     def __init__(self):
         ImageFile.LOAD_TRUNCATED_IMAGES = True
-        pass
 
     def prepare(self):
-        self.s3 = get_minio_connection()
         self.statistics = {
             'wrong-mimetype': 0,
             'file-missing': 0,
@@ -54,8 +50,8 @@ class DataWorkerThumbnails():
         file.thumbnailGenerated = datetime.now()
         # get file
         try:
-            data = self.s3.get_object(
-                current_app.config['S3_BUCKET'],
+            data = minio.connection.get_object(
+                current_app.config['MINIO_BUCKET'],
                 "files/%s/%s" % (document.id, file.id)
             )
         except NoSuchKey:
@@ -73,7 +69,6 @@ class DataWorkerThumbnails():
         with open(file_path, 'wb') as file_data:
             for d in data.stream(32 * 1024):
                 file_data.write(d)
-
 
         if file.mimeType not in ['application/msword', 'application/pdf', 'image/jpeg', 'image/png', 'image/tiff', 'image/bmp']:
             current_app.logger.warn('wrong mimetype: %s' % file.id)
@@ -162,15 +157,15 @@ class DataWorkerThumbnails():
         for size in current_app.config['THUMBNAIL_SIZES']:
             for out_file in os.listdir(os.path.join(out_folder, str(size))):
                 try:
-                    result = self.s3.fput_object(
-                        current_app.config['S3_BUCKET'],
+                    minio.connection.fput_object(
+                        current_app.config['MINIO_BUCKET'],
                         "thumbnails/%s/%s/%s/%s" % (str(document.id), str(file.id), str(size), out_file),
                         os.path.join(out_folder, str(size), out_file),
                         'image/jpeg'
                     )
                 except ResponseError as err:
                     current_app.logger.error(
-                        'Critical error saving file from File %s from Body %s' % (result['_id'], document.id))
+                        'Critical error saving file from File %s from Body %s' % (file.id, document.id))
         # save in mongodb
         file.thumbnailStatus = 'successful'
         file.thumbnailsGenerated = datetime.now()

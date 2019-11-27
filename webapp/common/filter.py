@@ -51,6 +51,8 @@ def register_global_filters(app):
 
     @app.template_filter('filesize')
     def template_filesize(value):
+        if not value:
+            return ''
         if value < 1000:
             return '%s Byte' % value
         elif value < 1000000:

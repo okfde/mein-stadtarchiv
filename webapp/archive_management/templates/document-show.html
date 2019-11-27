@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                Dokument {{ document.title }}
+                {{ action_button('edit', '/admin/document/%s/show' % document.id) }}
+            </h1>
+            <table class="table">
+                <tr>
+                    <td>Beschreibung</td>
+                    <td>{{ document.description }}</td>
+                </tr>
+                <tr>
+                    <td>Kategorie</td>
+                    <td>
+                        {% for categories in document.categories %}
+                            {% for category in categories %}
+                                {{ category.title }}
+                                {% if not loop.last %}<span class="category-arrow">→</span>{% endif %}
+                            {% endfor %}
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% if document.origination %}
+                    <tr>
+                        <td class="col-6">Herkunft</td>
+                        <td>{{ document.origination }}</td>
+                    </tr>
+                {% endif %}
+                {% if document.extra_fields %}
+                    {% for extra_field_key, extra_field_value in document.extra_fields.items() %}
+                        <tr>
+                            <td>{{ extra_field_key }}</td>
+                            <td>{{ extra_field_value }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                <tr>
+                    <td>Letzte Aktualisierung</td>
+                    <td>{{ document.modified|datetime }}</td>
+                </tr>
+            </table>
+            <h2>
+                Dateien
+                {{ action_button('new', '/admin/document/%s/file/new' % document.id) }}
+            </h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Größe</th>
+                    <th>Status</th>
+                    <th>Aktionen</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for file in document.files %}
+                    <tr>
+                        <td>{% if file.name %}{{ file.name }}{% endif %}</td>
+                        <td>{{ file.size|filesize }}</td>
+                        <td>
+                            {% if file.binary_exists %}
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-question-circle" aria-hidden="true"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ action_button('show', '/admin/document/%s/file/%s/show' % (document.id, file.id)) }}
+                            {{ action_button('edit', '/admin/document/%s/file/%s/edit' % (document.id, file.id)) }}
+                            {{ action_button('delete', '/admin/document/%s/file/%s/delete' % (document.id, file.id)) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

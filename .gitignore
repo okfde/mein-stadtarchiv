@@ -8,9 +8,8 @@ venv
 node_modules
 tmp
 logs
-!logs/.gitkeep
 temp/upload/*
-!temp/upload/.gitkeep
 temp/thumbnails/*
-!temp/thumbnails/.gitkeep
 static/sitemap/*.xml*
+static/js/*.js
+static/webpack-assets.json
