@@ -73,8 +73,8 @@ class DocumentFileForm(FlaskForm):
 
 class DocumentFileDeleteForm(FlaskForm):
     abort = SubmitField(
-        abbrechen='speichern'
+        label='abbrechen'
     )
     submit = SubmitField(
-        label='speichern'
+        label='löschen'
     )

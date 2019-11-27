@@ -1,14 +1,14 @@
 {% if document.files|length %}
     {% if document.files[0].binary_exists %}
         <div id="document-image">
-            <a href="{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg"
+            <a href="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg"
                data-toggle="lightbox" data-gallery="{{ document.files[0].id }}">
-                <img src="{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/600/1.jpg">
+                <img src="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/600/1.jpg">
             </a>
             {% if document.files[0].pages %}
                 {% if document.files[0].pages > 1 %}
                     {% for page in range(2, document.files[0].pages) %}
-                        <a href="{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/{{ page }}.jpg"
+                        <a href="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/{{ page }}.jpg"
                            data-toggle="lightbox" data-gallery="{{ document.files[0].id }}"
                            style="display: none"></a>
                     {% endfor %}
@@ -16,7 +16,7 @@
                 {% endif %}
             {% endif %}
             <p>
-                <a href="{{ config['S3_MEDIA_URL'] }}/files/{{ document.id }}/{{ document.files[0].id }}/download">
+                <a href="{{ config['MINIO_MEDIA_URL'] }}/files/{{ document.id }}/{{ document.files[0].id }}/download">
                     <i class="fa fa-download" aria-hidden="true"></i> Download der Datei in Originalgröße
                     {% if document.files[0].mimeType %}
                         ({% if document.files[0].mimeType == 'image/jpeg' %}JPEG,
