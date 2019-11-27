@@ -16,6 +16,7 @@ from flask import Flask, request, render_template, redirect
 from flask_wtf.csrf import CSRFError
 
 from webapp import config as Config
+from webapp.gallery.GalleryController import gallery
 from .common.constants import BaseConfig
 from .common.filter import register_global_filters
 from .extensions import db, es, login_manager, csrf, mail, celery, cache, minio
@@ -41,7 +42,8 @@ DEFAULT_BLUEPRINTS = [
     archive_management,
     user,
     admin,
-    api
+    api,
+    gallery
 ]
 
 

@@ -39,7 +39,7 @@ def worker_celery_full():
 
 @celery.task()
 def worker_celery_single(document_id):
-    document = Document.get(document_id).first()
+    document = Document.get(document_id)
 
     data_worker_thumbnails = DataWorkerThumbnails()
     data_worker_thumbnails.prepare()

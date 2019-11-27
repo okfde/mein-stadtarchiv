@@ -16,7 +16,7 @@
                 {% endif %}
             {% endif %}
             <p>
-                <a href="{{ config['MINIO_MEDIA_URL'] }}/files/{{ document.id }}/{{ document.files[0].id }}/download">
+                <a href="{{ config['MINIO_MEDIA_URL'] }}/files/{{ document.id }}/{{ document.files[0].id }}">
                     <i class="fa fa-download" aria-hidden="true"></i> Download der Datei in Originalgröße
                     {% if document.files[0].mimeType %}
                         ({% if document.files[0].mimeType == 'image/jpeg' %}JPEG,
