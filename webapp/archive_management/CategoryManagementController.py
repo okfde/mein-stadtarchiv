@@ -40,7 +40,7 @@ def admin_archive_category_new(archive_id):
 
         import_delayed(filename, archive_id)
         flash('Bestand erfolgreich hochgeladen und Importvorgang gestartet', 'success')
-        #return redirect('/admin/archive/%s/show' % archive.id)
+        return redirect('/admin/archive/%s/show' % archive.id)
     return render_template('category-new.html', archive=archive, form=form)
 
 
