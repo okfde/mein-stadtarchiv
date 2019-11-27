@@ -2,11 +2,11 @@
 {% from "macros.html" import form_field with context %}
 
 {% block content %}
-    <form method="POST" action="/admin/document/{{ document.id }}/file/{{ file.id }}/edit" enctype="multipart/form-data">
+    <form method="POST" action="/admin/document/{{ document.id }}/file/{{ file.id }}/delete" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-12">
                 <h1>Datei löschen</h1>
-                <p>Soll die Datei {% if file.name %} als Teil von Dokument {{ document.title }} gelöscht werden?</p>
+                <p>Soll die Datei {% if file.name %}{{ file.name }}{% endif %} als Teil von Dokument {{ document.title }} gelöscht werden?</p>
             </div>
         </div>
         <div class="row row-form">

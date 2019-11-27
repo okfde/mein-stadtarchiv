@@ -29,8 +29,8 @@ def documents_main():
         document = document_raw.to_dict(deref='deref_document', format_datetime=True, delete='delete_document', clean_none=True)
         if 'files' in document:
             for i in range(0, len(document['files'])):
-                document['files'][i]['accessUrl'] = '%s/files/%s/%s/show' % (current_app.config['S3_MEDIA_URL'], document['id'], document['files'][i]['id'])
-                document['files'][i]['downloadUrl'] = '%s/files/%s/%s/download' % (current_app.config['S3_MEDIA_URL'], document['id'], document['files'][i]['id'])
+                document['files'][i]['accessUrl'] = '%s/files/%s/%s/show' % (current_app.config['MINIO_MEDIA_URL'], document['id'], document['files'][i]['id'])
+                document['files'][i]['downloadUrl'] = '%s/files/%s/%s/download' % (current_app.config['MINIO_MEDIA_URL'], document['id'], document['files'][i]['id'])
         documents.append(document)
     return json_response({
         'data': documents,

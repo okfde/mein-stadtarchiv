@@ -5,7 +5,7 @@
 {% block description %}{% if document.description %}{{ document.description }}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block og_title %}{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %} | {{ super() }}{% endblock %}
 {% block og_description %}{% if document.description %}{{ document.description }}{% else %}{{ super() }}{% endif %}{% endblock %}
-{% block og_image %}{% if document.files|length %}{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg{% else %}{{ super() }}{% endif %}{% endblock %}
+{% block og_image %}{% if document.files|length %}{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg{% else %}{{ super() }}{% endif %}{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -101,7 +101,7 @@
                    target="blank"><i class="fa fa-linkedin"></i></a>
                 <a class="pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media=
 
-                        {% if document.files|length %}{{ config['S3_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg
+                        {% if document.files|length %}{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg
                             {% else %}{{ config['PROJECT_URL'] }}/static/images/stadtarchiv.jpg{% endif %}&url=
                         {{ config['PROJECT_URL'] }}{{ request.path }}&is_video=false&description=
                         {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}"
@@ -156,6 +156,9 @@
         </div>
         <div class="col-md-6 d-none d-md-block">
             {% include 'single_document_image.html' %}
+            <div id="lat-value" style="display: none">{{ document.lat }}</div>
+            <div id="lon-value" style="display: none">{{ document.lon }}</div>
+            <div id="single-maker-map-container"></div>
         </div>
     </div>
 {% endblock %}
