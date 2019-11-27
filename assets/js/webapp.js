@@ -15,6 +15,7 @@ import DocumentManagement from './Helper/DocumentManagement';
 
 import SearchTableArchives from './SearchTable/SearchTableArchives'
 import SearchTableComments from './SearchTable/SearchTableComments';
+import SingleMarkerMap from "./SingleMarkerMap";
 
 
 $(document).ready(function () {
@@ -42,5 +43,12 @@ $(document).ready(function () {
         ReactDOM.render(
             <SearchTableComments ref={(searchTableComments) => {window.searchTableComments = searchTableComments}} />,
             document.getElementById("comment-search-results"));
+    }
+
+    if (document.getElementById('single-maker-map-container')) {
+        ReactDOM.render(
+            <SingleMarkerMap ref={(ref) => {window.fileGallery = ref}}/>,
+            document.getElementById('single-maker-map-container')
+        )
     }
 });

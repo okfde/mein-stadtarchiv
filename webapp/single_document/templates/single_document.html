@@ -156,6 +156,9 @@
         </div>
         <div class="col-md-6 d-none d-md-block">
             {% include 'single_document_image.html' %}
+            <div id="lat-value" style="display: none">{{ document.lat }}</div>
+            <div id="lon-value" style="display: none">{{ document.lon }}</div>
+            <div id="single-maker-map-container"></div>
         </div>
     </div>
 {% endblock %}
