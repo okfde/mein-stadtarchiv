@@ -47,6 +47,10 @@
     "clean-webpack-plugin": "^3.0.0",
     "assets-webpack-plugin": "^3.9.10",
     "react-leaflet": "^2.6.0",
-    "leaflet": "^1.6.0"
+    "leaflet": "^1.6.0",
+    "@uppy/react": "^1.3.2",
+    "@uppy/xhr-upload": "^1.3.2",
+    "@uppy/core": "^1.5.1",
+    "@uppy/drag-drop": "^1.3.1"
   }
 }

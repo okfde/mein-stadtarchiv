@@ -50,7 +50,6 @@ class Document(Base):
 
 def update_index(sender, document):
     from ..data_worker.DataWorkerHelper import worker_celery_single as index_document
-    index_document.run(str(document.id))
-
+    index_document.apply_async((str(document.id), ), countdown=5)
 
 signals.pre_save.connect(update_index, sender=Document)

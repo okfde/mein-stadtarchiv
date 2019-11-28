@@ -13,9 +13,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import os
 from uuid import uuid4
-from flask import current_app, abort, render_template, flash, redirect
+from flask import current_app, abort, render_template, flash, redirect, request, jsonify
 from flask_login import current_user
-from ..models import Category
+from ..data_worker.DataWorkerHelper import worker_celery_single as index_document
+
+from webapp.archive_management.DocumentManagementHelper import process_file
+from webapp.common.elastic_request import ElasticRequest
+from webapp.extensions import csrf
+from ..models import Category, File, Document
 from .CategoryManagementForms import CategoryFileForm
 from ..data_import.DataImportSelect import import_delayed
 
@@ -53,3 +58,75 @@ def archive_category_show(archive_id, category_id):
     return render_template('category-show.html', archive=archive, category=category)
 
 
+@archive_management.route('/admin/archive/<string:archive_id>/category/<string:category_id>/upload')
+def archive_category_upload_files(archive_id, category_id):
+    if not current_user.has_capability('admin'):
+        abort(403)
+    archive = Category.get_or_404(archive_id)
+    category = Category.get_or_404(category_id)
+
+    return render_template('category-upload.html', archive=archive, category=category)
+
+
+
+
+
+@csrf.exempt
+@archive_management.route('/admin/archive/<string:archive_id>/category/<string:category_id>/upload', methods=['POST'])
+def archive_category_upload_file(archive_id, category_id):
+    if not current_user.has_capability('admin'):
+        abort(403)
+    archive = Category.get_or_404(archive_id)
+    category = Category.get_or_404(category_id)
+
+    elastic_request = ElasticRequest(
+        current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
+        'document'
+    )
+    elastic_request.set_fq('category_with_parents', category_id)
+    elastic_request.query_parts_should = [
+            { "range" : { "file_missing_count" : {"gte": 1} } },
+            { "range" : { "file_count" : {"gte": 1} } }
+        ],
+    elastic_request.set_limit(32000)
+    elastic_request.query()
+    documents = elastic_request.get_results()
+
+    if request.files:
+        uploaded_file = request.files['file']
+        matching_file_as_dict, document_as_dict = get_matching_file(uploaded_file, documents)
+        if not matching_file_as_dict:
+            return jsonify({'error': 'Dateiname wurde in keinem Dokument dieser Kategorie gefunden.'}), 400
+
+        # we need to fetch this document and assign it to the matching_file, because the process_file
+        # function will use this property later on - mongoengine does not dereference it.
+        document = Document.get(document_as_dict.get('id'))
+        if not document:
+            return jsonify({'error': 'Das angegebene Dokument ist indiziert, wurde jedoch nicht in der Datenbank gefunden.'}), 400
+        matching_file = File.get(matching_file_as_dict.get('id'))
+        if not matching_file:
+            return jsonify({'error': 'Die angegebene Datei ist indiziert, wurde jedoch nicht in der Datenbank gefunden.'}), 400
+
+        matching_file.mimeType = uploaded_file.content_type
+        matching_file.document = document
+        matching_file.save()
+        matching_file.document.save()
+
+
+        # This should be part of the process_file function
+        path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], str(matching_file.id))
+        uploaded_file.seek(0)
+        uploaded_file.save(path)
+
+
+        process_file(matching_file.id)
+
+    return jsonify(success=True)
+
+
+def get_matching_file(uploaded_file, documents):
+    for document in documents:
+        for file in document['files']:
+            if file.get('fileName') in [uploaded_file.filename, uploaded_file.filename.split('.')[0]]:
+                return file, document
+    return None, None

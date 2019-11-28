@@ -49,6 +49,7 @@
                 {% elif level == 4 %}
                     {{ action_button('show', '/admin/archive/%s/category/%s/show' % (archive.id, category['id'])) }}
                     {{ action_button('edit', '/admin/archive/%s/category/%s/edit' % (archive.id, category['id'])) }}
+                    {{ action_button('custom', '/admin/archive/%s/category/%s/upload' % (archive.id, category['id']), 'Dateiupload', 'upload') }}
                 {% endif %}
             </h{{ level }}>
             {% if category.get('children', [])|length %}
