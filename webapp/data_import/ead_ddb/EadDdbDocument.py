@@ -114,6 +114,7 @@ def save_document(data, parent, nsmap):
             continue
         file_upsert_values = {
             'set__externalId': data.get('id') + '-' + file_name,
+            'set__fileName': file_name
         }
         file = File.objects(externalId=data.get('id') + '-' + file_name).upsert_one(**file_upsert_values)
         files.append(file)
