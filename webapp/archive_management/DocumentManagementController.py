@@ -97,6 +97,8 @@ def admin_document_file_delete(document_id, file_id):
     if form.validate_on_submit():
         if form.abort.data:
             return redirect('/admin/document/%s/show' % document.id)
+        document.files = list(filter(lambda file: str(file.id) != file_id, document.files))
+        document.save()
         file.delete()
         flash('Datei wurde erfolgreich gelöscht', 'success')
         return redirect('/admin/document/%s/show' % document.id)
