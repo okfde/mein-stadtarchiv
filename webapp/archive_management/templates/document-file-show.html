@@ -45,7 +45,7 @@
             {% else %}
                 <h4>Dateiinhalt</h4>
                 {% if file.mimeType in config['IMAGE_MIMETYPES'] %}
-                    <img src="{{ url }}" alt="{{ file.name }}"/>
+                    <img class="img-fluid" src="{{ url }}" alt="{{ file.name }}"/>
                 {% elif file.mimeType == 'application/pdf' %}
                     <a class="btn btn-default" href="{{ url }}" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> PDF Datei herunterladen</a>
                 {% endif %}

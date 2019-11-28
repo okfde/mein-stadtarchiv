@@ -9,7 +9,7 @@ export default class SingleMarkerMap extends Component {
         lat: 'null',
         lon: 'null',
         zoom: 13,
-    }
+    };
 
     componentDidMount() {
         this.setState({
@@ -19,7 +19,6 @@ export default class SingleMarkerMap extends Component {
     }
 
     render() {
-        console.log(this.state)
         if (isNaN(this.state.lat) || isNaN(this.state.lon)) {
             console.log('returning')
             return  ''

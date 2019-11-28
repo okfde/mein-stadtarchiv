@@ -13,13 +13,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 import re
 import codecs
 import string
-from random import SystemRandom
 import translitcodec
+from random import SystemRandom
 from flask import current_app
 from datetime import datetime, timedelta
-from flask.json import JSONEncoder as BaseJSONEncoder
-from minio import Minio
-from minio.error import ResponseError, BucketAlreadyOwnedByYou, BucketAlreadyExists
 
 
 slugify_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
@@ -46,13 +43,16 @@ def slugify(text, delim='-'):
 def get_current_time_plus(days=0, hours=0, minutes=0, seconds=0):
     return get_current_time() + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
 
+
 def get_file_url(documentId, fileId):
     return current_app.config['MINIO_MEDIA_URL'] + '/files/%s/%s' % (str(documentId),  str(fileId))
+
 
 def get_first_thumbnail_url(documentId, fileId, size):
     if size not in current_app.config['THUMBNAIL_SIZES']:
         return ''
-    return current_app.config['MINIO_MEDIA_URL'] + '/thumbnails/%s/%s/1200/1.jpg' % (str(documentId),  str(fileId))
+    return current_app.config['MINIO_MEDIA_URL'] + '/thumbnails/%s/%s/%s/1.jpg' % (str(documentId), str(fileId), size)
+
 
 """
 def get_minio_connection():

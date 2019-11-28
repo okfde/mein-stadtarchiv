@@ -16,7 +16,6 @@ from flask import Flask, request, render_template, redirect
 from flask_wtf.csrf import CSRFError
 
 from webapp import config as Config
-from webapp.gallery.GalleryController import gallery
 from .common.constants import BaseConfig
 from .common.filter import register_global_filters
 from .extensions import db, es, login_manager, csrf, mail, celery, cache, minio
@@ -28,9 +27,11 @@ from .ead_ddb_import import ead_ddb_import
 from .recherche import recherche
 from .single_document import single_document
 from .archive_management import archive_management
+from webapp.gallery import gallery
 from .user import user
 from .admin import admin
 from .api import api
+from .map import map
 
 __all__ = ['launch']
 
@@ -43,7 +44,8 @@ DEFAULT_BLUEPRINTS = [
     user,
     admin,
     api,
-    gallery
+    gallery,
+    map
 ]
 
 

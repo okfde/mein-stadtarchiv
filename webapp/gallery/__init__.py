@@ -10,39 +10,4 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-
-from flask import Blueprint, current_app, render_template
-
-from webapp.common.elastic_request import ElasticRequest
-from webapp.common.helpers import get_first_thumbnail_url, get_random_password
-
-gallery = Blueprint('gallery', __name__, template_folder='templates')
-
-
-@gallery.route('/gallery', methods=['GET', 'POST'])
-def gallery_main():
-    elastic_request = ElasticRequest(
-        current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
-        'document'
-    )
-
-    elastic_request.set_range_limit('file_count', "gte", 1)
-    elastic_request.set_limit(100)
-    elastic_request.set_sort_order('random')
-    elastic_request.set_random_seed(get_random_password())
-    elastic_request.query()
-
-    elastic_results = elastic_request.get_results()
-    result = []
-
-    for document in elastic_results:
-        for file in document['files']:
-            if file.get('mimeType') not in current_app.config['IMAGE_MIMETYPES']:
-                continue
-            result.append({
-                'src': get_first_thumbnail_url(document.get('id'), file.get('id'), 600),
-                'alt': file.get('name'),
-                'document': '/document/' + document.get('id'),
-            })
-
-    return render_template('gallery.html', files=result)
+from .GalleryController import gallery

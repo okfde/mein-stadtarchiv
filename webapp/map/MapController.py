@@ -14,35 +14,48 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from flask import Blueprint, current_app, render_template
 
 from webapp.common.elastic_request import ElasticRequest
-from webapp.common.helpers import get_first_thumbnail_url, get_random_password
+from ..common.response import json_response
 
-gallery = Blueprint('gallery', __name__, template_folder='templates')
+map = Blueprint('map', __name__, template_folder='templates')
 
 
-@gallery.route('/gallery', methods=['GET', 'POST'])
-def gallery_main():
+@map.route('/map')
+def map_main():
+    return render_template('map.html')
+
+
+@map.route('/api/geojson')
+def map_api():
     elastic_request = ElasticRequest(
         current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
         'document'
     )
-
-    elastic_request.set_range_limit('file_count', "gte", 1)
-    elastic_request.set_limit(100)
-    elastic_request.set_sort_order('random')
-    elastic_request.set_random_seed(get_random_password())
+    elastic_request.set_limit(1000)
+    elastic_request.set_range_limit('lat', 'gt', 0)
+    elastic_request.set_range_limit('lon', 'gt', 0)
+    elastic_request.source = ['id', 'lat', 'lon', 'title', 'files.id', 'files.mimeType', 'files.binary_exists']
     elastic_request.query()
+    items = elastic_request.get_results()
+    features = []
+    for item in items:
+        properties = {
+            'id': item['id'],
+            'title': item.get('title')
+        }
+        if len(item.get('files', [])):
+            properties['binaryExists'] = item['files'][0]['binary_exists']
+            properties['fileId'] = item['files'][0]['id']
+            properties['mimeType'] = item['files'][0]['mimeType']
 
-    elastic_results = elastic_request.get_results()
-    result = []
-
-    for document in elastic_results:
-        for file in document['files']:
-            if file.get('mimeType') not in current_app.config['IMAGE_MIMETYPES']:
-                continue
-            result.append({
-                'src': get_first_thumbnail_url(document.get('id'), file.get('id'), 600),
-                'alt': file.get('name'),
-                'document': '/document/' + document.get('id'),
-            })
-
-    return render_template('gallery.html', files=result)
+        features.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [item.get('lon'), item.get('lat')]
+            },
+            "properties": properties
+        })
+    return json_response({
+        'type': 'FeatureCollection',
+        'features': features
+    })

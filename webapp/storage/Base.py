@@ -106,3 +106,5 @@ def update_modified(sender, document):
 
 
 signals.pre_save.connect(update_modified)
+
+

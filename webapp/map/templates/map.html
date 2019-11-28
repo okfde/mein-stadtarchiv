@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Karte</h1>
+            <div id="document-map">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    var config = {
+        mapbox_token: "{{ config.MAPBOX_TOKEN }}",
+        cdnUrl: "{{ config['MINIO_MEDIA_URL'] }}"
+    }
+    </script>
+    {{ super() }}
+{% endblock %}

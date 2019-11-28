@@ -16,12 +16,14 @@ from ..extensions import celery
 from ..models import Category
 from .ead_ddb.DataImportEadDdbWorker import DataImportEadDdbWorker
 from .faust_stadtarchiv.DataImportFaustStadtarchivWorker import DataImportFaustStadtarchivWorker
+from .faust_bergbaumuseum.DataImportFaustBergbaumuseumWorker import DataImportFaustBergbaumuseumWorker
 from ..data_worker.DataWorkerHelper import worker
 
 
 workers = [
     DataImportFaustStadtarchivWorker,
-    DataImportEadDdbWorker
+    DataImportEadDdbWorker,
+    DataImportFaustBergbaumuseumWorker
 ]
 
 

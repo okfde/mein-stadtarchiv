@@ -17,12 +17,16 @@ import SearchTableArchives from './SearchTable/SearchTableArchives'
 import SearchTableComments from './SearchTable/SearchTableComments';
 import SingleMarkerMap from "./SingleMarkerMap";
 import CategoryFileUpload from "./CategoryFileUpload";
+import DocumentMap from './Helper/DocumentMap';
 
 
 $(document).ready(function () {
     window.common = new Common();
     if (document.getElementById('archive-categories')) {
         window.archiveManagement = new ArchiveManagement();
+    }
+    if (document.getElementById('document-map')) {
+        window.documentMap = new DocumentMap();
     }
     if (document.getElementById('document-form')) {
         window.documentManagement = new DocumentManagement();

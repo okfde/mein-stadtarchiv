@@ -1,13 +1,14 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Gallerie</h1>
-
-    <div id="image-wall">
-        {% for file in files %}
-            <a href="{{ file.document }}"><img alt="{{ file.alt }}" src="{{ file.src }}"/></a>
-        {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Gallerie</h1>
+            <div id="image-wall">
+                {% for file in files %}
+                    <a href="{{ file.document }}"><img alt="{{ file.alt }}" src="{{ file.src }}"/></a>
+                {% endfor %}
+            </div>
         </div>
     </div>
-
 {% endblock %}

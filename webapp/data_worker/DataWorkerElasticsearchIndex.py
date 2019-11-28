@@ -126,6 +126,8 @@ def es_mapping_field_generator(field):
         result['fielddata'] = True
     elif field.__class__.__name__ == 'IntField':
         result['type'] = 'integer'
+    elif field.__class__.__name__ == 'FloatField':
+        result['type'] = 'float'
     elif field.__class__.__name__ == 'DateTimeField':
         result['type'] = 'date'
         if field.datetime_format == 'datetime':
