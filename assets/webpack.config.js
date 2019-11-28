@@ -94,7 +94,7 @@ module.exports = (env, argv) => {
                 chunkFilename: '[id].[hash].css'
             }),
             new CleanWebpackPlugin(),
-            new AssetsPlugin({path: path.join(__dirname, '..', "static")})
+            new AssetsPlugin({path: path.join(__dirname, '..', "static"), filename: 'webpack-assets.' + ((isDevelopment) ? '' : 'min.') + 'json'})
         ]
     }
 };
