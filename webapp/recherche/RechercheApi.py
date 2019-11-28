@@ -87,8 +87,8 @@ def api_search():
     elastic_request.set_skip(current_app.config['ITEMS_PER_PAGE'] * (form.page.data - 1))
     elastic_request.set_sort_field(form.sort_field.data)
     elastic_request.set_sort_order(form.sort_order.data)
-
     elastic_request.query()
+    print(elastic_request.get_results())
     return json_response({
         'status': 0,
         'documents': elastic_request.get_results(),

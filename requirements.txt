@@ -21,4 +21,4 @@ minio
 pillow
 bs4
 celery==4.4.0rc3
-elasticsearch>=6.0.0,<7.0.0
+elasticsearch>=7.0.0,<8.0.0

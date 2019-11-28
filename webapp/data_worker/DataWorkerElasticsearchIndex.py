@@ -58,9 +58,10 @@ def create_index():
 
     es.indices.create(index=index_name, body={
         'settings': es_settings(),
-        'mappings': {
-            'document': mapping
-        }
+        'mappings': mapping
+        #{
+            #'document': mapping
+        #}
     })
 
     latest_name = current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest'
@@ -203,7 +204,6 @@ def es_settings():
                         'type': 'custom',
                         'tokenizer': 'standard',
                         'filter': [
-                            'standard',
                             'lowercase',
                             'custom_stop',
                             'german_stop',

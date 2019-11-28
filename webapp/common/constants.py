@@ -73,6 +73,7 @@ class BaseConfig:
     ABIWORD_COMMAND = '/usr/bin/abiword'
     GHOSTSCRIPT_COMMAND = '/usr/bin/gs'
     JPEGOPTIM_PATH = '/usr/bin/jpegoptim'
+    GZIP_PATH = '/bin/gzip'
 
     ITEMS_PER_PAGE = 10
 

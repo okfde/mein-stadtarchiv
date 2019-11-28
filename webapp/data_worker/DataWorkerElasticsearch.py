@@ -108,7 +108,6 @@ class DataWorkerElasticsearch:
         new_doc = es.index(
             index=self.index_name,
             id=str(document.id),
-            doc_type='document',
             body=document_dict
         )
         if new_doc['result'] in ['created', 'updated']:

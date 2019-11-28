@@ -239,7 +239,7 @@ class ElasticRequest:
     def get_result_count(self):
         if not self.result_raw:
             return False
-        return self.result_raw['hits']['total']
+        return self.result_raw['hits']['total']['value']
 
     def get_aggs(self):
         result = {}
