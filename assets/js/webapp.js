@@ -16,6 +16,7 @@ import DocumentManagement from './Helper/DocumentManagement';
 import SearchTableArchives from './SearchTable/SearchTableArchives'
 import SearchTableComments from './SearchTable/SearchTableComments';
 import SingleMarkerMap from "./SingleMarkerMap";
+import CategoryFileUpload from "./CategoryFileUpload";
 
 
 $(document).ready(function () {
@@ -49,6 +50,13 @@ $(document).ready(function () {
         ReactDOM.render(
             <SingleMarkerMap ref={(ref) => {window.fileGallery = ref}}/>,
             document.getElementById('single-maker-map-container')
+        )
+    }
+
+    if (document.getElementById('category-file-upload-container')) {
+        ReactDOM.render(
+            <CategoryFileUpload ref={(ref) => {window.categoryFileUpload = ref}}/>,
+            document.getElementById('category-file-upload-container')
         )
     }
 });

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                Dateiupload zu '{{ category.title }}' in Archiv {{ archive.title }}
+            </h1>
+            <div id="category-file-upload-container">
+
+            </div>
+        </div>
+    </div>
+    <script>
+    window.currentCategoryId = '{{ category.id }}'
+    window.currentArchiveId = '{{ archive.id }}'
+    </script>
+{% endblock %}

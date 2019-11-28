@@ -2,16 +2,18 @@
 {% from "macros.html" import form_field with context %}
 
 {% block content %}
-    <form method="POST" action="/admin/document/{{ document.id }}/file/{{ file.id }}/edit" enctype="multipart/form-data">
+    <form method="POST" action="{{ post }}" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-12">
                 <h1>Datei bearbeiten</h1>
-                <p>Die Datei {% if file.name %} ist Teil von Dokument {{ document.title }}</p>
+                <p>Die Datei {% if file.name %}{{ file.name }}{% endif %} ist Teil von Dokument {{ document.title }}</p>
             </div>
         </div>
         <div class="row row-form">
             {{ form_field(form.name, 6) }}
-            {{ form_field(form.image_file, 6) }}
+            {% if not is_edit_mode %}
+                {{ form_field(form.image_file, 6) }}
+            {% endif %}
         </div>
         <div class="row row-form">
             {{ form_field(form.submit, 12, 'input-submit') }}

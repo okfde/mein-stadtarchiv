@@ -22,7 +22,7 @@ def gallery_main():
 
     for document in elastic_results:
         for file in document['files']:
-            if file.get('mimeType') not in ['image/jpeg', 'image/png', 'image/tiff', 'image/bmp']:
+            if file.get('mimeType') not in current_app.config['IMAGE_MIMETYPES']:
                 continue
             result.append({
                 'src': get_first_thumbnail_url(document.get('id'), file.get('id'), 600),
