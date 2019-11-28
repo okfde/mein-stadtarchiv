@@ -54,6 +54,12 @@ class DocumentFileForm(FlaskForm):
     name = StringField(
         label='Name'
     )
+
+    submit = SubmitField(
+        label='speichern'
+    )
+
+class DocumentNewFileForm(DocumentFileForm):
     image_file = FileField(
         label='Bild- oder PDF-Datei',
         validators=[
@@ -66,10 +72,6 @@ class DocumentFileForm(FlaskForm):
             )
         ]
     )
-    submit = SubmitField(
-        label='speichern'
-    )
-
 
 class DocumentFileDeleteForm(FlaskForm):
     abort = SubmitField(
