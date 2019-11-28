@@ -77,3 +77,4 @@ class BaseConfig:
     ITEMS_PER_PAGE = 10
 
     THUMBNAIL_SIZES = [150, 300, 600, 1200]
+    IMAGE_MIMETYPES = ['image/jpeg', 'image/png', 'image/tiff', 'image/bmp']

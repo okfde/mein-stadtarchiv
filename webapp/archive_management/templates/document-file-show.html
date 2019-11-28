@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                Datei {{ file.name or 'Unbenannte Datei' }} in Dokument {{ document.title }}
+                {{ action_button('edit', '/admin/document/%s/file/%s/edit' % (document.id, file.id)) }}
+            </h1>
+            <table class="table">
+                <tr>
+                    <td>Name</td>
+                    <td>{{ file.name or 'Unbenannt' }}</td>
+                </tr>
+                {% if file.text %}
+                    <tr>
+                        <td>Text</td>
+                        <td>{{ file.text }}</td>
+                    </tr>
+                {% endif %}
+                {% if file.pages != None %}
+                    <tr>
+                        <td>Anzahl Seiten</td>
+                        <td>{{ file.pages }}</td>
+                    </tr>
+                {% endif %}
+                {% if file.mimeType != None %}
+                    <tr>
+                        <td>MIME Type</td>
+                        <td>{{ file.mimeType }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>Letzte Aktualisierung</td>
+                    <td>{{ document.modified|datetime }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% if not file.binary_exists %}
+                <em>Diese Datei wurde noch nicht in "Mein Stadtarchiv" hochgeladen.</em>
+            {% else %}
+                <h4>Dateiinhalt</h4>
+                {% if file.mimeType in config['IMAGE_MIMETYPES'] %}
+                    <img src="{{ url }}" alt="{{ file.name }}"/>
+                {% elif file.mimeType == 'application/pdf' %}
+                    <a class="btn btn-default" href="{{ url }}" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> PDF Datei herunterladen</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

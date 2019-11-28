@@ -14,6 +14,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 import os
 from flask import current_app, abort, render_template, flash, redirect
 from flask_login import current_user
+
+from webapp.common.helpers import get_file_url
 from ..models import Document, File
 from .DocumentManagementForms import DocumentForm, DocumentFileForm, DocumentFileDeleteForm
 from .DocumentManagementHelper import process_file
@@ -85,6 +87,14 @@ def admin_document_file_edit(document_id, file_id):
     file = File.get_or_404(file_id)
     form = DocumentFileForm(obj=file)
     return render_template('document-file-edit.html', document=document, file=file, form=form)
+
+@archive_management.route('/admin/document/<string:document_id>/file/<string:file_id>/show', methods=['GET', 'POST'])
+def admin_document_file_show(document_id, file_id):
+    if not current_user.has_capability('admin'):
+        abort(403)
+    document = Document.get_or_404(document_id)
+    file = File.get_or_404(file_id)
+    return render_template('document-file-show.html', document=document, file=file, url=get_file_url(document.id, file.id))
 
 
 @archive_management.route('/admin/document/<string:document_id>/file/<string:file_id>/delete', methods=['GET', 'POST'])
