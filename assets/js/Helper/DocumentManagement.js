@@ -1,10 +1,12 @@
 
 export default class DocumentManagement {
     baseUrl = 'https://nominatim.openstreetmap.org/search?';
-    params = {
+    address = {
         country: 'Deutschland',
-        countrycodes: 'de',
-        format: 'json'
+    }
+    params = {
+        format: 'json',
+        q: ''
     };
     constructor() {
         document.getElementById('document-form').onsubmit = (evt) => this.submitData(evt);
@@ -28,17 +30,24 @@ export default class DocumentManagement {
             return;
         }
         evt.preventDefault();
-        let params = {};
-        Object.assign(params, this.params);
-        params.address = document.getElementById('address').value;
-        params.postcode = document.getElementById('postcode').value;
-        params.locality = document.getElementById('locality').value;
-        if (!params.address || !params.postcode || !params.locality) {
+        let params = Object.assign({}, this.params);
+        const addressParts = this.getAddressParts();
+        if (addressParts.some(part => !part)) {
             this.setGeocodeError();
             return;
         }
+        addressParts.push('Deutschland');
+        params.q = addressParts.join(', ');
         $.get(this.baseUrl + $.param(params))
             .then((data) => this.handleGeocodingResults(data));
+    }
+
+    getAddressParts() {
+        const addressParts = []
+        addressParts.push(document.getElementById('address').value);
+        addressParts.push(document.getElementById('postcode').value);
+        addressParts.push(document.getElementById('locality').value);
+        return addressParts;
     }
 
     handleGeocodingResults(data) {
