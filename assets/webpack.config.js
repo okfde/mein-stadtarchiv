@@ -1,12 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
 //const Chunks2JsonPlugin = require('chunks-2-json-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const AssetsPlugin = require('assets-webpack-plugin')
+const AssetsPlugin = require('assets-webpack-plugin');
 
 module.exports = (env, argv) => {
-    const isDevelopment = argv.mode !== 'production'
+    const isDevelopment = argv.mode !== 'production';
 
     return {
         entry: [
@@ -24,7 +24,7 @@ module.exports = (env, argv) => {
         output: {
             path: path.join(__dirname, '..', 'static', 'js'),
             publicPath: '/static/js',
-            filename: 'webapp.[contenthash].js',
+            filename: 'webapp.[contenthash].' + ((isDevelopment) ? '' : 'min.') + 'js',
         },
         optimization: {
             minimize: !isDevelopment

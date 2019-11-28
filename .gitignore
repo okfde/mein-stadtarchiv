@@ -12,7 +12,7 @@ temp/upload/*
 temp/thumbnails/*
 static/sitemap/*.xml*
 static/js/*.js
+!static/js/*.min.js
 static/js/*.map
-static/css/*.css
-static/css/*.map
+!static/js/*.min.map
 static/webpack-assets.json
