@@ -40,11 +40,10 @@
                     {% endif %}
                     Name: <a href="{{ config['PROJECT_URL'] }}/document/{{ document.id }}">{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}</a><br>
                     {% if document.categories[0][0].licenceName and document.categories[0][0].licenceUrl %}
-                        Quelle: <a href="{{ document.categories[0][0].licenceUrl }}" target="_blank">{{ document.categories[0][0].licenceName }}</a><br>
+                        Lizenz: <a href="{{ document.categories[0][0].licenceUrl }}" target="_blank">{{ document.categories[0][0].licenceName }}</a><br>
                     {% elif document.categories[0][0].licenceName %}
-                        Quelle: {{ document.categories[0][0].licenceName }}
+                        Lizenz: {{ document.categories[0][0].licenceName }}
                     {% endif %}
-                    Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons BY 4.0</a>
                 </p>
             {% endif %}
         </div>
