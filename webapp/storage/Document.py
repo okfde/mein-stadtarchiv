@@ -15,7 +15,6 @@ from .Base import Base
 from mongoengine import signals
 
 
-
 class Document(Base):
     uid = StringField()
     order_id = StringField()
@@ -51,5 +50,6 @@ class Document(Base):
 def update_index(sender, document):
     from ..data_worker.DataWorkerHelper import worker_celery_single as index_document
     index_document.apply_async((str(document.id), ), countdown=5)
+
 
 signals.pre_save.connect(update_index, sender=Document)

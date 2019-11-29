@@ -28,7 +28,8 @@ def gallery_main():
 
     elastic_request.set_range_limit('file_count', "gte", 1)
     elastic_request.set_limit(100)
-    elastic_request.set_sort_order('random')
+    elastic_request.set_sort_order('asc')
+    elastic_request.set_sort_field('random')
     elastic_request.set_random_seed(get_random_password())
     elastic_request.query()
 

@@ -222,6 +222,9 @@ export default class SearchList extends Component {
                         <p className="search-result-description">{this.formatExcept(document.description)}</p>
                     }
                 </div>
+                {document.files && <div className="search-result-image">
+                    <img src={window.common.buildImageUrl(document.id, document.files[0].id, 150)}/>
+                </div>}
             </li>
         );
     }
@@ -267,6 +270,7 @@ export default class SearchList extends Component {
         return (
             <div className="d-flex justify-content-start search-table-result-header-text">
                 <span>
+                    {this.state.resultCount === 10000 && <span>Über </span>}
                     {this.state.resultCount} Ergebnis{this.state.resultCount === 1 ? '' : 'se'}
                 </span>
                 <select

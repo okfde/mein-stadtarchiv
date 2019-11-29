@@ -12,6 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, TextAreaField, BooleanField
+from wtforms.validators import URL, Optional
 from ..common.form import SearchBaseForm
 
 
@@ -38,6 +39,26 @@ class ArchiveForm(FlaskForm):
     )
     visible = BooleanField(
         label='Öffentlich sichtbar'
+    )
+    licenceName = StringField(
+        label='Lizenz: Name'
+    )
+    licenceUrl = StringField(
+        label='Lizenz URL',
+        validators=[
+            URL(message='Bitte eine valide URL oder gar keine eingeben.'),
+            Optional()
+        ]
+    )
+    licenceAuthorName = StringField(
+        label='Autor Name'
+    )
+    licenceAuthorUrl = StringField(
+        label='Autor URL',
+        validators=[
+            URL(message='Bitte eine valide URL oder gar keine eingeben.'),
+            Optional()
+        ]
     )
     submit = SubmitField(
         label='speichern'

@@ -25,6 +25,11 @@ class Category(Base):
     status = StringField()
     parent = ReferenceField('Category', deref_document=False)
 
+    licenceName = StringField()
+    licenceUrl = StringField()
+    licenceAuthorName = StringField()
+    licenceAuthorUrl = StringField()
+
     def get_dict_with_children(self, recursive=False):
         result = self.to_dict()
         result['children'] = []

@@ -80,8 +80,10 @@ export default class DocumentMap {
             .addTo(this.map);
     }
 
-    buildImageUrl(properties) {
-        return config.cdnUrl + '/thumbnails/' + properties.id + '/' + properties.fileId + '/300/1.jpg';
+    buildImageUrl(properties, size) {
+        if (!size)
+            size = 300;
+        return config.cdnUrl + '/thumbnails/' + properties.id + '/' + properties.fileId + '/' + size + '/1.jpg';
     }
 
     closePopup() {

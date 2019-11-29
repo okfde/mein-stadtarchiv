@@ -91,4 +91,11 @@ export default class Common {
                 storage.length !== 0;
         }
     }
+
+    buildImageUrl(document_id, file_id, size) {
+        if (!size)
+            size = 300;
+        return config.cdnUrl + '/thumbnails/' + document_id + '/' + file_id + '/' + size + '/1.jpg';
+    }
+
 };

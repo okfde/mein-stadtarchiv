@@ -21,6 +21,7 @@
                     {% if document.files[0].mimeType %}
                         ({% if document.files[0].mimeType == 'image/jpeg' %}JPEG,
                             {% elif document.files[0].mimeType == 'image/tiff' %}TIFF,
+                            {% elif document.files[0].mimeType == 'image/png' %}PNG,
                             {% elif document.files[0].mimeType == 'application/pdf' %}PDF,
                             {% else %}{{ document.files[0].mimeType }},
                         {% endif %}
@@ -30,7 +31,22 @@
                     {% endif %}
                 </a>
             </p>
-            <p>Quelle: <a href="https://www.stadt-kerpen.de/stadtarchiv" target="_blank">Stadtarchiv Kerpen</a> | Name: <a href="{{ config['PROJECT_URL'] }}/document/{{ document.id }}">{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}</a> | Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons BY 4.0</a></p>
+            {% if document.categories|length and document.categories[0]|length %}
+                <p>
+                    {% if document.categories[0][0].authorName and document.categories[0][0].authorUrl %}
+                        Quelle: <a href="{{ document.categories[0][0].authorUrl }}" target="_blank">{{ document.categories[0][0].authorName }}</a><br>
+                    {% elif document.categories[0][0].authorName %}
+                        Quelle: {{ document.categories[0][0].authorName }}
+                    {% endif %}
+                    Name: <a href="{{ config['PROJECT_URL'] }}/document/{{ document.id }}">{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}</a><br>
+                    {% if document.categories[0][0].licenceName and document.categories[0][0].licenceUrl %}
+                        Quelle: <a href="{{ document.categories[0][0].licenceUrl }}" target="_blank">{{ document.categories[0][0].licenceName }}</a><br>
+                    {% elif document.categories[0][0].licenceName %}
+                        Quelle: {{ document.categories[0][0].licenceName }}
+                    {% endif %}
+                    Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons BY 4.0</a>
+                </p>
+            {% endif %}
         </div>
     {% endif %}
 {% else %}

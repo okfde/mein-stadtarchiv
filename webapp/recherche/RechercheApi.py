@@ -80,7 +80,8 @@ def api_search():
         'date_end',
         'date_text',
         'help_required',
-        'file_count'
+        'file_count',
+        'files.id'
     ]
 
     elastic_request.set_random_seed(form.random_seed.data)
@@ -88,7 +89,6 @@ def api_search():
     elastic_request.set_sort_field(form.sort_field.data)
     elastic_request.set_sort_order(form.sort_order.data)
     elastic_request.query()
-    print(elastic_request.get_results())
     return json_response({
         'status': 0,
         'documents': elastic_request.get_results(),

@@ -36,6 +36,7 @@ def process_file(file_id):
         return
     file.binary_exists = True
     path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], str(file.id))
+    file.size = os.path.getsize(path)
     metadata = {
         'Content-Disposition': 'filename=%s.%s' % (
             slugify(file.document.title) if file.document.title else file.document.id, file_endings[file.mimeType]

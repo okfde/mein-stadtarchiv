@@ -49,6 +49,26 @@ def admin_archive_category_new(archive_id):
     return render_template('category-new.html', archive=archive, form=form)
 
 
+@archive_management.route('/admin/archive/<string:archive_id>/category/<string:category_id>/edit', methods=['GET', 'POST'])
+def admin_archive_category_edit(archive_id, category_id):
+    if not current_user.has_capability('admin'):
+        abort(403)
+    archive = Category.get_or_404(archive_id)
+    form = CategoryFileForm()
+    if form.validate_on_submit():
+        form.category_file.data_import_worker.set_parent(archive)
+        form.category_file.data_import_worker.save_base_data()
+        filename = str(uuid4())
+        path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], filename)
+        form.category_file.data.seek(0)
+        form.category_file.data.save(path)
+
+        import_delayed(filename, archive_id)
+        flash('Bestand erfolgreich hochgeladen und Importvorgang gestartet', 'success')
+        return redirect('/admin/archive/%s/show' % archive.id)
+    return render_template('category-edit.html', archive=archive, form=form)
+
+
 @archive_management.route('/admin/archive/<string:archive_id>/category/<string:category_id>/show')
 def archive_category_show(archive_id, category_id):
     if not current_user.has_capability('admin'):

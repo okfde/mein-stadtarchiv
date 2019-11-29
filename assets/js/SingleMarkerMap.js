@@ -20,8 +20,7 @@ export default class SingleMarkerMap extends Component {
 
     render() {
         if (isNaN(this.state.lat) || isNaN(this.state.lon)) {
-            console.log('returning')
-            return  ''
+            return ''
         }
         return (
             <Map style={{height: '500px'}} center={[this.state.lat, this.state.lon]} zoom={this.state.zoom}>
