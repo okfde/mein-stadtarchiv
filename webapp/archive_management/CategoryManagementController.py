@@ -54,6 +54,7 @@ def admin_archive_category_edit(archive_id, category_id):
     if not current_user.has_capability('admin'):
         abort(403)
     archive = Category.get_or_404(archive_id)
+    category = Category.get_or_404(category_id)
     form = CategoryFileForm()
     if form.validate_on_submit():
         form.category_file.data_import_worker.set_parent(archive)
@@ -66,7 +67,7 @@ def admin_archive_category_edit(archive_id, category_id):
         import_delayed.delay(filename, archive_id)
         flash('Bestand erfolgreich hochgeladen und Importvorgang gestartet', 'success')
         return redirect('/admin/archive/%s/show' % archive.id)
-    return render_template('category-edit.html', archive=archive, form=form)
+    return render_template('category-edit.html', archive=archive, category=category, form=form)
 
 
 @archive_management.route('/admin/archive/<string:archive_id>/category/<string:category_id>/show')
