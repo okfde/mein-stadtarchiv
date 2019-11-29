@@ -34,7 +34,7 @@ def select_standard(*args, **kwargs):
             return check
 
 
-#@celery.worker
+@celery.worker
 def import_delayed(filename, archive_id):
     archive = Category.get(archive_id)
     if not archive:

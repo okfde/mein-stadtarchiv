@@ -16,7 +16,7 @@ from minio.error import ResponseError, SignatureDoesNotMatch
 from urllib3.exceptions import MaxRetryError
 from flask import current_app
 from ..models import File
-from ..extensions import minio, logger
+from ..extensions import minio, logger, celery
 from ..data_worker.DataWorkerThumbnails import DataWorkerThumbnails
 from ..common.helpers import slugify
 
@@ -30,6 +30,7 @@ file_endings = {
 }
 
 
+@celery.task
 def process_file(file_id):
     file = File.get(file_id)
     if not file:

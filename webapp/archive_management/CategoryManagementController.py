@@ -43,7 +43,7 @@ def admin_archive_category_new(archive_id):
         form.category_file.data.seek(0)
         form.category_file.data.save(path)
 
-        import_delayed(filename, archive_id)
+        import_delayed.delay(filename, archive_id)
         flash('Bestand erfolgreich hochgeladen und Importvorgang gestartet', 'success')
         return redirect('/admin/archive/%s/show' % archive.id)
     return render_template('category-new.html', archive=archive, form=form)
@@ -63,7 +63,7 @@ def admin_archive_category_edit(archive_id, category_id):
         form.category_file.data.seek(0)
         form.category_file.data.save(path)
 
-        import_delayed(filename, archive_id)
+        import_delayed.delay(filename, archive_id)
         flash('Bestand erfolgreich hochgeladen und Importvorgang gestartet', 'success')
         return redirect('/admin/archive/%s/show' % archive.id)
     return render_template('category-edit.html', archive=archive, form=form)
@@ -86,9 +86,6 @@ def archive_category_upload_files(archive_id, category_id):
     category = Category.get_or_404(category_id)
 
     return render_template('category-upload.html', archive=archive, category=category)
-
-
-
 
 
 @csrf.exempt
@@ -132,12 +129,10 @@ def archive_category_upload_file(archive_id, category_id):
         matching_file.save()
         matching_file.document.save()
 
-
         # This should be part of the process_file function
         path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], str(matching_file.id))
         uploaded_file.seek(0)
         uploaded_file.save(path)
-
 
         process_file(matching_file.id)
 

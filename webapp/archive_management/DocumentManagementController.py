@@ -75,7 +75,7 @@ def admin_document_file_new(document_id):
         path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], str(file.id))
         form.image_file.data.seek(0)
         form.image_file.data.save(path)
-        process_file(file.id)
+        process_file.delay(file.id)
         return redirect(url_for('archive_management.admin_document_file_show', document_id=document_id, file_id=str(file.id)))
     return render_template('document-file-new.html', document=document, form=form,  is_edit_mode=False, post=request.url)
 
@@ -90,7 +90,7 @@ def admin_document_file_edit(document_id, file_id):
     if form.validate_on_submit():
         file.name = form.name.data
         file.save()
-        process_file(file.id)
+        process_file.delay(file.id)
         flash('Datei wurde erfolgreich gespeichert.', 'success')
     return render_template('document-file-edit.html', document=document, file=file, form=form, is_edit_mode=True, post=request.url)
 
