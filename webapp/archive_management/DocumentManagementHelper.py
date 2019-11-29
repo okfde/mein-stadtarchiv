@@ -30,7 +30,7 @@ file_endings = {
 }
 
 
-@celery.task
+@celery.task()
 def process_file(file_id):
     file = File.get(file_id)
     if not file:
