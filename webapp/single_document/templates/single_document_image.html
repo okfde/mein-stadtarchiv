@@ -33,10 +33,10 @@
             </p>
             {% if document.categories|length and document.categories[0]|length %}
                 <p>
-                    {% if document.categories[0][0].authorName and document.categories[0][0].authorUrl %}
-                        Quelle: <a href="{{ document.categories[0][0].authorUrl }}" target="_blank">{{ document.categories[0][0].authorName }}</a><br>
-                    {% elif document.categories[0][0].authorName %}
-                        Quelle: {{ document.categories[0][0].authorName }}
+                    {% if document.categories[0][0].licenceAuthorName and document.categories[0][0].licenceAuthorUrl %}
+                        Quelle: <a href="{{ document.categories[0][0].licenceAuthorUrl }}" target="_blank">{{ document.categories[0][0].licenceAuthorName }}</a><br>
+                    {% elif document.categories[0][0].licenceAuthorName %}
+                        Quelle: {{ document.categories[0][0].licenceAuthorName }}
                     {% endif %}
                     Name: <a href="{{ config['PROJECT_URL'] }}/document/{{ document.id }}">{% if document.title %}{{ document.title }}{% else %}Unbekannte Darstellung{% endif %}</a><br>
                     {% if document.categories[0][0].licenceName and document.categories[0][0].licenceUrl %}
