@@ -54,7 +54,6 @@ class DataWorkerGeoreference:
             'format': 'json',
             'q': '%s, %s, Deutschland' % (street, postfix)
         }
-        return
         results = requests.get('https://nominatim.openstreetmap.org/search', args)
         sleep(1)
         if results.status_code != 200:
