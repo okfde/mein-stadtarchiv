@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Galerie</h1>
-            <p><a href="/gallery" class="btn btn-block">mehr Bilder laden</a></p>
+            <p><a href="/gallery" class="btn btn-block btn-success">mehr Bilder laden</a></p>
             <div id="image-wall">
                 {% for file in files %}
                     <a href="{{ file.document }}"><img alt="{{ file.alt }}" src="{{ file.src }}"/></a>
