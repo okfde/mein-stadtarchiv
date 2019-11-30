@@ -39,6 +39,8 @@ class DataWorkerGeoreference:
             self.loop_categories(category)
 
     def georeference_document(self, document):
+        if document.lat and document.lon:
+            return
         logger.info('worker.georeference', 'Georeferencing document %s' % document.id)
         street = document.title # TODO: flexible way of selecting this. should support title and meta values
         street = street.replace('str.', 'straße').replace('Str.', 'Straße')
