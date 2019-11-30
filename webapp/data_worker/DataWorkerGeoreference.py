@@ -34,7 +34,6 @@ class DataWorkerGeoreference:
     def loop_categories(self, category):
         for document in Document.objects(category=category).all():
             self.georeference_document(document)
-            return
         for category in Category.objects(parent=category).all():
             self.loop_categories(category)
 
@@ -55,6 +54,7 @@ class DataWorkerGeoreference:
             'format': 'json',
             'q': '%s, %s, Deutschland' % (street, postfix)
         }
+        return
         results = requests.get('https://nominatim.openstreetmap.org/search', args)
         sleep(1)
         if results.status_code != 200:
