@@ -32,6 +32,8 @@ class Category(Base):
 
     def get_dict_with_children(self, recursive=False):
         result = self.to_dict()
+        if not recursive:
+            return result
         result['children'] = []
         for category in Category.objects(parent=self.id).order_by('+title').all():
             result['children'].append(category.get_dict_with_children(recursive))
