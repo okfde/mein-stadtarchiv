@@ -20,9 +20,9 @@ from webapp.data_worker.DataWorkerHelper import worker as data_worker_run, upser
 from webapp.admin.AdminHelper import set_auth as set_auth_run, missing_media as missing_media_run, \
     file_document_reverse as file_document_reverse_run, reset_elasticsearch_last_run as reset_elasticsearch_last_run_run, \
     init_archive as init_archive_run
+from webapp.data_worker.DataWorkerGeoreference import DataWorkerGeoreference
 
 app = launch()
-
 manager = Manager(app)
 
 
@@ -55,6 +55,7 @@ def set_auth(id, auth):
 def missing_media():
     missing_media_run()
 
+
 @manager.command
 def file_document_reverse():
     file_document_reverse_run()
@@ -68,6 +69,12 @@ def reset_elasticsearch_last_run():
 @manager.command
 def init_archive(title, auth):
     init_archive_run(title, auth)
+
+
+@manager.command
+def georeference(category_id):
+    dwg = DataWorkerGeoreference()
+    dwg.run(category_id)
 
 
 @manager.command

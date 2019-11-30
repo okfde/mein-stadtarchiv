@@ -15,6 +15,7 @@ translitcodec
 python-memcached
 pytz
 passlib
+requests
 bcrypt
 lxml
 minio

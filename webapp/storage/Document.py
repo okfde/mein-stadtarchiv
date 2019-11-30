@@ -40,6 +40,9 @@ class Document(Base):
     lat = FloatField()
     lon = FloatField()
 
+    georeferencePrecision = StringField()
+    georeferenceDone = DateTimeField(datetime_format='datetime')
+
     extra_fields = DictField(delete_document=True)
     document_type = StringField()
 

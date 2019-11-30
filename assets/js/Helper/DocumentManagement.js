@@ -3,7 +3,7 @@ export default class DocumentManagement {
     baseUrl = 'https://nominatim.openstreetmap.org/search?';
     address = {
         country: 'Deutschland',
-    }
+    };
     params = {
         format: 'json',
         q: ''
@@ -43,7 +43,7 @@ export default class DocumentManagement {
     }
 
     getAddressParts() {
-        const addressParts = []
+        const addressParts = [];
         addressParts.push(document.getElementById('address').value);
         addressParts.push(document.getElementById('postcode').value);
         addressParts.push(document.getElementById('locality').value);

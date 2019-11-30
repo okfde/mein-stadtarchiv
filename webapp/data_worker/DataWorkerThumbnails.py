@@ -23,7 +23,7 @@ from ..extensions import logger, minio
 Image.MAX_IMAGE_PIXELS = None
 
 
-class DataWorkerThumbnails():
+class DataWorkerThumbnails:
     def __init__(self):
         ImageFile.LOAD_TRUNCATED_IMAGES = True
 
