@@ -30,13 +30,13 @@ class Category(Base):
     licenceAuthorName = StringField()
     licenceAuthorUrl = StringField()
 
-    def get_dict_with_children(self, recursive=False):
+    def get_dict_with_children(self, recursive=False, level=1):
         result = self.to_dict()
-        if not recursive:
+        if not recursive and level > 1:
             return result
         result['children'] = []
         for category in Category.objects(parent=self.id).order_by('+title').all():
-            result['children'].append(category.get_dict_with_children(recursive))
+            result['children'].append(category.get_dict_with_children(recursive, level + 1))
         return result
 
     def __repr__(self):
