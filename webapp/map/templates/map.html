@@ -4,9 +4,14 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Karte</h1>
-            <div id="document-map">
+        </div>
+    </div>
+    <form id="map-search-form">
 
-            </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="document-map"></div>
         </div>
     </div>
 {% endblock %}
@@ -16,7 +21,9 @@
     var config = {
         mapbox_token: "{{ config.MAPBOX_TOKEN }}",
         cdnUrl: "{{ config['MINIO_MEDIA_URL'] }}"
-    }
+    };
+    var csrf_token = '{{ csrf_token() }}';
+    var archives = {{ archives|tojson }};
     </script>
     {{ super() }}
 {% endblock %}

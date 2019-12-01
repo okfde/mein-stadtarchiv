@@ -17,7 +17,7 @@ class BaseConfig:
     INSTANCE_FOLDER_PATH = os.path.join('/tmp', 'instance')
 
     PROJECT_NAME = 'mein-stadtarchiv'
-    PROJECT_VERSION = '1.9.0'
+    PROJECT_VERSION = '2.0.0'
 
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
     LOG_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'logs'))

@@ -18,6 +18,7 @@ import SearchTableComments from './SearchTable/SearchTableComments';
 import SingleMarkerMap from "./SingleMarkerMap";
 import CategoryFileUpload from "./CategoryFileUpload";
 import DocumentMap from './Helper/DocumentMap';
+import DocumentMapSearch from './Helper/DocumentMapSearch';
 
 
 $(document).ready(function () {
@@ -25,9 +26,9 @@ $(document).ready(function () {
     if (document.getElementById('archive-categories')) {
         window.archiveManagement = new ArchiveManagement();
     }
-    if (document.getElementById('document-map')) {
-        window.documentMap = new DocumentMap();
-    }
+    //if (document.getElementById('document-map')) {
+    //    window.documentMap = new DocumentMap();
+    //}
     if (document.getElementById('document-form')) {
         window.documentManagement = new DocumentManagement();
     }
@@ -38,7 +39,11 @@ $(document).ready(function () {
             document.getElementById('search-list-box')
         );
     }
-
+    if (document.getElementById('map-search-form')) {
+        ReactDOM.render(
+            <DocumentMapSearch ref={(documentMapSearch) => {window.documentMapSearch = documentMapSearch}} />,
+            document.getElementById("map-search-form"));
+    }
     if (document.getElementById('archive-search-form')) {
         ReactDOM.render(
             <SearchTableArchives ref={(searchTableArchives) => {window.searchTableArchives = searchTableArchives}} />,

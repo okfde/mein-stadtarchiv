@@ -11,6 +11,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 import os
+from flask_celery import single_instance
 from PIL import Image
 from minio.error import ResponseError, SignatureDoesNotMatch
 from urllib3.exceptions import MaxRetryError
@@ -31,6 +32,7 @@ file_endings = {
 
 
 @celery.task()
+@single_instance
 def process_file(file_id):
     file = File.get(file_id)
     if not file:
@@ -77,3 +79,4 @@ def process_file(file_id):
     dwt = DataWorkerThumbnails()
     dwt.prepare()
     dwt.file_thumbnails(file)
+

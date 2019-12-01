@@ -14,6 +14,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from flask import Blueprint, current_app, render_template
 
 from webapp.common.elastic_request import ElasticRequest
+from .MapForm import SearchForm
+from ..models import Category
 from ..common.response import json_response
 
 map = Blueprint('map', __name__, template_folder='templates')
@@ -21,15 +23,57 @@ map = Blueprint('map', __name__, template_folder='templates')
 
 @map.route('/map')
 def map_main():
-    return render_template('map.html')
+    form = SearchForm()
+    archives = []
+    for archive in Category.objects(parent__exists=False).order_by('+title').all():
+        archives.append(
+            archive.to_dict()
+        )
+    return render_template('map.html', form=form, archives=archives)
 
 
-@map.route('/api/geojson')
+@map.route('/api/geojson', methods=['GET', 'POST'])
 def map_api():
     elastic_request = ElasticRequest(
         current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
         'document'
     )
+    form = SearchForm()
+    if form.fulltext.data:
+        elastic_request.query_parts_must.append({
+            'bool': {
+                'should': [
+                    {
+                        'query_string': {
+                            'fields': ['title.fulltext'],
+                            'query': form.fulltext.data,
+                            'default_operator': 'and',
+                            'boost': 50
+                        }
+                    },
+                    {
+                        'query_string': {
+                            'fields': ['description.fulltext'],
+                            'query': form.fulltext.data,
+                            'default_operator': 'and',
+                            'boost': 20
+                        }
+                    },
+                    {
+                        'query_string': {
+                            'fields': ['extra_field_text.fulltext'],
+                            'query': form.fulltext.data,
+                            'default_operator': 'and',
+                            'boost': 25
+                        }
+                    }
+                ]
+            }
+        })
+    if form.files_required.data:
+        elastic_request.set_range_limit('file_count', 'gte', 1)
+    if form.category.data and form.category.data != 'all':
+        elastic_request.set_fq('category_with_parents', form.category.data)
     elastic_request.set_limit(1000)
     elastic_request.set_range_limit('lat', 'gt', 0)
     elastic_request.set_range_limit('lon', 'gt', 0)
