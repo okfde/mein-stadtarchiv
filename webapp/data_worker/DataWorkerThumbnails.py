@@ -40,13 +40,13 @@ class DataWorkerThumbnails:
         for file in files:
             self.file_thumbnails(file)
 
-    def file_thumbnails(self, file):
+    def file_thumbnails(self, file, force_update=False):
         logger.info('worker.file', 'processing file %s' % file.id)
         document = Document.objects(files=file).first()
         if not document:
             current_app.logger.info('file %s has no document' % file.id)
             return
-        if file.modified < file.thumbnailGenerated:
+        if file.modified < file.thumbnailGenerated and not force_update:
             return
         file.modified = datetime.now()
         file.thumbnailGenerated = datetime.now()
@@ -217,3 +217,10 @@ class DataWorkerThumbnails:
         if error is not None and error.decode().strip() != '' and 'WARNING **: clutter failed 0, get a life.' not in error.decode():
             current_app.logger.warn("pdf output at command %s; output: %s" % (cmd, error.decode()))
         return output
+
+
+def regenerate_thumbnails(file_id):
+    file = File.get(file_id)
+    dwt = DataWorkerThumbnails()
+    dwt.prepare()
+    dwt.file_thumbnails(file, True)
