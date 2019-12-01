@@ -76,7 +76,7 @@ def archive_category_upload_file(archive_id, category_id):
         uploaded_file = request.files['file']
         # Hacky way of uploading files because at Stadtarchiv Moers, there's no connection between Document and File in XML
         print(archive.title)
-        if archive.title == 'Stadtarchiv Kerpen':
+        if archive.title == 'Stadtarchiv Moers':
             document, matching_file = get_matching_document_file_stadtarchiv_moers(archive, uploaded_file)
             if not document:
                 return jsonify({'error': 'Dateiname wurde in keinem Dokument dieser Kategorie gefunden.'}), 400
