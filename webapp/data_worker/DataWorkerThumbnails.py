@@ -46,6 +46,8 @@ class DataWorkerThumbnails:
         if not document:
             current_app.logger.info('file %s has no document' % file.id)
             return
+        if file.modified < file.thumbnailGenerated:
+            return
         file.modified = datetime.now()
         file.thumbnailGenerated = datetime.now()
         # get file

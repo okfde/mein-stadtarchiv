@@ -10,57 +10,27 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import random
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
-from ..models import Document
-from ..extensions import es
-from ..common.response import json_response
+from flask import Blueprint, render_template, current_app
+from ..common.elastic_request import ElasticRequest
+from ..common.helpers import get_random_password
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
 
 @frontend.route('/')
-def root():
-    # todo: random query
-    """
-    result_raw = es.search(
-        index=current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
-        doc_type='document',
-        body={
-            'query': {
-                'function_score': {
-                    'random_score': {},
-                    'query': {
-                        'bool': {
-                            'must': [
-                                {
-                                    'range': {
-                                        'help_required': {
-                                            'gte': 1
-                                        }
-                                    }
-                                },
-                                {
-                                    'range': {
-                                        'file_count': {
-                                            'gte': 1
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        sort = '_score',
-        _source = 'id,files,slider_height',
-        size = 5,
-        from_ = 1
+def home():
+    elastic_request = ElasticRequest(
+        current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
+        'document'
     )
-    """
-    return render_template('index.html', documents=[])
+    elastic_request.set_limit(5)
+    elastic_request.set_sort_field('random')
+    elastic_request.set_random_seed(get_random_password())
+    elastic_request.set_range_limit('help_required', 'gte', 1)
+    elastic_request.set_range_limit('file_count', 'gte', 1)
+    elastic_request.source = ['id', 'title', 'files.id']
+    elastic_request.query()
+    return render_template('index.html', documents=elastic_request.get_results())
 
 
 @frontend.route('/impressum')

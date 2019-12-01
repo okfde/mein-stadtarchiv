@@ -39,5 +39,12 @@ class Category(Base):
             result['children'].append(category.get_dict_with_children(recursive, level + 1))
         return result
 
+    def get_children_list(self):
+        result = []
+        for category in Category.objects(parent=self.id).order_by('+title').all():
+            result.append(category)
+            result += category.get_children_list()
+        return result
+
     def __repr__(self):
         return '<Category %r>' % self.title

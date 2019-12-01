@@ -11,14 +11,14 @@ export default class CategoryFileUpload extends Component {
 
     state = {
         files: [],
-    }
+    };
 
     constructor() {
-        super()
-        this.uppy = Uppy({id: 'uppy', autoProceed: true})
+        super();
+        this.uppy = Uppy({id: 'uppy', autoProceed: true});
         this.uppy.use(XHRUpload, {
             id: 'XHRUpload',
-            endpoint: `/admin/archive/${window.currentArchiveId}/category/${window.currentCategoryId}/upload`,
+            endpoint: `/api/admin/archive/${window.currentArchiveId}/category/${window.currentCategoryId}/upload`,
             responseType: 'text',
             fieldName: 'file',
             getResponseError: (text,response) => {
@@ -28,11 +28,11 @@ export default class CategoryFileUpload extends Component {
                     return new Error('Error Response not valid JSON')
                 }
             }
-        })
-        this.uppy.on('upload', () => this.setState({files: this.uppy.getFiles()}))
-        this.uppy.on('upload-progress', () => this.setState({files: this.uppy.getFiles()}))
-        this.uppy.on('upload-success', () => this.setState({files: this.uppy.getFiles()}))
-        this.uppy.on('upload-error', () => this.setState({files: this.uppy.getFiles()}))
+        });
+        this.uppy.on('upload', () => this.setState({files: this.uppy.getFiles()}));
+        this.uppy.on('upload-progress', () => this.setState({files: this.uppy.getFiles()}));
+        this.uppy.on('upload-success', () => this.setState({files: this.uppy.getFiles()}));
+        this.uppy.on('upload-error', () => this.setState({files: this.uppy.getFiles()}));
 
     }
 
@@ -64,10 +64,10 @@ export default class CategoryFileUpload extends Component {
                     { this.getFileStatus(file)}
                 </td>
             </tr>
-        })
+        });
 
         return <div>
-            <DragDrop uppy={this.uppy}         locale={{
+            <DragDrop uppy={this.uppy} locale={{
                 strings: {
                     dropHereOr: 'Dateien hierherziehen oder %{browse}',
                     browse: 'auswählen'

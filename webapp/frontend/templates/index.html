@@ -23,7 +23,7 @@
                 <div class="carousel-inner">
                     {% for document in documents %}
                         <div class="carousel-item{% if loop.first %} active{% endif %}">
-                            <a href="/document/{{ document['_id'] }}"><img class="d-block w-100"  src="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document['_id'] }}/{{ document['_source']['files'][0]['id'] }}/600/1.jpg" alt="{{ document['_source']['title'] }}"></a>
+                            <a href="/document/{{ document['id'] }}"><img class="d-block w-100"  src="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document['id'] }}/{{ document['files'][0]['id'] }}/600/1.jpg" alt="{{ document['title'] }}"></a>
                         </div>
                     {% endfor %}
                 </div>

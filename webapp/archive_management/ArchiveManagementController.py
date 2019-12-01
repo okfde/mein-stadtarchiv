@@ -36,7 +36,11 @@ def archive_show(archive_id):
     if not current_user.has_capability('admin'):
         abort(403)
     archive = Category.get_or_404(archive_id)
-    return render_template('archive-show.html', archive=archive, children=archive.get_dict_with_children().get('children'))
+    return render_template(
+        'archive-show.html',
+        archive=archive,
+        children=archive.get_dict_with_children(True).get('children')
+    )
 
 
 @archive_management.route('/admin/archive/new', methods=['GET', 'POST'])
