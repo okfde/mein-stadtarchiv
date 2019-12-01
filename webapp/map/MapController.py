@@ -74,7 +74,7 @@ def map_api():
         elastic_request.set_range_limit('file_count', 'gte', 1)
     if form.category.data and form.category.data != 'all':
         elastic_request.set_fq('category_with_parents', form.category.data)
-    elastic_request.set_limit(1000)
+    elastic_request.set_limit(10000)
     elastic_request.set_range_limit('lat', 'gt', 0)
     elastic_request.set_range_limit('lon', 'gt', 0)
     elastic_request.source = ['id', 'lat', 'lon', 'title', 'files.id', 'files.mimeType', 'files.binary_exists']
