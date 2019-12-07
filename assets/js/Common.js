@@ -92,6 +92,20 @@ export default class Common {
         }
     }
 
+    getUrlParams() {
+        let match;
+        let pl     = /\+/g;
+        let search = /([^&=]+)=?([^&]*)/g;
+        let decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); };
+        let query  = window.location.search.substring(1);
+
+        let urlParams = {};
+        while (match = search.exec(query)) {
+            urlParams[decode(match[1])] = decode(match[2]);
+        }
+        return urlParams;
+    }
+
     buildImageUrl(document_id, file_id, size) {
         if (!size)
             size = 300;

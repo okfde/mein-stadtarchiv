@@ -20,10 +20,10 @@
     <script>
     var config = {
         mapbox_token: "{{ config.MAPBOX_TOKEN }}",
-        cdnUrl: "{{ config['MINIO_MEDIA_URL'] }}"
+        cdnUrl: "{{ config['MINIO_MEDIA_URL'] }}",
+        categoryData: {{ category_data|tojson }},
+        csrf_token: '{{ csrf_token() }}'
     };
-    var csrf_token = '{{ csrf_token() }}';
-    var archives = {{ archives|tojson }};
     </script>
     {{ super() }}
 {% endblock %}

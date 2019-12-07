@@ -12,7 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SelectField, IntegerField, HiddenField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 
 from ..common.form import SearchBaseForm
 
@@ -24,16 +24,23 @@ class SearchForm(SearchBaseForm):
     sort_field = SelectField(
         label='Sortier-Feld',
         choices=[
-            ('title', 'Name'),
-            ('created', 'Erstellt'),
-            ('modified', 'Verändert')
+            ('title.sort', 'Name'),
+            ('random', 'Zufall'),
+            ('date_sort', 'Datum'),
+            ('_score', 'Priorität')
         ]
     )
     year_start = IntegerField(
-        label='Zeitraum Beginn'
+        label='Zeitraum Beginn',
+        validators=[
+            Optional()
+        ]
     )
     year_end = IntegerField(
-        label='Zeitraum Ende'
+        label='Zeitraum Ende',
+        validators=[
+            Optional()
+        ]
     )
     help_required = BooleanField(
         label=''

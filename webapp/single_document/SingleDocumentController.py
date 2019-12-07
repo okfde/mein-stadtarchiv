@@ -37,7 +37,6 @@ def single_document_main(id):
             categories[i].insert(0, category)
             category = category.parent
     document.categories = categories
-    print(document.categories[0][0])
     comments = Comment.objects(document=document, status__gte=1).order_by('-created').all()
 
     form = CommentForm()

@@ -27,6 +27,11 @@ def api_search():
         'document'
     )
     form = SearchForm()
+    if not form.validate():
+        return json_response({
+            'status': -1,
+            'errors': form.errors
+        })
     if form.fulltext.data:
         elastic_request.query_parts_must.append({
             'bool': {
@@ -36,7 +41,7 @@ def api_search():
                             'fields': ['title.fulltext'],
                             'query': form.fulltext.data,
                             'default_operator': 'and',
-                            'boost': 50
+                            'boost': 50 if form.sort_field.data == '_score' else 1
                         }
                     },
                     {
@@ -44,7 +49,7 @@ def api_search():
                             'fields': ['description.fulltext'],
                             'query': form.fulltext.data,
                             'default_operator': 'and',
-                            'boost': 20
+                            'boost': 20 if form.sort_field.data == '_score' else 1
                         }
                     },
                     {
@@ -52,7 +57,7 @@ def api_search():
                             'fields': ['extra_field_text.fulltext'],
                             'query': form.fulltext.data,
                             'default_operator': 'and',
-                            'boost': 25
+                            'boost': 25 if form.sort_field.data == '_score' else 1
                         }
                     }
                 ]
@@ -60,6 +65,8 @@ def api_search():
         })
     if form.year_start.data:
         elastic_request.set_range_limit('date_sort', 'gte', '%s-01-01' % form.year_start.data)
+    elif form.sort_field.data == 'date_sort':
+        elastic_request.set_range_limit('date_sort', 'gte', '0001-01-01')
     if form.year_end.data:
         elastic_request.set_range_limit('date_sort', 'lte', '%s-01-01' % form.year_end.data)
     if form.help_required.data:

@@ -6,35 +6,42 @@ import SearchListCategories from './SearchListCategories';
 
 
 export default class SearchList extends Component {
+    defaultParams = {
+        fulltext: '',
+        year_start: '',
+        year_end: '',
+        files_required: false,
+        help_required: false,
+        category: 'all',
+        sort_field: 'random',
+        sort_order: 'asc',
+        page: 1
+    };
     state = {
         page: 1,
         data: [],
         resultCount: 0,
         documents: [],
-        params: {
-            fulltext: '',
-            year_start: '',
-            year_end: '',
-            files_required: false,
-            help_required: false,
-            category: 'all',
-            sort_field: 'random',
-            sort_order: 'asc',
-            page: 1
-        },
+        params: Object.assign({}, this.defaultParams),
         initialized: false
     };
     sortDef = [
         { key: 'random', name: 'Zufall' },
-        { key: 'title', name: 'Titel'}
+        { key: 'title.sort', name: 'Titel'},
+        { key: 'date_sort', name: 'Datum'},
+        { key: '_score', name: 'Priorität'}
     ];
     itemsPerPage = 10;
     excerptLength = 250;
     apiUrl = '/api/documents';
+    lastParams = {};
 
     componentDidMount() {
         let params = this.state.params;
-        params.csrf_token = csrf_token;
+        Object.assign(params, window.common.getUrlParams());
+        params.files_required = (params.files_required) ? parseInt(params.files_required) && true : false;
+        params.help_required = (params.help_required) ? parseInt(params.help_required) && true : false;
+        params.csrf_token = config.csrf_token;
         params.random_seed = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         this.setState({
             initialized: true,
@@ -49,10 +56,57 @@ export default class SearchList extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         $(".selectpicker").selectpicker('refresh');
-        $('.btn-icon').tooltip()
+        $('.btn-icon').tooltip();
+    }
+
+    checkUpdateUrl() {
+        for (const [key, value] of Object.entries(this.state.params)) {
+            if (['csrf_token', 'random_seed'].includes(key)) {
+                continue;
+            }
+            if (this.lastParams[key] !== value) {
+                return this.updateUrl();
+            }
+        }
+    }
+
+    updateUrl() {
+        let url_params = [];
+        this.lastParams = {};
+        for (const [key, value] of Object.entries(this.state.params)) {
+            if (['csrf_token', 'random_seed'].includes(key)) {
+                continue;
+            }
+            this.lastParams[key] = value;
+            if (!value || this.defaultParams[key] === value)
+                continue;
+            if (['help_required', 'files_required'].includes(key)) {
+                url_params.push(key + '=' + ((value) ? '1' : '0'));
+            }
+            else {
+                url_params.push(key + '=' + encodeURIComponent(value));
+            }
+        }
+        let url = '/recherche' + ((url_params.length) ? '?' : '') + url_params.join('&');
+        history.replaceState(this.lastParams, 'Recherche | Mein Stadtarchiv', url);
     }
 
     search(params) {
+        if (params.fulltext && !this.lastParams.fulltext) {
+            params.sort_field = '_score';
+            params.sort_order = 'desc';
+            this.setState({
+                params: params
+            });
+        }
+        if (!params.fulltext && params.sort_field === '_score') {
+            params.sort_field = 'random';
+            params.sort_order = 'asc';
+            this.setState({
+                params: params
+            });
+        }
+        this.checkUpdateUrl();
         $.post(this.apiUrl, params)
             .then((data) => {
                 this.setState({
@@ -207,6 +261,9 @@ export default class SearchList extends Component {
         else if (document.date) {
             meta.push('Jahr ' + this.formatYear(document.date));
         }
+        else if (document.date_text) {
+            meta.push('Jahr ' + document.date_text);
+        }
         if (document.origination) {
             meta.push('Quelle: ' + document.origination);
         }
@@ -263,6 +320,9 @@ export default class SearchList extends Component {
     renderStatusLineText() {
         let sort_list = [];
         for (let i = 0; i < this.sortDef.length; i++) {
+            if (this.sortDef[i].key === '_score' && !this.state.params.fulltext) {
+                continue;
+            }
             sort_list.push(
                 <option value={this.sortDef[i].key} key={this.sortDef[i].key}>{this.sortDef[i].name}</option>
             )
@@ -293,6 +353,7 @@ export default class SearchList extends Component {
                     onChange={this.handleChange.bind(this)}
                     className="selectpicker"
                     data-width="fit"
+                    value={this.state.params.sort_field}
                 >
                     {sort_list}
                 </select>

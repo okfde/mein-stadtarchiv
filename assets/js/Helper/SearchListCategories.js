@@ -7,13 +7,10 @@ export default class SearchListCategories extends Component {
         initialized: false,
         categorySelectorOpen: false,
         status: 'ready',
-        current: {
-            id: 'all',
-            title: 'Alle Archive'
-        },
-        parent: null,
-        children: archives,
-        csrf_token: csrf_token
+        current: config.categoryData.current,
+        parent: config.categoryData.parent,
+        children: config.categoryData.children,
+        csrf_token: config.csrf_token
     };
 
     apiUrl = '/api/search/category';
@@ -39,7 +36,7 @@ export default class SearchListCategories extends Component {
     }
 
     getCategoryData(category) {
-        $.post(this.apiUrl, {csrf_token: csrf_token, category: category})
+        $.post(this.apiUrl, {csrf_token: config.csrf_token, category: category})
             .then((data) => {
                 this.setState({
                     status: 'ready',

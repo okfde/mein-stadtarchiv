@@ -10,18 +10,33 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-
-from flask import Blueprint, render_template, request
-from .RechercheHelper import get_category_data
-from .RechercheForm import SearchForm
-
-recherche = Blueprint('recherche', __name__, template_folder='templates')
-
-from . import RechercheApi
+from ..models import Category
 
 
-@recherche.route('/recherche')
-def recherche_main():
-    form = SearchForm()
-    return render_template('recherche.html', category_data=get_category_data(request.args.get('category')), form=form)
+def get_category_data(category_id):
+    if category_id:
+        category = Category.get(category_id)
+        if not category:
+            return get_root_category()
+        return {
+            'current': category.to_dict(),
+            'parent': category.parent.to_dict(),
+            'children': category.get_children_list()
+        }
+    return get_root_category()
 
+
+def get_root_category():
+    category = {
+        'current': {
+            'id': 'all',
+            'title': 'Alle Archive'
+        },
+        'parent': None,
+        'children': []
+    }
+    for archive in Category.objects(parent__exists=False).order_by('+title').all():
+        category['children'].append(
+            archive.to_dict()
+        )
+    return category

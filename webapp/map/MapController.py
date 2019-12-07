@@ -11,12 +11,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, current_app, render_template, request
 
 from webapp.common.elastic_request import ElasticRequest
-from .MapForm import SearchForm
-from ..models import Category
+from ..recherche.RechercheHelper import get_category_data
 from ..common.response import json_response
+from .MapForm import SearchForm
 
 map = Blueprint('map', __name__, template_folder='templates')
 
@@ -24,12 +24,8 @@ map = Blueprint('map', __name__, template_folder='templates')
 @map.route('/map')
 def map_main():
     form = SearchForm()
-    archives = []
-    for archive in Category.objects(parent__exists=False).order_by('+title').all():
-        archives.append(
-            archive.to_dict()
-        )
-    return render_template('map.html', form=form, archives=archives)
+
+    return render_template('map.html', form=form,  category_data=get_category_data(request.args.get('category')))
 
 
 @map.route('/api/geojson', methods=['GET', 'POST'])

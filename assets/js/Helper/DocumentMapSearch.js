@@ -22,7 +22,7 @@ export default class DocumentMapSearch extends Component {
 
     componentDidMount() {
         let params = this.state.params;
-        params.csrf_token = csrf_token;
+        params.csrf_token = config.csrf_token;
         this.setState({
             initialized: true,
             params: params
