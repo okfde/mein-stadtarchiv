@@ -20,7 +20,7 @@ def get_category_data(category_id):
             return get_root_category()
         return {
             'current': category.to_dict(),
-            'parent': category.parent.to_dict(),
+            'parent': category.parent.to_dict() if category.parent else None,
             'children': category.get_children_list()
         }
     return get_root_category()
