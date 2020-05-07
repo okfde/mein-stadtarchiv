@@ -47,7 +47,7 @@
     "popper.js": "^1.16",
     "react": "^16.13",
     "react-dom": "^16.13",
-    "react-leaflet": "^2.7",
+    "react-leaflet": "2.6.3",
     "sass-loader": "^8.0",
     "style-loader": "^1.2",
     "system": "^2.0",
@@ -56,5 +56,8 @@
     "webpack-cli": "^3.3",
     "moment-timezone": "^0.5",
     "moment-timezone-data-webpack-plugin": "^1.2"
+  },
+  "dependencies": {
+    "file-loader": "^6.0.0"
   }
 }

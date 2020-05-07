@@ -35,7 +35,7 @@ export default class SearchTable extends Component {
         this.params.csrf_token = document.getElementById('csrf_token').value;
         this.loadParams();
         let form = $('#' + this.formId);
-        document.getElementById(this.formId).querySelector('select').onchange =(event) => this.formSubmit(event);
+        $('#' + this.formId + ' select').change((event) => this.formSubmit(event));
         document.getElementById(this.formId).onsubmit = (event) => this.formSubmit(event)
     }
 

@@ -19,6 +19,11 @@ module.exports = (env, argv) => {
                 jquery: "jquery/src/jquery",
                 $: "jquery/src/jquery",
                 'mapbox-gl': 'mapbox-gl/dist/mapbox-gl',
+                './images/layers.png$': path.resolve(__dirname, '../static/images/leaflet/layers.png'),
+                './images/layers-2x.png$': path.resolve(__dirname, '../static/images/leaflet/layers-2x.png'),
+                './images/marker-icon.png$': path.resolve(__dirname, '../static/images/leaflet/marker-icon.png'),
+                './images/marker-icon-2x.png$': path.resolve(__dirname, '../static/images/leaflet/marker-icon-2x.png'),
+                './images/marker-shadow.png$': path.resolve(__dirname, '../static/images/leaflet/marker-shadow.png')
             }
         },
         mode: isDevelopment ? 'development' : argv.mode,
@@ -42,6 +47,14 @@ module.exports = (env, argv) => {
                     query: {
                         presets: ['@babel/preset-env', '@babel/preset-react']
                     }
+                },
+                {
+                    test: /\.(png|jpe?g|gif)$/i,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                        },
+                    ],
                 },
                 {
                     test: /\.module\.s(a|c)ss$/,

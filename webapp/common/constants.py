@@ -59,8 +59,7 @@ class BaseConfig:
     MINIO_REGION = 'us-east-1'
     MINIO_BUCKET = 'stadtarchiv'
 
-    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-    CELERY_BROKER_URL = 'redis://localhost:6379'
+    CELERY_BROKER_URL = 'amqp://localhost'
 
     MAPBOX_CENTER_LAT = 51.470915
     MAPBOX_CENTER_LON = 7.219874
