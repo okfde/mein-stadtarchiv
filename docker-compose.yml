@@ -33,15 +33,16 @@ services:
       context: .
       dockerfile: Dockerfile.webpack
     container_name: stadtarchiv-webpack
+    ports:
+      - 8888:8888
     volumes:
       - .:/app
       - stadtarchiv_node_modules:/app/node_modules
     networks:
       stadtarchiv:
         aliases:
-        - gulp
-    #entrypoint: ['sleep', '600000']
-    entrypoint: ["webpack", "--watch", "--config", "assets/webpack.config.js"]
+        - webpack
+    entrypoint: ["/app/webpack.sh"]
 
 
   rabbitmq:
@@ -55,6 +56,8 @@ services:
   mongodb:
     image: mongo:4.2
     container_name: stadtarchiv-mongodb
+    volumes:
+      - .:/app
     networks:
       stadtarchiv:
         aliases:
@@ -85,7 +88,7 @@ services:
     command: server /data
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: stadtarchiv-elasticsearch
     ports:
       - 9200:9200

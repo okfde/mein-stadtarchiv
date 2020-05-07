@@ -34,52 +34,82 @@ def make_shell_context():
 
 @manager.command
 def create_index():
+    """
+    (re)creates elasticsearch index
+    """
     create_index_run()
 
 
 @manager.command
 def data_worker():
+    """
+    processes all uploaded data
+    """
     data_worker_run()
 
 
 @manager.command
 def upsert_login(email, password):
+    """
+    upserts a login
+    """
     upsert_login_run(email, password)
 
 
 @manager.command
-def set_auth(id, auth):
-    set_auth_run(id, auth)
+def set_auth(category_id, auth):
+    """
+    sets an auth by category
+    """
+    set_auth_run(category_id, auth)
 
 
 @manager.command
 def missing_media():
+    """
+    outputs all missing media
+    """
     missing_media_run()
 
 
 @manager.command
 def file_document_reverse():
+    """
+    creates reverse references for files
+    """
     file_document_reverse_run()
 
 
 @manager.command
 def reset_elasticsearch_last_run():
+    """
+    resets last elasticsearch run
+    """
     reset_elasticsearch_last_run_run()
 
 
 @manager.command
 def init_archive(title, auth):
+    """
+    inittializes archove by title and auth
+    """
     init_archive_run(title, auth)
 
 
 @manager.command
 def georeference(category_id):
+    """
+    georeferences documents by category
+    """
     dwg = DataWorkerGeoreference()
     dwg.run(category_id)
 
 
 @manager.command
 def regenerate_thumbnails(file_id):
+    """
+    regenerate thumbnails by file id
+    """
     regenerate_thumbnails_run(file_id)
 
 

@@ -1,14 +1,15 @@
 const path = require('path');
 const webpack = require('webpack');
-//const Chunks2JsonPlugin = require('chunks-2-json-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
+const MomentTimezoneDataPlugin = require('moment-timezone-data-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env, argv) => {
     const isDevelopment = argv.mode !== 'production';
 
-    return {
+    let result = {
         entry: [
             `./assets/js/base.js`,
             `./assets/js/webapp.js`
@@ -32,10 +33,6 @@ module.exports = (env, argv) => {
         performance: {
             hints: false
         },
-        /*    watchOptions: {
-                poll: true,
-                ignored: /node_modules/
-            },*/
         module: {
             rules: [
                 {
@@ -85,10 +82,13 @@ module.exports = (env, argv) => {
         plugins: [
             new webpack.ProvidePlugin({
                 $: 'jquery',
-                jQuery: 'jquery',
-                moment: 'moment'
+                jQuery: 'jquery'
             }),
-            new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/),
+            new MomentTimezoneDataPlugin({
+                matchZones: ["Europe/Berlin", 'Etc/UTC'],
+                startYear: 1400,
+                endYear: 2030,
+            }),
             new MiniCssExtractPlugin({
                 filename: '../css/webapp.[contenthash].css',
                 chunkFilename: '[id].[hash].css'
@@ -96,5 +96,14 @@ module.exports = (env, argv) => {
             new CleanWebpackPlugin(),
             new AssetsPlugin({path: path.join(__dirname, '..', "static"), filename: 'webpack-assets.' + ((isDevelopment) ? '' : 'min.') + 'json'})
         ]
+    };
+
+    if (isDevelopment) {
+        result.plugins.push(
+            new BundleAnalyzerPlugin({
+                analyzerHost: '0.0.0.0'
+            })
+        );
     }
+    return result;
 };

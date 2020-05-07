@@ -1,4 +1,5 @@
 import {Decimal} from 'decimal.js';
+import moment from 'moment';
 
 export default class Common {
 

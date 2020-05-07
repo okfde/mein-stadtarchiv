@@ -21,5 +21,6 @@ lxml
 minio
 pillow
 bs4
-celery==4.4.0rc3
+celery
+email_validator
 elasticsearch>=7.0.0,<8.0.0

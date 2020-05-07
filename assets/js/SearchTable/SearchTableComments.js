@@ -1,5 +1,6 @@
 import React from "react";
 import SearchTable from './SearchTable'
+import moment from 'moment';
 
 export default class SearchTableArchives extends SearchTable {
     defaultStartDate = moment().subtract(3, 'month');
@@ -76,7 +77,11 @@ export default class SearchTableArchives extends SearchTable {
 
     renderTableCellDocument(row) {
         return(
-            <td><a href={`/document/${row.document.id}`}>{row.document.title}</a></td>
+            <td>
+                <a href={`/document/${row.document.id}`}>
+                    {(row.document.title) ? row.document.title : 'Unbenanntes Dokument'}
+                </a>
+            </td>
         )
     }
 

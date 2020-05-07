@@ -273,7 +273,11 @@ export default class SearchList extends Component {
         return(
             <li key={document.id}>
                 <div className="search-result-text">
-                    <h2><a href={`/document/${document.id}`}>{document.title}</a></h2>
+                    <h2>
+                        <a href={`/document/${document.id}`}>
+                            {(document.title) ? document.title : 'Unbekanntes Dokument'}
+                        </a>
+                    </h2>
                     <p className="search-result-meta">{meta.join(' | ')}</p>
                     {document.description &&
                         <p className="search-result-description">{this.formatExcept(document.description)}</p>

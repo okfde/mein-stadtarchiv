@@ -1,3 +1,8 @@
+import 'core-js/features/string/includes';
+import 'core-js/features/array';
+import 'core-js/features/object/assign';
+import 'core-js/features/object/entries';
+
 import 'bootstrap/js/src/dropdown.js';
 import 'bootstrap/js/src/button.js';
 import 'bootstrap/js/src/alert.js';

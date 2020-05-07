@@ -1,8 +1,3 @@
-import 'core-js/fn/string/includes';
-import 'core-js/es7/array';
-import 'core-js/fn/object/assign';
-import 'core-js/fn/object/entries';
-
 import '../sass/base.scss'
 import '../sass/webapp.scss'
 
