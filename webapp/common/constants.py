@@ -36,9 +36,9 @@ class BaseConfig:
         'MAIL_SERVER',
         'MAIL_USERNAME',
         'MAIL_PASSWORD',
-        'S3_ACCESS_KEY',
-        'S3_ACCESS_KEY',
-        'S3_MEDIA_URL',
+        'MINIO_ACCESS_KEY',
+        'MINIO_ACCESS_KEY',
+        'MINIO_MEDIA_URL',
         'AUTH',
         'MAPBOX_TOKEN'
     ]

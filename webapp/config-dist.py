@@ -46,13 +46,13 @@ class DefaultConfig(object):
     MONGODB_PORT = 27017
     MONGODB_DB = ''
 
-    S3_ENDPOINT = ''
-    S3_ACCESS_KEY = ''
-    S3_SECRET_KEY = ''
-    S3_SECURE = False
-    S3_BUCKET = ''
-    S3_LOCATION = 'us-east-1'
-    S3_MEDIA_URL = ''
+    MINIO_ENDPOINT = ''
+    MINIO_ACCESS_KEY = ''
+    MINIO_SECRET_KEY = ''
+    MINIO_SECURE = False
+    MINIO_BUCKET = ''
+    MINIO_LOCATION = 'us-east-1'
+    MINIO_MEDIA_URL = ''
 
     CELERY_RESULT_BACKEND = 'redis://localhost:6379'
     CELERY_BROKER_URL = 'redis://localhost:6379'

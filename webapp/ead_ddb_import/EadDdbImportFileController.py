@@ -87,7 +87,7 @@ def ead_ddb_push_media():
     }
     try:
         minio.connection.fput_object(
-            current_app.config['S3_BUCKET'],
+            current_app.config['MINIO_BUCKET'],
             "files/%s/%s" % (document.id, file.id),
             file_path,
             content_type=file.mimeType,

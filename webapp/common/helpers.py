@@ -57,21 +57,21 @@ def get_first_thumbnail_url(documentId, fileId, size):
 """
 def get_minio_connection():
     s3 = Minio(
-        current_app.config['S3_ENDPOINT'],
-        access_key=current_app.config['S3_ACCESS_KEY'],
-        secret_key=current_app.config['S3_SECRET_KEY'],
-        secure=current_app.config['S3_SECURE']
+        current_app.config['MINIO_ENDPOINT'],
+        access_key=current_app.config['MINIO_ACCESS_KEY'],
+        secret_key=current_app.config['MINIO_SECRET_KEY'],
+        secure=current_app.config['MINIO_SECURE']
     )
     try:
-        s3.make_bucket(current_app.config['S3_BUCKET'], location=current_app.config['S3_LOCATION'])
+        s3.make_bucket(current_app.config['MINIO_BUCKET'], location=current_app.config['MINIO_LOCATION'])
     except BucketAlreadyOwnedByYou as err:
         pass
     except BucketAlreadyExists as err:
         pass
-    #if s3.get_bucket_policy(current_app.config['S3_BUCKET'], 'files') != 'readonly':
-    #    s3.set_bucket_policy(current_app.config['S3_BUCKET'], 'files', Policy.READ_ONLY)
-    #if s3.get_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails') != 'readonly':
-    #    s3.set_bucket_policy(current_app.config['S3_BUCKET'], 'thumbnails', Policy.READ_ONLY)
+    #if s3.get_bucket_policy(current_app.config['MINIO_BUCKET'], 'files') != 'readonly':
+    #    s3.set_bucket_policy(current_app.config['MINIO_BUCKET'], 'files', Policy.READ_ONLY)
+    #if s3.get_bucket_policy(current_app.config['MINIO_BUCKET'], 'thumbnails') != 'readonly':
+    #    s3.set_bucket_policy(current_app.config['MINIO_BUCKET'], 'thumbnails', Policy.READ_ONLY)
     return s3
 """
 
