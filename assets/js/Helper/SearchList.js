@@ -141,6 +141,7 @@ export default class SearchList extends Component {
     handleChange(event) {
         let params = this.state.params;
         params[event.target.id] = (event.target.type === 'checkbox') ? event.target.checked : event.target.value;
+
         this.setState({params: params});
         if (event.target.type === 'checkbox' || event.target.tagName.toLowerCase() === 'select') {
             this.search(params);
@@ -178,7 +179,7 @@ export default class SearchList extends Component {
                     <div className="row">
                         <div className="col-5">
                             <input
-                                type="text"
+                                type="number"
                                 id="year_start"
                                 name="year_start"
                                 className="form-control"
@@ -191,7 +192,7 @@ export default class SearchList extends Component {
                         </div>
                         <div className="col-5">
                             <input
-                                type="text"
+                                type="number"
                                 id="year_end"
                                 name="year_end"
                                 className="form-control"
