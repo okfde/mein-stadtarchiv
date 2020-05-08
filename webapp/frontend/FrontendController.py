@@ -21,7 +21,7 @@ frontend = Blueprint('frontend', __name__, template_folder='templates')
 @frontend.route('/')
 def home():
     elastic_request = ElasticRequest(
-        current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-laxtest',
+        current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
         'document'
     )
     elastic_request.set_limit(5)
