@@ -16,14 +16,14 @@ from logging.handlers import WatchedFileHandler
 from flask import current_app
 from ..extensions import mail, celery
 from flask_mail import Message
-from ..config import DefaultConfig
+from ..config import Config
 
 
 class Logger:
     registered_logs = []
 
     def __init__(self):
-        self.config = DefaultConfig
+        self.config = Config
 
     def get_log(self, log_name):
         logger = logging.getLogger(log_name)

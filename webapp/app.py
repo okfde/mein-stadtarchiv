@@ -12,10 +12,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import os
 import traceback
-from flask import Flask, request, render_template, redirect
+from flask import Flask, render_template, redirect
 from flask_wtf.csrf import CSRFError
 
-from webapp import config as Config
+from webapp.config import Config
 from .common.constants import BaseConfig
 from .common.filter import register_global_filters
 from .extensions import db, es, login_manager, csrf, mail, celery, cache, minio
@@ -49,13 +49,9 @@ DEFAULT_BLUEPRINTS = [
 ]
 
 
-def launch(config=None, app_name=None, blueprints=None):
-    """Create a Flask app."""
-
-    if app_name is None:
-        app_name = BaseConfig.PROJECT_NAME
-    if blueprints is None:
-        blueprints = DEFAULT_BLUEPRINTS
+def launch():
+    app_name = BaseConfig.PROJECT_NAME
+    blueprints = DEFAULT_BLUEPRINTS
 
     app = Flask(
         app_name,
@@ -63,7 +59,7 @@ def launch(config=None, app_name=None, blueprints=None):
         instance_relative_config=True,
         template_folder=os.path.join(BaseConfig.PROJECT_ROOT, 'templates')
     )
-    configure_app(app, config)
+    configure_app(app)
     configure_hook(app)
     configure_blueprints(app, blueprints)
     configure_extensions(app)
@@ -74,33 +70,21 @@ def launch(config=None, app_name=None, blueprints=None):
     return app
 
 
-def configure_app(app, config=None):
-    """Different ways of configurations."""
-
-    # http://flask.pocoo.org/docs/api/#configuration
-    app.config.from_object(Config.DefaultConfig)
-
-    if config:
-        app.config.from_object(config)
-        return
-
-    # get mode from os environment
-    application_mode = os.getenv('APPLICATION_MODE', 'DEVELOPMENT')
-
-    print("Running in %s mode" % application_mode)
-
-    app.config.from_object(Config.get_config(application_mode))
+def configure_app(app):
+    app.config.from_object(Config)
+    app.config['MODE'] = os.getenv('APPLICATION_MODE', 'DEVELOPMENT')
+    print("Running in %s mode" % app.config['MODE'])
 
 
 def configure_extensions(app):
     # mongoengine
     db.init_app(app)
 
+    # minio
     minio.init_app(app)
 
+    # es
     es.init_app(app)
-
-
 
     @login_manager.unauthorized_handler
     def unauthorized(msg=None):

@@ -11,10 +11,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 import datetime
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
+from flask import Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort
 from flask_login import login_required, login_user, current_user, logout_user, confirm_login, login_fresh
-from .UserForms import *
+from .UserForms import LoginForm
 from ..models import User
 from ..extensions import db, logger
 user = Blueprint('user', __name__, template_folder='templates')
@@ -33,6 +32,7 @@ def index():
             return redirect('/admin')
         flash('Zugangsdaten nicht korrekt', 'danger')
     return render_template('login.html', form=form)
+
 
 @user.route('/logout')
 def logout():

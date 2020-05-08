@@ -1,0 +1,30 @@
+
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Mein Stadtarchiv installieren</h1>
+        </div>
+    </div>
+    <form method="POST" action="/admin/install" id="install-form">
+        <div class="row row-form">
+            {{ form_field(form.email, 6) }}
+            {{ form_field(form.password, 6) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.mapbox_token, 6) }}
+            {{ form_field(form.minio_url, 6) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.mail_server, 4) }}
+            {{ form_field(form.mail_user, 4) }}
+            {{ form_field(form.mail_password, 4) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.submit, 12, 'input-submit-emptylabel') }}
+        </div>
+        {{ form.csrf_token }}
+    </form>
+{% endblock %}

@@ -10,7 +10,8 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from flask import Blueprint, render_template, current_app
+from elasticsearch.exceptions import NotFoundError
+from flask import Blueprint, render_template, current_app, redirect
 from ..common.elastic_request import ElasticRequest
 from ..common.helpers import get_random_password
 
@@ -20,7 +21,7 @@ frontend = Blueprint('frontend', __name__, template_folder='templates')
 @frontend.route('/')
 def home():
     elastic_request = ElasticRequest(
-        current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
+        current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-laxtest',
         'document'
     )
     elastic_request.set_limit(5)
@@ -29,7 +30,10 @@ def home():
     elastic_request.set_range_limit('help_required', 'gte', 1)
     elastic_request.set_range_limit('file_count', 'gte', 1)
     elastic_request.source = ['id', 'title', 'files.id']
-    elastic_request.query()
+    try:
+        elastic_request.query()
+    except NotFoundError:
+        return redirect('/admin/install')
     return render_template('index.html', documents=elastic_request.get_results())
 
 

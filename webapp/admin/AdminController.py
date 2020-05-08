@@ -19,6 +19,7 @@ from .AdminForms import CommentSearchForm
 admin = Blueprint('admin', __name__, template_folder='templates')
 
 from . import AdminApi
+from . import AdminInstallController
 
 
 @admin.route('/admin')

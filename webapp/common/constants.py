@@ -31,7 +31,6 @@ class BaseConfig:
         'PROJECT_URL',
         'SECRET_KEY',
         'SECURITY_PASSWORD_SALT',
-        'ADMINS',
         'MAILS_FROM',
         'MAIL_SERVER',
         'MAIL_USERNAME',

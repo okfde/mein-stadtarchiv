@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Mein Stadtarchiv installieren: Konfiguration</h1>
+            <p>
+                Um Mein Stadtarchiv zu installieren, müssen Sie nun die folgende Konfiguartionsdatei in
+                <code>/webapp/config.py</code> legen.
+            </p>
+        </div>
+    </div>
+    <pre><code>
+class Config(BaseConfig):
+    PROJECT_URL = '{{ current_url }}'
+
+    ADMINS = ['{{ form.email.data }}']
+    MAILS_FROM = '{{ form.email.data }}'
+
+    SECRET_KEY = '{{ generated_secret }}
+
+    MINIO_ACCESS_KEY = '{{ generated_access_key }}'
+    MINIO_SECRET_KEY = '{{ generated_access_secret }}'
+    MINIO_MEDIA_URL = '{{ form.minio_url.data }}'
+
+    MAIL_SERVER = '{{ form.mail_server.data }}'
+    MAIL_USERNAME = '{{ form.mail_user.data }}'
+    MAIL_PASSWORD = '{{ form.mail_password.data }}'
+
+    MAPBOX_TOKEN = '{{ form.mapbox_token.data }}'
+    </code></pre>
+{% endblock %}
