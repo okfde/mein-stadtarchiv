@@ -21,12 +21,12 @@ from ..extensions import celery
 
 
 def worker():
-    data_worker_thumbnails = DataWorkerThumbnails()
-    data_worker_thumbnails.run()
+    #data_worker_thumbnails = DataWorkerThumbnails()
+    #data_worker_thumbnails.run()
     data_worker_elasticsearch = DataWorkerElasticsearch()
     data_worker_elasticsearch.run()
-    data_worker_sitemap = DataWorkerSitemap()
-    data_worker_sitemap.run()
+    #data_worker_sitemap = DataWorkerSitemap()
+    #data_worker_sitemap.run()
 
 
 @celery.task()

@@ -44,7 +44,6 @@ services:
         - webpack
     entrypoint: ["/app/webpack.sh"]
 
-
   rabbitmq:
     image: rabbitmq:latest
     container_name: stadtarchiv-rabbitmq
