@@ -89,4 +89,5 @@ def consistent_files():
             data = None
         if (data is not None) != file.binaryExists:
             file.binaryExists = data is not None
+            file.save()
 
