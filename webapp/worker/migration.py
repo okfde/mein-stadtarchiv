@@ -123,6 +123,9 @@ def check_mimetypes():
 
 def check_thumbnails():
     for file in File.objects(binaryExists=True).all():
+        if file.document is None:
+            print('file %s has no document' % file.id)
+            continue
         try:
             data = minio.connection.get_object(
                 current_app.config['MINIO_BUCKET'],
