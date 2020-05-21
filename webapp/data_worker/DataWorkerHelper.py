@@ -61,3 +61,4 @@ def upsert_login(email, password):
     user.capabilities = ['admin']
     user.password = password
     user.save()
+

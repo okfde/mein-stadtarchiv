@@ -11,9 +11,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 import os
+import magic
+import shutil
 import subprocess
 from PIL import Image, ImageFile
-import shutil
 from datetime import datetime
 from flask import current_app
 from ..models import Document, File
@@ -71,6 +72,9 @@ class DataWorkerThumbnails:
         with open(file_path, 'wb') as file_data:
             for d in data.stream(32 * 1024):
                 file_data.write(d)
+
+        if not file.mimeType:
+            file.mimeType = magic.from_file(file_path, mime=True)
 
         if file.mimeType not in ['application/msword', 'application/pdf', 'image/jpeg', 'image/png', 'image/tiff', 'image/bmp']:
             current_app.logger.warn('wrong mimetype: %s' % file.id)

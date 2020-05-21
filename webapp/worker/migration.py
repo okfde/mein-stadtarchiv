@@ -25,6 +25,15 @@ def migrate_data(action):
         consistent_files()
     if action == 'set_reverse_file':
         set_reverse_file()
+    if action == 'reset_mimetype':
+        reset_mimetype()
+
+
+def reset_mimetype():
+    for file in File.objects(thumbnailStatus='wrong-mimetype').all():
+        file.thumbnailGenerated = None
+        file.thumbnailStatus = None
+        file.save()
 
 
 def set_reverse_file():
