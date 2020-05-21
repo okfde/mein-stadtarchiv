@@ -92,7 +92,7 @@ def broken_files():
 
 
 def consistent_files():
-    for file in File.objects():
+    for file in File.objects().all():
         if not file.document:
             continue
         try:
@@ -122,7 +122,7 @@ def check_mimetypes():
 
 
 def check_thumbnails():
-    for file in File.objects(binaryExists=1):
+    for file in File.objects(binaryExists=1).all():
         try:
             data = minio.connection.get_object(
                 current_app.config['MINIO_BUCKET'],
@@ -133,3 +133,5 @@ def check_thumbnails():
         if data is None:
             print('file %s thumbnail missing' % file.id)
             regenerate_thumbnails(file.id)
+
+def delete_non_camel_case():

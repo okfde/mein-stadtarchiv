@@ -18,7 +18,6 @@ from ..extensions import logger
 
 
 class File(Base):
-    binary_exists = BooleanField(default=False)  # TO DELETE
     binaryExists = BooleanField(default=False)
     name = StringField()
     fileName = StringField()

@@ -16,9 +16,7 @@ from .Base import Base
 
 class Comment(Base):
     content = StringField()
-    author_name = StringField()  # TO DELETE
     authorName = StringField()
-    author_email = EmailField()  # TO DELETE
     authorEmail = EmailField()
     ip = StringField()
 

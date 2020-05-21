@@ -28,16 +28,12 @@ class Document(Base):
     helpRequired = IntField(default=0)
 
     date = DateTimeField(datetime_format='date')
-    date_begin = DateTimeField(datetime_format='date')  # TO DELETE
     dateBegin = DateTimeField(datetime_format='date')
-    date_end = DateTimeField(datetime_format='date')  # TO DELETE
     dateEnd = DateTimeField(datetime_format='date')
-    date_text = StringField()  # TO DELETE
     dateText = StringField()
 
     category = ListField(ReferenceField('Category', deref_document=True))
     tags = ListField(StringField())
-    #files = ListField(ReferenceField('File', deref_document=True))
 
     address = StringField()
     postcode = StringField()
@@ -48,7 +44,6 @@ class Document(Base):
     georeferencePrecision = StringField()
     georeferenceDone = DateTimeField(datetime_format='datetime')
 
-    extra_fields = DictField(delete_document=True)  # TO DELETE
     extraFields = DictField(delete_document=True)
     document_type = StringField()  # TO DELETE
     documentType = StringField()

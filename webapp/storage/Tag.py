@@ -16,7 +16,6 @@ from .Base import Base
 
 class Tag(Base):
     title = StringField()
-    order_number = StringField()  # TO DELETE
     orderNumber = StringField()
 
     def __repr__(self):

@@ -16,7 +16,6 @@ from .Base import Base
 
 class Category(Base):
     uid = StringField(index=True)
-    order_id = StringField()  # TO DELETE
     orderId = StringField()
     title = StringField()
     description = StringField(fulltext=True)
@@ -24,7 +23,6 @@ class Category(Base):
     auth = StringField()
     visible = BooleanField()
     status = StringField()
-    uploaded_file = StringField()  # TO DELETE
     uploadedFile = StringField()
     parent = ReferenceField('Category', deref_document=False)
 
