@@ -34,7 +34,6 @@ def set_reverse_file():
             file.save()
 
 
-
 def migrate_camel_case():
     for category in Category.objects().all():
         if category.uploaded_file:
@@ -89,5 +88,5 @@ def consistent_files():
         except NoSuchKey:
             data = None
         if (data is not None) != file.binaryExists:
-            print('file %s db: %s, reality %s' % (file.id, file.binaryExists, data is not None))
+            file.binaryExists = data is not None
 

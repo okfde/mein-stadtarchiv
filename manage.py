@@ -36,8 +36,7 @@ def make_shell_context():
 @manager.command
 def migrate_data(action):
     """
-    mirates db to camel case
-    :return:
+    mirates data
     """
     migrate_data_run(action)
 
