@@ -122,7 +122,7 @@ def check_mimetypes():
 
 
 def check_thumbnails():
-    for file in File.objects(binaryExists=1).all():
+    for file in File.objects(binaryExists=True).all():
         try:
             data = minio.connection.get_object(
                 current_app.config['MINIO_BUCKET'],
