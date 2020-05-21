@@ -33,6 +33,8 @@ def migrate_data(action):
         check_mimetypes()
     if action == 'check_thumbnails':
         check_thumbnails()
+    if action == 'clean_files':
+        clean_files()
 
 
 def reset_mimetype():
@@ -136,3 +138,10 @@ def check_thumbnails():
         if data is None:
             print('file %s thumbnail missing' % file.id)
             regenerate_thumbnails(file.id)
+
+
+def clean_files():
+    for file in File.objects().all():
+        if file.document is not None:
+            continue
+        print('file %s has no document' % file.id)

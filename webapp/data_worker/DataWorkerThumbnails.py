@@ -43,10 +43,6 @@ class DataWorkerThumbnails:
 
     def file_thumbnails(self, file, force_update=False):
         logger.info('worker.file', 'processing file %s' % file.id)
-        document = Document.objects(files=file).first()
-        if not document:
-            current_app.logger.info('file %s has no document' % file.id)
-            return
         if file.thumbnailGenerated and file.modified < file.thumbnailGenerated and not force_update:
             return
         file.modified = datetime.now()
@@ -55,7 +51,7 @@ class DataWorkerThumbnails:
         try:
             data = minio.connection.get_object(
                 current_app.config['MINIO_BUCKET'],
-                "files/%s/%s" % (document.id, file.id)
+                "files/%s/%s" % (file.document.id, file.id)
             )
         except NoSuchKey:
             current_app.logger.warn('file not found: %s' % file.id)
@@ -165,12 +161,12 @@ class DataWorkerThumbnails:
                 try:
                     minio.connection.fput_object(
                         current_app.config['MINIO_BUCKET'],
-                        "thumbnails/%s/%s/%s/%s" % (str(document.id), str(file.id), str(size), out_file),
+                        "thumbnails/%s/%s/%s/%s" % (str(file.document.id), str(file.id), str(size), out_file),
                         os.path.join(out_folder, str(size), out_file),
                         'image/jpeg'
                     )
                 except ResponseError as err:
-                    current_app.logger.error('Critical error saving file from File %s from Body %s' % (file.id, document.id))
+                    current_app.logger.error('Critical error saving file from File %s from Body %s' % (file.id, file.document.id))
         # save in mongodb
         file.thumbnailStatus = 'successful'
         file.thumbnailsGenerated = datetime.now()
