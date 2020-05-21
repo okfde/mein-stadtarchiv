@@ -10,10 +10,12 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+import magic
 from flask import current_app
 from ..models import Category, Comment, Document, File, Tag
 from ..extensions import minio
 from minio.error import ResponseError, NoSuchKey
+from ..data_worker.DataWorkerThumbnails import regenerate_thumbnails
 
 
 def migrate_data(action):
@@ -27,6 +29,10 @@ def migrate_data(action):
         set_reverse_file()
     if action == 'reset_mimetype':
         reset_mimetype()
+    if action == 'check_mimetypes':
+        check_mimetypes()
+    if action == 'check_thumbnails':
+        check_thumbnails()
 
 
 def reset_mimetype():
@@ -100,3 +106,30 @@ def consistent_files():
             file.binaryExists = data is not None
             file.save()
 
+
+def check_mimetypes():
+    for file in File.objects.all():
+        try:
+            data = minio.connection.get_object(
+                current_app.config['MINIO_BUCKET'],
+                "files/%s/%s" % (file.document.id, file.id)
+            )
+        except NoSuchKey:
+            continue
+        magic_mime = magic.from_buffer(data, mime=True)
+        if file.mimeType != magic_mime:
+            print('file %s has db mime %s and magic mime %s' % (file.id, file.mimeType, magic_mime))
+
+
+def check_thumbnails():
+    for file in File.objects(binaryExists=1):
+        try:
+            data = minio.connection.get_object(
+                current_app.config['MINIO_BUCKET'],
+                "thumbnails/%s/%s/1200/1.jpg" % (file.document.id, file.id)
+            )
+        except NoSuchKey:
+            data = None
+        if data is None:
+            print('file %s thumbnail missing' % file.id)
+            regenerate_thumbnails(file.id)

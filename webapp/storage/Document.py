@@ -37,7 +37,7 @@ class Document(Base):
 
     category = ListField(ReferenceField('Category', deref_document=True))
     tags = ListField(StringField())
-    files = ListField(ReferenceField('File', deref_document=True))
+    #files = ListField(ReferenceField('File', deref_document=True))
 
     address = StringField()
     postcode = StringField()
@@ -55,7 +55,6 @@ class Document(Base):
 
     _file_cache = None
 
-    """
     @property
     def files(self):
         if self._file_cache is not None:
@@ -64,7 +63,6 @@ class Document(Base):
         for file in File.objects(document=self).all():
             self._file_cache.append(file)
         return self._file_cache
-    """
 
     def __repr__(self):
         return '<Document %r>' % self.title
