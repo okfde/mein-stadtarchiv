@@ -133,5 +133,3 @@ def check_thumbnails():
         if data is None:
             print('file %s thumbnail missing' % file.id)
             regenerate_thumbnails(file.id)
-
-def delete_non_camel_case():
