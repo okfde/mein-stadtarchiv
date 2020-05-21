@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field with context %}
+
+{% block content %}
+    <form method="POST" action="/admin/category/{{ category.id }}/table/{{ filename }}" id="archive-form" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Tabelle importieren</h1>
+                <p>Um den Import abzuschließen, müssen die Tabellenspalten inhaltlich zugeordnet werden.</p>
+            </div>
+        </div>
+        <div id="category-table-import" data-category={{ category.id }} data-filename="{{ filename }}"></div>
+        <div class="row row-form">
+            {{ form_field(form.abort, 6, 'input-submit') }}
+            {{ form_field(form.submit, 6, 'input-submit') }}
+        </div>
+        {{ form.csrf_token }}
+    </form>
+{% endblock %}

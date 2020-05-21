@@ -2,7 +2,7 @@
 {% from "macros.html" import form_field with context %}
 
 {% block content %}
-    <form method="POST" action="/admin/archive/{{ archive.id }}/category/{{ category.id }}/edit" id="archive-form" enctype="multipart/form-data">
+    <form method="POST" action="/admin/category/{{ category.id }}/edit" id="archive-form" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-12">
                 <h1>Bestand bearbeiten</h1>

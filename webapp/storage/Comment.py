@@ -16,8 +16,10 @@ from .Base import Base
 
 class Comment(Base):
     content = StringField()
-    author_name = StringField()
-    author_email = EmailField()
+    author_name = StringField()  # TO DELETE
+    authorName = StringField()
+    author_email = EmailField()  # TO DELETE
+    authorEmail = EmailField()
     ip = StringField()
 
     status = IntField() # 0 = not visited, 1 = accepted, -1 = spam

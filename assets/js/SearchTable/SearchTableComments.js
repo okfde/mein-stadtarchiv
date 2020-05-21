@@ -69,8 +69,8 @@ export default class SearchTableArchives extends SearchTable {
     renderTableCellAuthor(row) {
         return(
             <td>
-                <a href={`mailto:${row.author_email}`}>{row.author_name}</a><br/>
-                <small>{row.author_email}</small>
+                <a href={`mailto:${row.authorEmail}`}>{row.authorName}</a><br/>
+                <small>{row.authorEmail}</small>
             </td>
         )
     }

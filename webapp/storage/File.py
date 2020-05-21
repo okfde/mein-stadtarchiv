@@ -14,10 +14,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from mongoengine import signals
 from mongoengine import ReferenceField, DateTimeField, StringField, IntField, BooleanField, DictField
 from .Base import Base
+from ..extensions import logger
 
 
 class File(Base):
-    binary_exists = BooleanField(default=False)
+    binary_exists = BooleanField(default=False)  # TO DELETE
+    binaryExists = BooleanField(default=False)
     name = StringField()
     fileName = StringField()
     text = StringField()
@@ -40,6 +42,8 @@ class File(Base):
 
 def update_index(sender, document):
     from ..data_worker.DataWorkerHelper import worker_celery_single as index_document
+    if not document.document:
+        logger.error('index.update', 'file %s has no document')
     index_document.apply_async((str(document.document.id), ), countdown=5)
 
 

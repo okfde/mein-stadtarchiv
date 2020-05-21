@@ -47,9 +47,13 @@
                 {% if category['status'] == 'importing' %}
                     <i class="fa fa-spinner fa-spin fa-fw"></i>
                 {% elif level == 4 %}
-                    {{ action_button('show', '/admin/archive/%s/category/%s/show' % (archive.id, category['id'])) }}
-                    {{ action_button('edit', '/admin/archive/%s/category/%s/edit' % (archive.id, category['id'])) }}
-                    {{ action_button('custom', '/admin/archive/%s/category/%s/upload' % (archive.id, category['id']), 'Dateiupload', 'upload') }}
+                    {{ action_button('show', '/admin/category/%s/show' % category['id']) }}
+                    {{ action_button('edit', '/admin/category/%s/edit' % category['id']) }}
+                    {{ action_button('custom', '/admin/ategory/%s/upload' % (category['id']), 'Dateiupload', 'upload') }}
+                    {% if category.uploadedFile %}
+                        {{ action_button('custom', '/admin/category/%s/table/%s' % (category['id'], category.uploadedFile), 'Tabellenimport fertigstellen', 'table') }}
+                    {% endif %}
+                    {{ action_button('delete', '/admin/category/%s/delete' % category['id']) }}
                 {% endif %}
             </h{{ level }}>
             {% if category.get('children', [])|length %}

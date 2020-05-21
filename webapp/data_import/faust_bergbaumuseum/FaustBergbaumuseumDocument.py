@@ -31,7 +31,7 @@ def save_document(category, data):
     extra_fields = {}
     document.title = get_field(data, './/Titel')
     document.description = get_field(data, './/Beschreibung_Inhalt/Inhalt')
-    document.order_id = uid
+    document.orderId = uid
     document.licence = get_field(data, './/Rechteerklaerung/Rechtsstatus')
     document.author = get_field(data, './/Rechteerklaerung/creditline')
     document.date_text = get_field(data, './/Entstehung/Datierung_Herstellung/Dat_Begriff')
@@ -74,7 +74,7 @@ def save_document(category, data):
         file.document = document
         file.externalId = file_raw.get('Abbildung')
         file.fileName = file_raw.get('Abbildung')
-        file.binary_exists = False
+        file.binaryExists = False
         file.save()
     return document
 

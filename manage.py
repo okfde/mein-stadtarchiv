@@ -22,6 +22,7 @@ from webapp.admin.AdminHelper import set_auth as set_auth_run, missing_media as 
     init_archive as init_archive_run
 from webapp.data_worker.DataWorkerThumbnails import regenerate_thumbnails as regenerate_thumbnails_run
 from webapp.data_worker.DataWorkerGeoreference import DataWorkerGeoreference
+from webapp.worker.migration import migrate_data as migrate_data_run
 
 app = launch()
 manager = Manager(app)
@@ -30,6 +31,15 @@ manager = Manager(app)
 @manager.shell
 def make_shell_context():
     return dict(app=current_app, db=db, models=Models)
+
+
+@manager.command
+def migrate_data(action):
+    """
+    mirates db to camel case
+    :return:
+    """
+    migrate_data_run(action)
 
 
 @manager.command

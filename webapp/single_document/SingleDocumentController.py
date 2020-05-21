@@ -44,8 +44,8 @@ def single_document_main(id):
         comment = Comment()
         if 'X-Forwarded-For' in request.headers:
             comment.ip = request.headers['X-Forwarded-For']
-        comment.author_name = form.name.data
-        comment.author_email = form.email.data
+        comment.authorName = form.name.data
+        comment.authorEmail = form.email.data
         comment.content = form.text.data
         comment.document = document.id
         comment.status = 0

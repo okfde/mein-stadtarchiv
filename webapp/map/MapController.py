@@ -73,7 +73,7 @@ def map_api():
     elastic_request.set_limit(10000)
     elastic_request.set_range_limit('lat', 'gt', 0)
     elastic_request.set_range_limit('lon', 'gt', 0)
-    elastic_request.source = ['id', 'lat', 'lon', 'title', 'files.id', 'files.mimeType', 'files.binary_exists']
+    elastic_request.source = ['id', 'lat', 'lon', 'title', 'files.id', 'files.mimeType', 'files.binaryExists']
     elastic_request.query()
     items = elastic_request.get_results()
     features = []

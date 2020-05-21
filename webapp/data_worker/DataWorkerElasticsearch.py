@@ -68,7 +68,7 @@ class DataWorkerElasticsearch:
         document_dict['file_missing_count'] = 0
         if document.files:
             for file in document.files:
-                if file.binary_exists:
+                if file.binaryExists:
                     document_dict['file_count'] += 1
                 else:
                     document_dict['file_missing_count'] += 1

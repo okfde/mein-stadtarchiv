@@ -13,7 +13,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, BooleanField, FileField, SelectField
 from wtforms.validators import DataRequired
-from ..common.form_validator import ValidateMimeType, ValidateKnownXml
+from ..common.form_validator import ValidateMimeType, ValidateKnownXml, DataRequiredIfOtherEmpty, \
+    DataRequiredIfOtherMimetype
 from ..common.form import SearchBaseForm
 
 
@@ -32,23 +33,39 @@ class CategorySearchForm(SearchBaseForm):
 
 
 class CategoryFileForm(FlaskForm):
+    title = StringField(
+        label='Name',
+        validators=[
+            DataRequiredIfOtherEmpty(
+                'category_file',
+                message='Ohne Importdatei wird ein Titel benötigt'
+            ),
+            DataRequiredIfOtherMimetype(
+                'category_file',
+                ['application/vnd.ms-excel', 'text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+                message='Bei Tabellen wird ein Titel benötigt'
+            )
+        ]
+    )
     category_file = FileField(
         label='XML-Datei',
         validators=[
             DataRequired(
-                message='Bitte stellen Sie eine XML-Datei bereit'
+                message='Bitte stellen Sie eine XML-, CSV-, XLS- oder XLSX-Datei bereit'
             ),
             ValidateMimeType(
-                mimetypes=['application/xml', 'text/xml'],
-                message='Bitte stellen Sie eine XML Datei bereit'
+                mimetypes=[
+                    'application/xml', 'text/xml', 'application/vnd.ms-excel', 'text/csv', 'text/plain',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                ],
+                allow_empty=True,
+                message='Bitte stellen Sie eine XML-, CSV-, XLS- oder XLSX-Datei bereit'
             ),
             ValidateKnownXml(
-                message='Bitte stellen Sie eine XML Datei in einem bekannten Format bereit'
+                ignore_non_xml=True,
+                message='Bitte stellen Sie eine XML-, CSV-, XLS- oder XLSX-Datei in einem bekannten Format bereit'
             )
         ]
-    )
-    title = StringField(
-        label='Name'
     )
     description = TextAreaField(
         label='Beschreibung'
@@ -58,4 +75,25 @@ class CategoryFileForm(FlaskForm):
     )
     submit = SubmitField(
         label='speichern'
+    )
+
+
+class CategoryTableForm(FlaskForm):
+    delete_file = BooleanField(
+        label='Hochgeladene Tabellen-Datei vom Server löschen'
+    )
+    abort = SubmitField(
+        label='abrechen'
+    )
+    submit = SubmitField(
+        label='speichern'
+    )
+
+
+class CategoryDeleteForm(FlaskForm):
+    abort = SubmitField(
+        label='abrechen'
+    )
+    submit = SubmitField(
+        label='löschen'
     )

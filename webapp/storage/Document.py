@@ -12,6 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from mongoengine import ReferenceField, DateTimeField, StringField, ListField, IntField, DictField, FloatField
 from .Base import Base
+from .File import File
 from mongoengine import signals
 
 
@@ -24,11 +25,15 @@ class Document(Base):
     note = StringField(fulltext=True)
     origination = StringField()
     help_required = IntField(default=0)
+    helpRequired = IntField(default=0)
 
     date = DateTimeField(datetime_format='date')
-    date_begin = DateTimeField(datetime_format='date')
-    date_end = DateTimeField(datetime_format='date')
-    date_text = StringField()
+    date_begin = DateTimeField(datetime_format='date')  # TO DELETE
+    dateBegin = DateTimeField(datetime_format='date')
+    date_end = DateTimeField(datetime_format='date')  # TO DELETE
+    dateEnd = DateTimeField(datetime_format='date')
+    date_text = StringField()  # TO DELETE
+    dateText = StringField()
 
     category = ListField(ReferenceField('Category', deref_document=True))
     tags = ListField(StringField())
@@ -43,8 +48,23 @@ class Document(Base):
     georeferencePrecision = StringField()
     georeferenceDone = DateTimeField(datetime_format='datetime')
 
-    extra_fields = DictField(delete_document=True)
-    document_type = StringField()
+    extra_fields = DictField(delete_document=True)  # TO DELETE
+    extraFields = DictField(delete_document=True)
+    document_type = StringField()  # TO DELETE
+    documentType = StringField()
+
+    _file_cache = None
+
+    """
+    @property
+    def files(self):
+        if self._file_cache is not None:
+            return self._file_cache
+        self._file_cache = []
+        for file in File.objects(document=self).all():
+            self._file_cache.append(file)
+        return self._file_cache
+    """
 
     def __repr__(self):
         return '<Document %r>' % self.title

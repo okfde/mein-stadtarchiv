@@ -5,8 +5,13 @@
     <div class="row">
         <div class="col-md-12">
             <h1>
-                Bestand {{ category.title }} in Archiv {{ archive.title }}
-                {{ action_button('edit', '/admin/archive/%s/category/%s/edit' % (archive.id, category.id)) }}
+                Bestand {{ category.title }} in Archiv {{ category.parent.title }}
+                {{ action_button('edit', '/admin/category/%s/edit' % category.id) }}
+                    {{ action_button('custom', '/admin/ategory/%s/upload' % (category['id']), 'Dateiupload', 'upload') }}
+                    {% if category.uploadedFile %}
+                        {{ action_button('custom', '/admin/category/%s/table/%s' % (category['id'], category.uploadedFile), 'Tabellenimport fertigstellen', 'table') }}
+                    {% endif %}
+                    {{ action_button('delete', '/admin/category/%s/delete' % category['id']) }}
             </h1>
             <table class="table">
                 <tr>
@@ -19,7 +24,7 @@
                 </tr>
                 <tr>
                     <td>Archiv</td>
-                    <td><a href="{{ '/admin/archive/%s/show' % archive.id}}">{{ archive.title }}</a></td>
+                    <td><a href="{{ '/admin/archive/%s/show' % category.parent.id}}">{{ category.parent.title }}</a></td>
                 </tr>
                 <tr>
                     <td>Letzte Aktualisierung</td>

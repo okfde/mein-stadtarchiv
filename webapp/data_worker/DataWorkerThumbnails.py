@@ -166,8 +166,7 @@ class DataWorkerThumbnails:
                         'image/jpeg'
                     )
                 except ResponseError as err:
-                    current_app.logger.error(
-                        'Critical error saving file from File %s from Body %s' % (file.id, document.id))
+                    current_app.logger.error('Critical error saving file from File %s from Body %s' % (file.id, document.id))
         # save in mongodb
         file.thumbnailStatus = 'successful'
         file.thumbnailsGenerated = datetime.now()

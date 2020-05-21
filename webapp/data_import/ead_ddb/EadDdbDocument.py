@@ -65,7 +65,7 @@ def save_document(data, parent, nsmap):
 
     # order_id
     order_id = data.xpath('./ns:did/ns:unitid', namespaces=nsmap)
-    document.order_id = clean_text(order_id[0].text) if len(order_id) else ''
+    document.orderId = clean_text(order_id[0].text) if len(order_id) else ''
 
     # origination
     origination = data.xpath('./ns:did/ns:origination', namespaces=nsmap)

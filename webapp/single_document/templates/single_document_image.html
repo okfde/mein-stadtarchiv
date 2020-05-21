@@ -1,5 +1,5 @@
 {% if document.files|length %}
-    {% if document.files[0].binary_exists %}
+    {% if document.files[0].binaryExists %}
         <div id="document-image">
             <a href="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg"
                data-toggle="lightbox" data-gallery="{{ document.files[0].id }}">

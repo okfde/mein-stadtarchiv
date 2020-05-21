@@ -55,7 +55,7 @@ def save_category(data, parent, nsmap, status):
     if len(collection_title) and collection_title[0].text:
         category.title = collection_title[0].text
     if len(collection_order_id) and collection_order_id[0].text:
-        category.order_id = collection_order_id[0].text
+        category.orderId = collection_order_id[0].text
     if len(collection_descr) and collection_descr[0].text:
         category.description = collection_descr[0].text.replace('<lb/>', ' ').strip()
 

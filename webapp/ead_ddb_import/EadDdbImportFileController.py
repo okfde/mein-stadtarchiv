@@ -74,7 +74,7 @@ def ead_ddb_push_media():
     file.fileName = request.form.get('fileName')
     file.sha1Checksum = request.form.get('sha1Checksum')
     file.modified = datetime.datetime.now()
-    file.binary_exists = True
+    file.binaryExists = True
     if file.mimeType not in file_endings.keys():
         logger.info('api.eadddb.file.reply', '%s %s: invalid mime type' % (file_name, document_uid))
         return xml_response(generate_xml_answer('invalid mime type', 'invalid mime type'))

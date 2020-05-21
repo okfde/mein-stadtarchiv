@@ -75,7 +75,6 @@ def archive_category_upload_file(archive_id, category_id):
     if request.files:
         uploaded_file = request.files['file']
         # Hacky way of uploading files because at Stadtarchiv Moers, there's no connection between Document and File in XML
-        print(archive.title)
         if archive.title == 'Stadtarchiv Moers':
             document, matching_file = get_matching_document_file_stadtarchiv_moers(archive, uploaded_file)
             if not document:

@@ -41,28 +41,30 @@
                         <div class="col-6">Datum</div>
                         <div class="col-6">{{ document.date|datetime('fulldate') }}</div>
                     </div>
-                {% elif document.date_begin and document.date_end %}
-                    {% if document.date_begin|datetime('daymonth') == '0101' and document.date_end|datetime('daymonth') == '3112' %}
+                {% elif document.dateBegin and document.dateEnd %}
+                    {% if document.dateBegin|datetime('daymonth') == '0101' and document.dateEnd|datetime('daymonth') == '3112' %}
                         <div class="row">
                             <div class="col-6">Jahr</div>
-                            {% if document.date_begin|datetime('year') == document.date_end|datetime('year') %}
-                                <div class="col-6">{{ document.date_begin|datetime('year') }}</div>
+                            {% if document.dateBegin|datetime('year') == document.dateEnd|datetime('year') %}
+                                <div class="col-6">{{ document.dateBegin|datetime('year') }}</div>
                             {% else %}
-                                <div class="col-6">{{ document.date_begin|datetime('year') }}
-                                    - {{ document.date_end|datetime('year') }}</div>
+                                <div class="col-6">
+                                    {{ document.dateBegin|datetime('year') }} - {{ document.dateEnd|datetime('year') }}
+                                </div>
                             {% endif %}
                         </div>
                     {% else %}
                         <div class="row">
                             <div class="col-6">Datum</div>
-                            <div class="col-6">{{ document.date_begin|datetime('fulldate') }}
-                                - {{ document.date_end|datetime('fulldate') }}</div>
+                            <div class="col-6">
+                                {{ document.dateBegin|datetime('fulldate') }} - {{ document.dateEnd|datetime('fulldate') }}
+                            </div>
                         </div>
                     {% endif %}
                 {% endif %}
                 <div class="row">
                     <div class="col-6">Laufende Nummer</div>
-                    <div class="col-6">{{ document.order_id }}</div>
+                    <div class="col-6">{{ document.orderId }}</div>
                 </div>
                 {% if document.origination %}
                 <div class="row">
@@ -85,27 +87,10 @@
             </div>
 
             <div id="share">
-                <a class="facebook"
-                   href="https://www.facebook.com/share.php?u={{ config['PROJECT_URL'] }}{{ request.path }}&title=
-                           {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}"
-                   target="blank"><i class="fa fa-facebook"></i></a>
-                <a class="twitter"
-                   href="https://twitter.com/intent/tweet?status=
-                           {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}+
-                           {{ config['PROJECT_URL'] }}{{ request.path }}"
-                   target="blank"><i class="fa fa-twitter"></i></a>
-                <a class="linkedin"
-                   href="https://www.linkedin.com/shareArticle?mini=true&url=
-                           {{ config['PROJECT_URL'] }}{{ request.path }}&title=
-                           {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}&source=Unser%20Stadtarchiv"
-                   target="blank"><i class="fa fa-linkedin"></i></a>
-                <a class="pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media=
-
-                        {% if document.files|length %}{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg
-                            {% else %}{{ config['PROJECT_URL'] }}/static/images/stadtarchiv.jpg{% endif %}&url=
-                        {{ config['PROJECT_URL'] }}{{ request.path }}&is_video=false&description=
-                        {% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}"
-                   target="blank"><i class="fa fa-pinterest-p"></i></a>
+                <a class="facebook" href="https://www.facebook.com/share.php?u={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}" target="blank"><i class="fa fa-facebook"></i></a>
+                <a class="twitter" href="https://twitter.com/intent/tweet?status={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}+{{ config['PROJECT_URL'] }}{{ request.path }}" target="blank"><i class="fa fa-twitter"></i></a>
+                <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}&source=Unser%20Stadtarchiv" target="blank"><i class="fa fa-linkedin"></i></a>
+                <a class="pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media={% if document.files|length %}{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg{% else %}{{ config['PROJECT_URL'] }}/static/images/stadtarchiv.jpg{% endif %}&url={{ config['PROJECT_URL'] }}{{ request.path }}&is_video=false&description={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}" target="blank"><i class="fa fa-pinterest-p"></i></a>
             </div>
             <div class=" d-md-none">
                 {% include 'single_document_image.html' %}

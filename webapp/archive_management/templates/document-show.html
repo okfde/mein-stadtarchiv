@@ -63,7 +63,7 @@
                         <td>{% if file.name %}{{ file.name }}{% endif %}</td>
                         <td>{{ file.size|filesize }}</td>
                         <td>
-                            {% if file.binary_exists %}
+                            {% if file.binaryExists %}
                                 <i class="fa fa-check-circle" aria-hidden="true"></i>
                             {% else %}
                                 <i class="fa fa-question-circle" aria-hidden="true"></i>

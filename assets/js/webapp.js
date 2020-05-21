@@ -14,6 +14,7 @@ import SearchTableComments from './SearchTable/SearchTableComments';
 import SingleMarkerMap from "./SingleMarkerMap";
 import CategoryFileUpload from "./CategoryFileUpload";
 import DocumentMapSearch from './Helper/DocumentMapSearch';
+import CategoryTableImport from "./Import/CategoryTableImport";
 
 
 $(document).ready(function () {
@@ -29,6 +30,12 @@ $(document).ready(function () {
         ReactDOM.render(
             <SearchList ref={(searchList) => {window.searchList = searchList}} />,
             document.getElementById('search-list-box')
+        );
+    }
+    if (document.getElementById('category-table-import')) {
+        ReactDOM.render(
+            <CategoryTableImport ref={(categoryTableImport) => {window.categoryTableImport = categoryTableImport}} />,
+            document.getElementById('category-table-import')
         );
     }
     if (document.getElementById('map-search-form')) {

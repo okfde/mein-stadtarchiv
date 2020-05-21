@@ -256,14 +256,14 @@ export default class SearchList extends Component {
 
     renderDocument(document) {
         let meta = [];
-        if (document.date_begin && document.date_end) {
-            meta.push('Jahr ' + this.formatYear(document.date_begin) + ' - ' + this.formatYear(document.date_end));
+        if (document.dateBegin && document.dateEnd) {
+            meta.push('Jahr ' + this.formatYear(document.dateBegin) + ' - ' + this.formatYear(document.dateEnd));
         }
         else if (document.date) {
             meta.push('Jahr ' + this.formatYear(document.date));
         }
-        else if (document.date_text) {
-            meta.push('Jahr ' + document.date_text);
+        else if (document.dateText) {
+            meta.push('Jahr ' + document.dateText);
         }
         if (document.origination) {
             meta.push('Quelle: ' + document.origination);
