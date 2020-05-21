@@ -8,7 +8,7 @@ export default class SearchTable extends Component {
         data: [],
         resultCount: 0,
         initialized: false,
-        itemsPerPage: 25
+        itemsPerPage: 10
     };
     params = {
         sort_field: '',
