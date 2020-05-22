@@ -21,8 +21,9 @@ from minio.error import ResponseError, SignatureDoesNotMatch
 from urllib3.exceptions import MaxRetryError
 from PIL import Image
 from ..data_worker.DataWorkerHelper import worker_celery_single
+from .EadDdbImportHelper import generate_xml_answer
 
-from .EadDdbImportController import ead_ddb_import, generate_xml_answer
+from .EadDdbImportController import ead_ddb_import
 
 Image.MAX_IMAGE_PIXELS = None
 

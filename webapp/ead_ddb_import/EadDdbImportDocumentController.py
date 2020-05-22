@@ -17,9 +17,9 @@ from ..common.response import xml_response
 from ..extensions import csrf, logger
 from ..models import Category, Document, File
 from ..data_worker.DataWorkerHelper import worker_celery_full
+from .EadDdbImportHelper import generate_xml_answer
 
-
-from .EadDdbImportController import ead_ddb_import, generate_xml_answer
+from .EadDdbImportController import ead_ddb_import
 
 
 @ead_ddb_import.route('/api/ead-ddb/push-data', methods=['POST'])

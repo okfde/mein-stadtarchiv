@@ -64,47 +64,46 @@ class DataWorkerElasticsearch:
     def index_document(self, document):
         document_dict = document.to_dict('deref_document', format_datetime=True, delete='delete_document')
 
-        document_dict['file_count'] = 0
-        document_dict['file_missing_count'] = 0
+        document_dict['fileCount'] = 0
+        document_dict['fileMissingCount'] = 0
         if document.files:
             for file in document.files:
                 if file.binaryExists:
-                    document_dict['file_count'] += 1
+                    document_dict['fileCount'] += 1
                 else:
-                    document_dict['file_missing_count'] += 1
+                    document_dict['fileMissingCount'] += 1
 
         replace_punctuation_re = re.compile('[%s\n\r]' % re.escape(string.punctuation))
         extra_fields = []
-        for extra_field_value in document.extra_fields.values():
+        for extra_field_value in document.extraFields.values():
             extra_fields.append(extra_field_value)
-        document_dict['extra_field_text'] = ' '.join(extra_fields)
+        document_dict['extraFieldText'] = ' '.join(extra_fields)
 
-        document_dict['category_full'] = []
-        document_dict['category_with_parents'] = []
+        document_dict['categoryFull'] = []
+        document_dict['categoryWithParents'] = []
         for category in document.category:
-            document_dict['category_full'].append(self.category_cache_str[str(category.id)])
-            document_dict['category_with_parents'] += self.category_cache_id[str(category.id)]
+            document_dict['categoryFull'].append(self.category_cache_str[str(category.id)])
+            document_dict['categoryWithParents'] += self.category_cache_id[str(category.id)]
         if document.date:
-            document_dict['date_sort'] = document.date.strftime('%Y-%m-%d')
+            document_dict['dateSort'] = document.date.strftime('%Y-%m-%d')
         elif document.date_begin:
-            document_dict['date_sort'] = document.date_begin.strftime('%Y-%m-%d')
+            document_dict['dateSort'] = document.date_begin.strftime('%Y-%m-%d')
         document_dict['autocomplete'] = []
-        for field in ['title', 'description', 'extra_field_text']:
-            if field in document_dict:
-                if document_dict[field]:
-                    # Sämtliche Newlines und Zeichen entfernen
-                    autocomplete_keywords = replace_punctuation_re.sub(' ', document_dict[field])
-                    # Sämtliche HTML Tags entfernen
-                    autocomplete_soup = BeautifulSoup(autocomplete_keywords, 'html.parser')
-                    autocomplete_keywords = ' '.join(autocomplete_soup.findAll(text=True))
-                    # Wörter mit Gewichtung hinzufügen
-                    autocomplete_keywords = autocomplete_keywords.split(' ')
-                    while '' in autocomplete_keywords:
-                        autocomplete_keywords.remove('')
-                    document_dict['autocomplete'].append({
-                        'input': autocomplete_keywords,
-                        'weight': 20 if field == 'title' else 10
-                    })
+        for field in ['title', 'description', 'extraFieldText']:
+            if field in document_dict and document_dict[field]:
+                # Sämtliche Newlines und Zeichen entfernen
+                autocomplete_keywords = replace_punctuation_re.sub(' ', document_dict[field])
+                # Sämtliche HTML Tags entfernen
+                autocomplete_soup = BeautifulSoup(autocomplete_keywords, 'html.parser')
+                autocomplete_keywords = ' '.join(autocomplete_soup.findAll(text=True))
+                # Wörter mit Gewichtung hinzufügen
+                autocomplete_keywords = autocomplete_keywords.split(' ')
+                while '' in autocomplete_keywords:
+                    autocomplete_keywords.remove('')
+                document_dict['autocomplete'].append({
+                    'input': autocomplete_keywords,
+                    'weight': 20 if field == 'title' else 10
+                })
         new_doc = es.index(
             index=self.index_name,
             id=str(document.id),

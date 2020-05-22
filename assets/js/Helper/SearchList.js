@@ -8,10 +8,10 @@ import SearchListCategories from './SearchListCategories';
 export default class SearchList extends Component {
     defaultParams = {
         fulltext: '',
-        year_start: '',
-        year_end: '',
-        files_required: false,
-        help_required: false,
+        yearStart: '',
+        yearEnd: '',
+        filesRequired: false,
+        helpRequired: false,
         category: 'all',
         sort_field: 'random',
         sort_order: 'asc',
@@ -28,7 +28,7 @@ export default class SearchList extends Component {
     sortDef = [
         { key: 'random', name: 'Zufall' },
         { key: 'title.sort', name: 'Titel'},
-        { key: 'date_sort', name: 'Datum'},
+        { key: 'dateSort', name: 'Datum'},
         { key: '_score', name: 'Priorität'}
     ];
     itemsPerPage = 10;
@@ -80,7 +80,7 @@ export default class SearchList extends Component {
             this.lastParams[key] = value;
             if (!value || this.defaultParams[key] === value)
                 continue;
-            if (['help_required', 'files_required'].includes(key)) {
+            if (['helpRequired', 'filesRequired'].includes(key)) {
                 url_params.push(key + '=' + ((value) ? '1' : '0'));
             }
             else {
@@ -173,17 +173,17 @@ export default class SearchList extends Component {
                 <div className="container no-gutters" style={{marginBottom: '1rem'}}>
                     <div className="row">
                         <div className="col-md-12">
-                            <label htmlFor="year_start">Zeitraum</label>
+                            <label htmlFor="yearStart">Zeitraum</label>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-5">
                             <input
                                 type="number"
-                                id="year_start"
-                                name="year_start"
+                                id="yearStart"
+                                name="yearStart"
                                 className="form-control"
-                                value={this.state.params.year_start}
+                                value={this.state.params.yearStart}
                                 onChange={this.handleChange.bind(this)}
                             />
                         </div>
@@ -193,34 +193,34 @@ export default class SearchList extends Component {
                         <div className="col-5">
                             <input
                                 type="number"
-                                id="year_end"
-                                name="year_end"
+                                id="yearEnd"
+                                name="yearEnd"
                                 className="form-control"
-                                value={this.state.params.year_end}
+                                value={this.state.params.yearEnd}
                                 onChange={this.handleChange.bind(this)}
                             />
                         </div>
                     </div>
                 </div>
                 <p>
-                    <label htmlFor="files_required">
+                    <label htmlFor="filesRequired">
                         <input
                             type="checkbox"
-                            name="files_required"
-                            id="files_required"
-                            checked={this.state.params.files_required}
+                            name="filesRequired"
+                            id="filesRequired"
+                            checked={this.state.params.filesRequired}
                             onChange={this.handleChange.bind(this)}
                         />
                         {' '}Nur Dokumente mit Medien
                     </label>
                 </p>
                 <p>
-                    <label htmlFor="help_required">
+                    <label htmlFor="helpRequired">
                         <input
                             type="checkbox"
-                            name="help_required"
-                            id="help_required"
-                            checked={this.state.params.help_required}
+                            name="helpRequired"
+                            id="helpRequired"
+                            checked={this.state.params.helpRequired}
                             onChange={this.handleChange.bind(this)}
                         />
                         {' '}Unbekannte Inhalte
@@ -268,8 +268,8 @@ export default class SearchList extends Component {
         if (document.origination) {
             meta.push('Quelle: ' + document.origination);
         }
-        for (let i = 0; i < document.category_full.length; i++) {
-            meta.push('Kategorie: ' + document.category_full[i]);
+        for (let i = 0; i < document.categoryFull.length; i++) {
+            meta.push('Kategorie: ' + document.categoryFull[i]);
         }
         return(
             <li key={document.id}>
@@ -285,7 +285,7 @@ export default class SearchList extends Component {
                     }
                 </div>
                 {document.files && <div className="search-result-image">
-                    <img src={window.common.buildImageUrl(document.id, document.files[0].id, 150)}/>
+                    <img src={window.common.buildImageUrl(document.id, document.files[0].id, 150)} />
                 </div>}
             </li>
         );

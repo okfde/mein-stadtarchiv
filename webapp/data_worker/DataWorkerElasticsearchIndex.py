@@ -23,24 +23,24 @@ def create_index():
     logger.info('worker.elasticsearch', 'create index %s' % index_name)
     mapping = es_mapping_generator(Document, 'deref_document')
 
-    mapping['properties']['category_full'] = {
+    mapping['properties']['categoryFull'] = {
         'type': 'keyword'
     }
-    mapping['properties']['category_with_parents'] = {
+    mapping['properties']['categoryWithParents'] = {
         'type': 'keyword'
     }
-    mapping['properties']['date_sort'] = {
+    mapping['properties']['dateSort'] = {
         'type': 'date',
         'format': 'date'
     }
-    mapping['properties']['file_count'] = {
+    mapping['properties']['fileCount'] = {
         'type': 'integer'
     }
-    mapping['properties']['file_missing_count'] = {
+    mapping['properties']['fileMissingCount'] = {
         'type': 'integer'
     }
 
-    mapping['properties']['extra_field_text'] = {
+    mapping['properties']['extraFieldText'] = {
         'type': 'text',
         'fields': {
             'fulltext': {
@@ -59,9 +59,6 @@ def create_index():
     es.indices.create(index=index_name, body={
         'settings': es_settings(),
         'mappings': mapping
-        #{
-            #'document': mapping
-        #}
     })
 
     latest_name = current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest'
