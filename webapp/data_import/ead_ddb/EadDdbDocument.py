@@ -128,7 +128,7 @@ def save_document(data, parent, nsmap):
         if len(field_title) and len(field_value) and len(clean_text(field_title[0].text)):
             extra_fields[clean_text(field_title[0].text)] = clean_text(field_value[0].text)
     if len(extra_fields.keys()):
-        document.extra_fields = extra_fields
+        document.extraFields = extra_fields
 
     # save document
     document.save()

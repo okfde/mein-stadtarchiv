@@ -32,7 +32,7 @@ def set_auth(id, auth):
 
 
 def missing_media():
-    for file in File.objects(binary_exists__ne=True).all():
+    for file in File.objects(binaryExists__ne=True).all():
         if file.document:
             if file.fileName:
                 print('missing %s at document id %s in category %s' % (file.fileName, file.document.uid, file.document.category[0].title))

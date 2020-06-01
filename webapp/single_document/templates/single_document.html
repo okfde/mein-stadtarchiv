@@ -72,8 +72,8 @@
                     <div class="col-6">{{ document.origination }}</div>
                 </div>
                 {% endif %}
-                {% if document.extra_fields %}
-                    {% for extra_field_key, extra_field_value in document.extra_fields.items() %}
+                {% if document.extraFields %}
+                    {% for extra_field_key, extra_field_value in document.extraFields.items() %}
                         <div class="row">
                             <div class="col-6">{{ extra_field_key }}</div>
                             <div class="col-6">{{ extra_field_value }}</div>

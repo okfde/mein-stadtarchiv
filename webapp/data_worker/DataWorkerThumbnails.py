@@ -37,7 +37,7 @@ class DataWorkerThumbnails:
 
     def run(self, *args):
         self.prepare()
-        files = File.objects(thumbnailStatus__exists=False, binary_exists=True).timeout(False).all()
+        files = File.objects(thumbnailStatus__exists=False, binaryExists=True).timeout(False).all()
         for file in files:
             self.file_thumbnails(file)
 

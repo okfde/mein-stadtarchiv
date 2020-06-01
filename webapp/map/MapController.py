@@ -83,7 +83,7 @@ def map_api():
             'title': item.get('title')
         }
         if len(item.get('files', [])):
-            properties['binaryExists'] = item['files'][0]['binary_exists']
+            properties['binaryExists'] = item['files'][0]['binaryExists']
             properties['fileId'] = item['files'][0]['id']
             properties['mimeType'] = item['files'][0]['mimeType']
 

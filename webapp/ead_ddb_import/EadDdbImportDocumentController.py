@@ -195,7 +195,7 @@ def save_document(document_xml, category, namespaces):
         if len(field_title) and len(field_value) and field_title[0].text:
                 extra_fields[field_title[0].text] = field_value[0].text.replace('<lb/>', ' ')
     if len(extra_fields.keys()):
-        document.extra_fields = extra_fields
+        document.extraFields = extra_fields
 
     document.save()
 

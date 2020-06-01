@@ -60,7 +60,7 @@ def save_document(category, data):
                 extra_fields[key.split('/')[-1]] = item
             else:
                 extra_fields[key] = item
-    document.extra_fields = extra_fields
+    document.extraFields = extra_fields
     # save document
     document.save()
     logger.info('dataimport.eadddb.document', 'document %s saved' % document.id)

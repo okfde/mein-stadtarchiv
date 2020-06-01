@@ -31,8 +31,8 @@
                         <td>{{ document.origination }}</td>
                     </tr>
                 {% endif %}
-                {% if document.extra_fields %}
-                    {% for extra_field_key, extra_field_value in document.extra_fields.items() %}
+                {% if document.extraFields %}
+                    {% for extra_field_key, extra_field_value in document.extraFields.items() %}
                         <tr>
                             <td>{{ extra_field_key }}</td>
                             <td>{{ extra_field_value }}</td>
