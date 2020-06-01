@@ -86,8 +86,8 @@ class DataWorkerElasticsearch:
             document_dict['categoryWithParents'] += self.category_cache_id[str(category.id)]
         if document.date:
             document_dict['dateSort'] = document.date.strftime('%Y-%m-%d')
-        elif document.date_begin:
-            document_dict['dateSort'] = document.date_begin.strftime('%Y-%m-%d')
+        elif document.dateBegin:
+            document_dict['dateSort'] = document.dateBegin.strftime('%Y-%m-%d')
         document_dict['autocomplete'] = []
         for field in ['title', 'description', 'extraFieldText']:
             if field in document_dict and document_dict[field]:

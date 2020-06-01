@@ -44,15 +44,15 @@ def save_document(category, data):
     date_str = get_field(data, './/Beschreibung_Inhalt/Zeitbezuege/Zeitbezug_norm')
     if date_str:
         if len(date_str) == 4:
-            document.date_begin = '%s-01-01' % date_str
-            document.date_end = '%s-12-31' % date_str
+            document.dateBegin = '%s-01-01' % date_str
+            document.dateEnd = '%s-12-31' % date_str
         elif len(date_str) == 10:
             document.date = datetime.strptime(date_str, '%Y-%m-%d').date()
         elif len(date_str) == 21:
             date_arr = date_str.split('/')
             if len(date_arr) == 2:
-                document.date_begin = datetime.strptime(date_arr[0], '%Y-%m-%d').date()
-                document.date_end = datetime.strptime(date_arr[1], '%Y-%m-%d').date()
+                document.dateBegin = datetime.strptime(date_arr[0], '%Y-%m-%d').date()
+                document.dateEnd = datetime.strptime(date_arr[1], '%Y-%m-%d').date()
     for key in ['Sachgebiet', 'Objektname', 'Objektklasse', 'Sachgebiet', 'Material', 'Beschreibung_Inhalt/Objektgeschichte']:
         item = get_field(data, './/%s' % key)
         if item:

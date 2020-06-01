@@ -83,11 +83,11 @@ def api_search():
         'category_full',
         'origination',
         'note',
-        'date_begin',
-        'date_end',
-        'date_text',
-        'help_required',
-        'file_count',
+        'dateBegin',
+        'dateEnd',
+        'dateText',
+        'helpRequired',
+        'fileCount',
         'files.id'
     ]
 

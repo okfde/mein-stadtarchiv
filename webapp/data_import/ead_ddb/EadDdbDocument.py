@@ -98,9 +98,9 @@ def save_document(data, parent, nsmap):
         if 'date' in date_result:
             document.date = date_result['date']
         if 'begin' in date_result:
-            document.date_begin = date_result['begin']
+            document.dateBegin = date_result['begin']
         if 'end' in date_result:
-            document.date_end = date_result['end']
+            document.dateEnd = date_result['end']
 
     # files
     files = []
