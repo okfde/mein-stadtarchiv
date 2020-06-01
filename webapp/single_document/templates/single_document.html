@@ -103,7 +103,7 @@
                         <p class="document-comment-meta">
                             {% if comment.status == 2 %}<i class="fa fa-plus-circle" aria-hidden="true"></i>
                             {% else %}<i class="fa fa-check-circle" aria-hidden="true"></i>{% endif %}
-                            {{ comment.author_name }} schrieb am {{ comment.created|datetime }}:
+                            {{ comment.authorName }} schrieb am {{ comment.created|datetime }}:
                         </p>
                         <div class="document-comment-content">{{ comment.content }}</div>
                     </div>
