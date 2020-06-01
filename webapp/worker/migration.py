@@ -33,6 +33,8 @@ def migrate_data(action):
         check_mimetypes()
     if action == 'check_thumbnails':
         check_thumbnails()
+    if action == 'regenerate_thumbnails':
+        full_regenerate_thumbnails()
     if action == 'clean_files':
         clean_files()
 
@@ -145,3 +147,11 @@ def clean_files():
         if file.document is not None:
             continue
         print('file %s has no document' % file.id)
+
+
+def full_regenerate_thumbnails():
+    file_ids = []
+    for file in File.objects(binaryExists=True).all():
+        file_ids.append(file.id)
+    for file_id in file_ids:
+        regenerate_thumbnails(file_id)
