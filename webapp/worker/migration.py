@@ -54,6 +54,13 @@ def set_reverse_file():
 
 
 def migrate_camel_case():
+    for document in Document.objects().all():
+        if document.order_id:
+            document.orderId = document.order_id
+        if document.document_type and not document.documentType:
+            document.documentType = document.document_type
+        document.save()
+    """
     for category in Category.objects().all():
         if category.uploaded_file:
             category.uploadedFile = category.uploaded_file
@@ -88,6 +95,7 @@ def migrate_camel_case():
         if tag.order_number:
             tag.orderNumber = tag.order_number
         tag.save()
+    """
 
 
 def broken_files():

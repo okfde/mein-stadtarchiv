@@ -19,6 +19,7 @@ from mongoengine import signals
 class Document(Base):
     uid = StringField()
     order_id = StringField()
+    orderId = StringField()
 
     title = StringField(fulltext=True, sortable=True)
     description = StringField(fulltext=True)
