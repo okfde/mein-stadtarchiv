@@ -8,6 +8,7 @@ venv
 node_modules
 tmp
 logs
+tests/data
 temp/upload/*
 temp/thumbnails/*
 static/sitemap/*.xml*

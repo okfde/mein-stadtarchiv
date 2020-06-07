@@ -14,6 +14,7 @@ from elasticsearch.exceptions import NotFoundError
 from flask import Blueprint, render_template, current_app, redirect
 from ..common.elastic_request import ElasticRequest
 from ..common.helpers import get_random_password
+from ..extensions import minio
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 

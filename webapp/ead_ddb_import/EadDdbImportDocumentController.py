@@ -16,7 +16,6 @@ from flask import request
 from ..common.response import xml_response
 from ..extensions import csrf, logger
 from ..models import Category, Document, File
-from ..data_worker.DataWorkerHelper import worker_celery_full
 from .EadDdbImportHelper import generate_xml_answer
 
 from .EadDdbImportController import ead_ddb_import
@@ -26,7 +25,7 @@ from .EadDdbImportController import ead_ddb_import
 @csrf.exempt
 def ead_ddb_push_data():
     # save data dump
-    logger.info('dump', request.get_data(as_text=True))
+    #logger.info('dump', request.get_data(as_text=True))
 
     # read xml
     try:
@@ -53,9 +52,7 @@ def ead_ddb_push_data():
     archive = Category.objects(uid=archive_title).upsert_one(set__title=archive_title, set__uid=archive_title)
     category_count += 1
 
-    auth = request.headers.get('X-Auth', None)
-    if not auth:
-        auth = request.args.get('auth', None)
+    auth = request.headers.get('X-Auth', request.args.get('auth', None))
 
     if archive.auth != auth:
         logger.info('api.eadddb.document', 'invalid auth')
@@ -75,7 +72,7 @@ def ead_ddb_push_data():
         collection = Category.objects(uid=collection_uid).first()
         if not collection:
             collection = Category()
-        collection.uid = collection_uid,
+        collection.uid = collection_uid
         collection.parent = archive
 
         if len(collection_title) and collection_title[0].text:
@@ -104,10 +101,10 @@ def ead_ddb_push_data():
             subcollection_uid = subcollection_xml.get('id')
             subcollection_title = subcollection_xml.xpath('./ns:did/ns:unittitle', namespaces=namespaces)
             subcollection_order_id = subcollection_xml.xpath('./ns:did/ns:unitid', namespaces=namespaces)
-            subcollection = Category.objects(uid=subcollection_uid)
+            subcollection = Category.objects(uid=subcollection_uid).first()
             if not subcollection:
                 subcollection = Category()
-            subcollection.uid = subcollection_uid,
+            subcollection.uid = subcollection_uid
             subcollection.parent = collection
             if len(subcollection_title) and subcollection_title[0].text:
                 subcollection.title = subcollection_title[0].text
@@ -125,7 +122,6 @@ def ead_ddb_push_data():
                 if file_missing_binaries_single:
                     file_missing_binaries += file_missing_binaries_single
 
-    worker_celery_full.delay()
     return xml_response(generate_xml_answer('ok', 'saved %s documents in %s categories' % (document_count, category_count), file_missing_binaries))
 
 
@@ -137,7 +133,7 @@ def save_document(document_xml, category, namespaces):
     document = Document.objects(uid=document_uid).first()
     if not document:
         document = Document()
-    document.uid = document_uid,
+    document.uid = document_uid
     document.category = [category]
     document.modified = datetime.datetime.utcnow()
 
@@ -215,7 +211,7 @@ def save_document(document_xml, category, namespaces):
         file.document = document
         file.save()
 
-        if not file.binaryExists:
+        if not file.binaryExists or request.args.get('force-reupload') == '1':
             file_missing_binaries.append(file.externalId)
 
     return document, file_missing_binaries

@@ -6,7 +6,6 @@ Flask-WTF
 Flask-Login
 Flask-Mail
 Flask-Caching
-Flask-Minio
 Flask-Failsafe
 Flask-MongoEngine
 Flask-Celery-Helper
@@ -22,6 +21,10 @@ bcrypt
 lxml
 minio
 pillow
+watchdog
+pyyaml
+argh
+future
 bs4
 celery
 python-magic

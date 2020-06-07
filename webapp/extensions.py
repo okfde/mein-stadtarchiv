@@ -13,7 +13,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from flask_mongoengine import MongoEngine
 db = MongoEngine()
 
-from flask_minio import Minio
+from .common.minio import Minio
 minio = Minio()
 
 # Flask-Login

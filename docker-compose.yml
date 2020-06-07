@@ -26,7 +26,8 @@ services:
       stadtarchiv:
         aliases:
         - worker
-    entrypoint: ["celery", "-A", "webapp.celery_entry_point", "worker"]
+    #entrypoint: ["celery", "-A", "webapp.celery_entry_point", "worker"]
+    entrypoint: ["/app/celery.sh"]
 
   webpack:
     build:

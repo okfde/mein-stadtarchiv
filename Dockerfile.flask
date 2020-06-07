@@ -27,6 +27,7 @@ COPY --chown=webdev:webdev . /app
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
 RUN ln -s /home/webdev/.local/bin/celery /usr/bin/celery
+RUN ln -s /home/webdev/.local/bin/watchmedo /usr/bin/watchmedo
 
 USER webdev
 RUN pip install -r requirements.txt

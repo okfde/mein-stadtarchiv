@@ -17,7 +17,6 @@ from ..models import Category
 from .ead_ddb.DataImportEadDdbWorker import DataImportEadDdbWorker
 from .faust_stadtarchiv.DataImportFaustStadtarchivWorker import DataImportFaustStadtarchivWorker
 from .faust_bergbaumuseum.DataImportFaustBergbaumuseumWorker import DataImportFaustBergbaumuseumWorker
-from ..data_worker.DataWorkerHelper import worker
 
 
 workers = [
@@ -42,4 +41,3 @@ def import_delayed(filename, archive_id):
     path = os.path.join(current_app.config['TEMP_UPLOAD_DIR'], filename)
     data_import_worker = select_standard(path=path, parent=archive)
     data_import_worker.save_data()
-    worker()

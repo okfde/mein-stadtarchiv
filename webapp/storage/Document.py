@@ -13,7 +13,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from mongoengine import ReferenceField, DateTimeField, StringField, ListField, IntField, DictField, FloatField
 from .Base import Base
 from .File import File
-from mongoengine import signals
 
 
 class Document(Base):
@@ -62,11 +61,3 @@ class Document(Base):
 
     def __repr__(self):
         return '<Document %r>' % self.title
-
-
-def update_index(sender, document):
-    from ..data_worker.DataWorkerHelper import worker_celery_single as index_document
-    index_document.apply_async((str(document.id), ), countdown=5)
-
-
-signals.pre_save.connect(update_index, sender=Document)

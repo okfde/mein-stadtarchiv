@@ -34,7 +34,7 @@ class DataWorkerElasticsearch:
         self.category_cache_id = {}
         self.index_name = current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest'
 
-        for category in Category.objects.all():
+        for category in Category.objects.no_cache().all():
             category_list_title = []
             category_list_id = []
             category_tmp = category
@@ -113,5 +113,6 @@ class DataWorkerElasticsearch:
             self.statistics[new_doc['result']] += 1
         else:
             logger.warn('worker.elasticsearch', 'Unknown result at %s' % document.id)
+        logger.info('worker.elasticsearch', 'indexed document %s' % document.id)
 
 

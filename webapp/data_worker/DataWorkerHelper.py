@@ -10,16 +10,15 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
 
 from .DataWorkerElasticsearch import DataWorkerElasticsearch
 from .DataWorkerThumbnails import DataWorkerThumbnails
 from .DataWorkerSitemap import DataWorkerSitemap
-from ..models import User, Document
+from ..models import User, Document, File
 from ..extensions import celery
 
 
+"""
 def worker():
     #data_worker_thumbnails = DataWorkerThumbnails()
     #data_worker_thumbnails.run()
@@ -35,22 +34,35 @@ def worker_celery_full():
     data_worker_elasticsearch.run()
     data_worker_sitemap = DataWorkerSitemap()
     data_worker_sitemap.run()
+"""
 
 
 @celery.task()
-def worker_celery_single(document_id):
+def process_document_delay(document_id):
     document = Document.get(document_id)
     if not document:
         return
-    data_worker_thumbnails = DataWorkerThumbnails()
-    data_worker_thumbnails.prepare()
-    if document.files:
-        for file in document.files:
-            data_worker_thumbnails.file_thumbnails(file)
+    process_document(document)
 
+
+def process_document(document):
     data_worker_elasticsearch = DataWorkerElasticsearch()
     data_worker_elasticsearch.prepare()
     data_worker_elasticsearch.index_document(document)
+
+
+@celery.task()
+def process_file_delay(file_id):
+    file = File.get(file_id)
+    if not file:
+        return
+    process_file(file)
+
+
+def process_file(file):
+    data_worker_thumbnails = DataWorkerThumbnails()
+    data_worker_thumbnails.prepare()
+    data_worker_thumbnails.file_thumbnails(file)
 
 
 def upsert_login(email, password):

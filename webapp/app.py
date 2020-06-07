@@ -67,6 +67,7 @@ def launch():
     configure_filters(app)
     configure_error_handlers(app)
     from .common import filter
+    from .common import signals
     return app
 
 
@@ -161,10 +162,6 @@ def configure_error_handlers(app):
     @app.errorhandler(404)
     def error_404(error):
         return render_template('404.html'), 404
-
-    @app.errorhandler(429)
-    def error_429(error):
-        return render_template('429.html'), 429
 
     @app.errorhandler(500)
     def error_500(error):

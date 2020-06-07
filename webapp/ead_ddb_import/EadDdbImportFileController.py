@@ -20,7 +20,6 @@ from ..models import Document, File, Category
 from minio.error import ResponseError, SignatureDoesNotMatch
 from urllib3.exceptions import MaxRetryError
 from PIL import Image
-from ..data_worker.DataWorkerHelper import worker_celery_single
 from .EadDdbImportHelper import generate_xml_answer
 
 from .EadDdbImportController import ead_ddb_import
@@ -39,9 +38,9 @@ file_endings = {
 @ead_ddb_import.route('/api/ead-ddb/push-file', methods=['POST'])
 @csrf.exempt
 def ead_ddb_push_media():
-    logger.info('api.eadddb.file.debug', request.headers)
-    logger.info('api.eadddb.file.debug', request.form)
-    logger.info('api.eadddb.file.debug', request.files)
+    #logger.info('api.eadddb.file.debug', request.headers)
+    #logger.info('api.eadddb.file.debug', request.form)
+    #logger.info('api.eadddb.file.debug', request.files)
 
     auth = request.headers.get('X-Auth', None)
     if not auth:
@@ -122,6 +121,5 @@ def ead_ddb_push_media():
     # tidy up
     os.remove(file_path)
 
-    worker_celery_single.delay(str(document.id))
     return xml_response(generate_xml_answer('ok', 'file saved'))
 

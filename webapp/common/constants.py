@@ -52,6 +52,7 @@ class BaseConfig:
     MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
     MONGODB_DB = 'stadtarchiv'
+    MONGODB_CONNECT = False
 
     MINIO_ENDPOINT = 'localhost'
     MINIO_SECURE = False
