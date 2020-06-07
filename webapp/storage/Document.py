@@ -23,7 +23,6 @@ class Document(Base):
     description = StringField(fulltext=True)
     note = StringField(fulltext=True)
     origination = StringField()
-    help_required = IntField(default=0)
     helpRequired = IntField(default=0)
 
     date = DateTimeField(datetime_format='date')
