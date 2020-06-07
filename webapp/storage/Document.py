@@ -45,7 +45,6 @@ class Document(Base):
     georeferenceDone = DateTimeField(datetime_format='datetime')
 
     extraFields = DictField(delete_document=True)
-    document_type = StringField()  # TO DELETE
     documentType = StringField()
 
     _file_cache = None
