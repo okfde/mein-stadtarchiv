@@ -28,8 +28,8 @@ def home():
     elastic_request.set_limit(5)
     elastic_request.set_sort_field('random')
     elastic_request.set_random_seed(get_random_password())
-    elastic_request.set_range_limit('help_required', 'gte', 1)
-    elastic_request.set_range_limit('file_count', 'gte', 1)
+    elastic_request.set_range_limit('helpRequired', 'gte', 1)
+    elastic_request.set_range_limit('fileCount', 'gte', 1)
     elastic_request.source = ['id', 'title', 'files.id']
     try:
         elastic_request.query()
