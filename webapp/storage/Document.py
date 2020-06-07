@@ -17,7 +17,6 @@ from .File import File
 
 class Document(Base):
     uid = StringField()
-    order_id = StringField()
     orderId = StringField()
 
     title = StringField(fulltext=True, sortable=True)
