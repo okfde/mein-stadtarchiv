@@ -118,6 +118,10 @@ def api_search_category():
             })
 
         category = Category.get(form.category.data)
+        if not category:
+            return json_response({
+                'status': -1
+            })
         result = {
             'status': 0,
             'children': category.get_dict_with_children()['children']
