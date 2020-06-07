@@ -66,12 +66,13 @@ class DataWorkerElasticsearch:
 
         document_dict['fileCount'] = 0
         document_dict['fileMissingCount'] = 0
-        if document.files:
-            for file in document.files:
-                if file.binaryExists:
-                    document_dict['fileCount'] += 1
-                else:
-                    document_dict['fileMissingCount'] += 1
+        document_dict['files'] = []
+        for file in document.files:
+            document_dict['files'].append(file.to_dict(delete='delete_document'))
+            if file.binaryExists:
+                document_dict['fileCount'] += 1
+            else:
+                document_dict['fileMissingCount'] += 1
 
         replace_punctuation_re = re.compile('[%s\n\r]' % re.escape(string.punctuation))
         extra_fields = []
@@ -109,11 +110,10 @@ class DataWorkerElasticsearch:
             id=str(document.id),
             body=document_dict
         )
-        print(document_dict)
         if new_doc['result'] in ['created', 'updated']:
             self.statistics[new_doc['result']] += 1
         else:
             logger.warn('worker.elasticsearch', 'Unknown result at %s' % document.id)
-        logger.info('worker.elasticsearch', 'indexed document %s' % document.id)
+        logger.debug('worker.elasticsearch', 'indexed document %s' % document.id)
 
 
