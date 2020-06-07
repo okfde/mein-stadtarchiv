@@ -106,14 +106,6 @@ export default class SearchTable extends Component {
         this.updateData();
     }
 
-    daterangepickerSubmit(start, end, label) {
-        this.params.page = 1;
-        this.updateParams({
-            daterange: start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY')
-        });
-        this.updateData();
-    }
-
     updateParams(overwrite) {
         if (!overwrite) {
             overwrite = {};

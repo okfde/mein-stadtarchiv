@@ -39,10 +39,11 @@ export default class SearchList extends Component {
     componentDidMount() {
         let params = this.state.params;
         Object.assign(params, window.common.getUrlParams());
-        params.filesRequired = (params.filesRequired) ? parseInt(params.files_required) && true : false;
-        params.helpRequired = (params.helpRequired) ? parseInt(params.help_required) && true : false;
+        params.filesRequired = (params.filesRequired) ? parseInt(params.filesRequired) && true : false;
+        params.helpRequired = (params.helpRequired) ? parseInt(params.helpRequired) && true : false;
         params.csrf_token = config.csrf_token;
-        params.random_seed = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        if (!params.random_seed)
+            params.random_seed = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         this.setState({
             initialized: true,
             params: params
@@ -61,7 +62,7 @@ export default class SearchList extends Component {
 
     checkUpdateUrl() {
         for (const [key, value] of Object.entries(this.state.params)) {
-            if (['csrf_token', 'random_seed'].includes(key)) {
+            if (['csrf_token'].includes(key)) {
                 continue;
             }
             if (this.lastParams[key] !== value) {
@@ -74,7 +75,7 @@ export default class SearchList extends Component {
         let url_params = [];
         this.lastParams = {};
         for (const [key, value] of Object.entries(this.state.params)) {
-            if (['csrf_token', 'random_seed'].includes(key)) {
+            if (['csrf_token'].includes(key)) {
                 continue;
             }
             this.lastParams[key] = value;
