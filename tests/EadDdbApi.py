@@ -19,16 +19,17 @@ from webapp.config import Config
 
 
 class EadDdbApi(unittest.TestCase):
-    def __init__(self):
-        super().__init__()
+
+    def setUp(self):
         self.auth = 'UNITTEST'
-        self.asset_xml_filename = 'unittest.xml'
+        self.asset_xml_filename = 'ead-ddb-test.xml'
         self.asset_image_filenames = []
         self.config = Config()
         self.unittest_path = os.path.join(self.config.PROJECT_ROOT, os.pardir, 'tests')
         self.xml_path = os.path.join(self.unittest_path, 'data', self.asset_xml_filename)
         self.image_path = os.path.join(self.unittest_path, 'data', 'images')
         self.asset_base_url = 'https://mein-stadtarchiv.de/static/unittest/'
+        #self.download_data()
 
     def download_data(self):
         r = requests.get('%s/%s' % (self.asset_base_url, self.asset_xml_filename))
@@ -39,7 +40,7 @@ class EadDdbApi(unittest.TestCase):
             with open(os.path.join(self.image_path, image), 'wb') as image_file:
                 image_file.write(r.content)
 
-    def api_test(self):
+    def test_api(self):
         valid_formats = {
             'tif': ['tif', 'image/tiff'],
             'tiff': ['tif', 'image/tiff'],
@@ -51,12 +52,14 @@ class EadDdbApi(unittest.TestCase):
         }
 
         ### xml handling ###
-        with open(self.image_path, 'r') as xml_file:
+        with open(self.xml_path, 'r') as xml_file:
             xml_data = bytes(xml_file.read().replace("\n", ""), 'utf8')
 
         headers = {'Content-Type': 'text/xml'}
-        url = '%s/api/ead-ddb/push-data?auth=%s' % (self.config.PROJECT_URL, self.auth)
-        r = requests.post(url, headers=headers, data=xml_data)
+        document_params = {'auth': self.auth, 'force-reupload': '1'}
+        document_url = '%s/api/ead-ddb/push-data' % self.config.PROJECT_URL
+        print('upload xml file')
+        r = requests.post(document_url, headers=headers, data=xml_data, params=document_params)
         assert r.status_code == 200
 
         result_xml = etree.fromstring(r.text)
@@ -77,7 +80,8 @@ class EadDdbApi(unittest.TestCase):
                     images[file] = [os.path.abspath(dir)]
 
         xml_data = etree.parse(self.xml_path).getroot()
-        url = '%s/api/ead-ddb/push-file?auth=%s' % (self.config.PROJECT_URL, self.auth)
+        file_params = {'auth': self.auth}
+        file_url = '%s/api/ead-ddb/push-file' % self.config.PROJECT_URL
 
         namespaces = xml_data.nsmap
         namespaces['ns'] = namespaces[None]
@@ -148,11 +152,12 @@ class EadDdbApi(unittest.TestCase):
                     'sha1Checksum': sha1.hexdigest(),
                     'size': os.path.getsize(document_file_path_full)
                 }
+                print('upload image %s' % document_file_name)
                 with open(document_file_path_full, 'rb') as image_file:
                     upload_files = {
                         'file': image_file
                     }
-                    r = requests.post(url, data=upload_data, files=upload_files)
+                    r = requests.post(file_url, data=upload_data, files=upload_files, params=file_params)
                 result_xml = etree.fromstring(r.text)
                 result = result_xml.xpath('.//ead-ddb-push:Description', namespaces=result_xml.nsmap)
                 assert len(result)
