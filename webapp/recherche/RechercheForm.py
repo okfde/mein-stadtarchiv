@@ -30,30 +30,28 @@ class SearchForm(SearchBaseForm):
             ('_score', 'Priorität')
         ]
     )
-    year_start = IntegerField(
+    yearStart = IntegerField(
         label='Zeitraum Beginn',
         validators=[
             Optional()
         ]
     )
-    year_end = IntegerField(
+    yearEnd = IntegerField(
         label='Zeitraum Ende',
         validators=[
             Optional()
         ]
     )
-    help_required = BooleanField(
+    helpRequired = BooleanField(
         label=''
     )
-    files_required = BooleanField(
+    filesRequired = BooleanField(
         label=''
     )
     category = StringField(
         label='Kategorie'
     )
-    random_seed = HiddenField(
-
-    )
+    random_seed = HiddenField()
 
 
 class CategorySearchForm(FlaskForm):

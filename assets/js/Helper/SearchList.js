@@ -39,8 +39,8 @@ export default class SearchList extends Component {
     componentDidMount() {
         let params = this.state.params;
         Object.assign(params, window.common.getUrlParams());
-        params.files_required = (params.files_required) ? parseInt(params.files_required) && true : false;
-        params.help_required = (params.help_required) ? parseInt(params.help_required) && true : false;
+        params.filesRequired = (params.filesRequired) ? parseInt(params.files_required) && true : false;
+        params.helpRequired = (params.helpRequired) ? parseInt(params.help_required) && true : false;
         params.csrf_token = config.csrf_token;
         params.random_seed = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         this.setState({

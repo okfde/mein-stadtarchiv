@@ -54,7 +54,7 @@ def api_search():
                     },
                     {
                         'query_string': {
-                            'fields': ['extra_field_text.fulltext'],
+                            'fields': ['extraFieldText.fulltext'],
                             'query': form.fulltext.data,
                             'default_operator': 'and',
                             'boost': 25 if form.sort_field.data == '_score' else 1
@@ -63,24 +63,24 @@ def api_search():
                 ]
             }
         })
-    if form.year_start.data:
-        elastic_request.set_range_limit('date_sort', 'gte', '%s-01-01' % form.year_start.data)
-    elif form.sort_field.data == 'date_sort':
-        elastic_request.set_range_limit('date_sort', 'gte', '0001-01-01')
-    if form.year_end.data:
-        elastic_request.set_range_limit('date_sort', 'lte', '%s-01-01' % form.year_end.data)
-    if form.help_required.data:
-        elastic_request.set_range_limit('help_required', 'gte', 1)
-    if form.files_required.data:
-        elastic_request.set_range_limit('file_count', 'gte', 1)
+    if form.yearStart.data:
+        elastic_request.set_range_limit('dateSort', 'gte', '%s-01-01' % form.yearStart.data)
+    elif form.sort_field.data == 'dateSort':
+        elastic_request.set_range_limit('dateSort', 'gte', '0001-01-01')
+    if form.yearEnd.data:
+        elastic_request.set_range_limit('dateSort', 'lte', '%s-01-01' % form.yearEnd.data)
+    if form.helpRequired.data:
+        elastic_request.set_range_limit('helpRequired', 'gte', 1)
+    if form.filesRequired.data:
+        elastic_request.set_range_limit('fileCount', 'gte', 1)
     if form.category.data and form.category.data != 'all':
-        elastic_request.set_fq('category_with_parents', form.category.data)
+        elastic_request.set_fq('categoryWithParents', form.category.data)
 
     elastic_request.source = [
         'id',
         'title',
         'description',
-        'category_full',
+        'categoryFull',
         'origination',
         'note',
         'dateBegin',

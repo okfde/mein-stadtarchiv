@@ -109,6 +109,7 @@ class DataWorkerElasticsearch:
             id=str(document.id),
             body=document_dict
         )
+        print(document_dict)
         if new_doc['result'] in ['created', 'updated']:
             self.statistics[new_doc['result']] += 1
         else:
