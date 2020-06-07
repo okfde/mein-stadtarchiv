@@ -16,7 +16,7 @@ from webapp import launch
 from webapp.extensions import db, celery
 import webapp.models as Models
 from webapp.data_worker.DataWorkerElasticsearchIndex import create_index as create_index_run
-#from webapp.data_worker.DataWorkerHelper import worker as data_worker_run, upsert_login as upsert_login_run
+from webapp.data_worker.DataWorkerHelper import worker as worker_run, upsert_login as upsert_login_run
 from webapp.admin.AdminHelper import set_auth as set_auth_run, missing_media as missing_media_run, \
     file_document_reverse as file_document_reverse_run, reset_elasticsearch_last_run as reset_elasticsearch_last_run_run, \
     init_archive as init_archive_run
@@ -50,11 +50,11 @@ def create_index():
 
 
 @manager.command
-def data_worker():
+def worker(job):
     """
     processes all uploaded data
     """
-    data_worker_run()
+    worker_run(job)
 
 
 @manager.command

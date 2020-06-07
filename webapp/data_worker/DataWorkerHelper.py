@@ -18,23 +18,28 @@ from ..models import User, Document, File
 from ..extensions import celery
 
 
-"""
-def worker():
-    #data_worker_thumbnails = DataWorkerThumbnails()
-    #data_worker_thumbnails.run()
-    data_worker_elasticsearch = DataWorkerElasticsearch()
-    data_worker_elasticsearch.run()
-    #data_worker_sitemap = DataWorkerSitemap()
-    #data_worker_sitemap.run()
+def worker(job):
+    if job == 'elasticsearch':
+        worker_elasticsearch()
+    if job == 'thumbnails':
+        worker_thumnails()
+    if job == 'sitemap':
+        worker_sitemap()
 
 
-@celery.task()
-def worker_celery_full():
+def worker_elasticsearch():
     data_worker_elasticsearch = DataWorkerElasticsearch()
     data_worker_elasticsearch.run()
+
+
+def worker_thumnails():
+    data_worker_thumbnails = DataWorkerThumbnails()
+    data_worker_thumbnails.run()
+
+
+def worker_sitemap():
     data_worker_sitemap = DataWorkerSitemap()
     data_worker_sitemap.run()
-"""
 
 
 @celery.task()
