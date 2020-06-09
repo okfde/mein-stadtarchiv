@@ -158,6 +158,8 @@ def clean_files():
 def full_regenerate_thumbnails():
     file_ids = []
     for file in File.objects(binaryExists=True).all():
+        if file.document is None:
+            continue
         file_ids.append(file.id)
     for file_id in file_ids:
         regenerate_thumbnails(file_id)
