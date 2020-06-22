@@ -26,7 +26,7 @@ def gallery_main():
         'document'
     )
 
-    elastic_request.set_range_limit('file_count', "gte", 1)
+    elastic_request.set_range_limit('fileCount', "gte", 1)
     elastic_request.set_limit(100)
     elastic_request.set_sort_order('asc')
     elastic_request.set_sort_field('random')

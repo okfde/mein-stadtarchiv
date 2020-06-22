@@ -24,7 +24,6 @@ map = Blueprint('map', __name__, template_folder='templates')
 @map.route('/map')
 def map_main():
     form = SearchForm()
-
     return render_template('map.html', form=form,  category_data=get_category_data(request.args.get('category')))
 
 
@@ -57,7 +56,7 @@ def map_api():
                     },
                     {
                         'query_string': {
-                            'fields': ['extra_field_text.fulltext'],
+                            'fields': ['extraFieldText.fulltext'],
                             'query': form.fulltext.data,
                             'default_operator': 'and',
                             'boost': 25
@@ -67,9 +66,9 @@ def map_api():
             }
         })
     if form.files_required.data:
-        elastic_request.set_range_limit('file_count', 'gte', 1)
+        elastic_request.set_range_limit('fileCount', 'gte', 1)
     if form.category.data and form.category.data != 'all':
-        elastic_request.set_fq('category_with_parents', form.category.data)
+        elastic_request.set_fq('categoryWithParents', form.category.data)
     elastic_request.set_limit(10000)
     elastic_request.set_range_limit('lat', 'gt', 0)
     elastic_request.set_range_limit('lon', 'gt', 0)
