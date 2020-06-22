@@ -37,6 +37,8 @@ def gallery_main():
     result = []
 
     for document in elastic_results:
+        if not 'files' in document:
+            continue
         for file in document['files']:
             if file.get('mimeType') not in current_app.config['IMAGE_MIMETYPES']:
                 continue
