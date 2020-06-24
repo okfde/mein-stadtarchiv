@@ -10,12 +10,38 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from .Subsite import Subsite
-from .Category import Category
-from .Document import Document
-from .Tag import Tag
-from .File import File
-from .Person import Person
-from .Comment import Comment
-from .User import User
-from .Option import Option
+
+from flask import current_app, abort, jsonify
+from flask_login import current_user
+from ..models import Subsite
+from .SubsiteForms import SubsiteSearchForm
+from ..common.response import json_response
+
+
+from .SubsiteController import subsite_management
+
+
+@subsite_management.route('/api/admin/subsites', methods=['POST'])
+def api_admin_subsites():
+    if not current_user.has_capability('admin'):
+        abort(403)
+    form = SubsiteSearchForm()
+    if not form.validate_on_submit():
+        return json_response({
+            'status': -1
+        })
+    subsites = Subsite.objects()
+    count = subsites.count()
+    subsites = subsites.order_by('%s%s' % ('+' if form.sort_order.data == 'asc' else '-', form.sort_field.data))\
+        .limit(current_app.config['ITEMS_PER_PAGE'])\
+        .skip((form.page.data - 1) * current_app.config['ITEMS_PER_PAGE'])\
+        .all()
+    data = []
+    for subsite in subsites:
+        data.append(subsite.to_dict())
+
+    return jsonify({
+        'data': data,
+        'status': 0,
+        'count': count
+    })

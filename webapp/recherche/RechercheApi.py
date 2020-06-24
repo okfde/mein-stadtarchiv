@@ -11,7 +11,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 
-from flask import current_app
+from flask import current_app, g
 from ..common.response import json_response
 from ..common.elastic_request import ElasticRequest
 from .RechercheForm import SearchForm, CategorySearchForm
@@ -75,7 +75,8 @@ def api_search():
         elastic_request.set_range_limit('fileCount', 'gte', 1)
     if form.category.data and form.category.data != 'all':
         elastic_request.set_fq('categoryWithParents', form.category.data)
-
+    elif g.subsite:
+        elastic_request.set_fq('categoryWithParents', [str(category) for category in g.subsite.categories])
     elastic_request.source = [
         'id',
         'title',

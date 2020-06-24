@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                Archiv {{ archive.title }}
+                {{ action_button('edit', '/admin/archive/%s/edit' % archive.id) }}
+            </h1>
+            <table class="table">
+                <tr>
+                    <td>Beschreibung</td>
+                    <td>{{ archive.description }}</td>
+                </tr>
+                <tr>
+                    <td>Sichtbar</td>
+                    <td>{% if archive.visible %}ja{% else %}nein{% endif %}</td>
+                </tr>
+                <tr>
+                    <td>Letzte Aktualisierung</td>
+                    <td>{{ archive.modified|datetime }}</td>
+                </tr>
+            </table>
+            <div id="archive-categories">
+                <h2>
+                    Bestände
+                    {{ action_button('new', '/admin/archive/%s/category/new' % archive.id) }}
+                </h2>
+                {% if children|length %}
+                    {{ render_categories(children, 4) }}
+                {% else %}
+                    <p class="italic">Noch keine Bestände hochgeladen.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro render_categories(categories, level) %}
+    <ul{% if level > 4 %} style="display: none;"{% endif %}>
+    {% for category in categories %}
+        <li>
+            <h{{ level }}{% if level == 4 %} data-status="closed"{% endif %}>
+                {% if level == 4 %}<i class="fa fa-arrow-circle-o-right expand" aria-hidden="true"></i>{% endif %}
+                {{ category['title'] }}
+                {% if category['status'] == 'importing' %}
+                    <i class="fa fa-spinner fa-spin fa-fw"></i>
+                {% elif level == 4 %}
+                    {{ action_button('show', '/admin/category/%s/show' % category['id']) }}
+                    {{ action_button('edit', '/admin/category/%s/edit' % category['id']) }}
+                    {{ action_button('custom', '/admin/ategory/%s/upload' % (category['id']), 'Dateiupload', 'upload') }}
+                    {% if category.uploadedFile %}
+                        {{ action_button('custom', '/admin/category/%s/table/%s' % (category['id'], category.uploadedFile), 'Tabellenimport fertigstellen', 'table') }}
+                    {% endif %}
+                    {{ action_button('delete', '/admin/category/%s/delete' % category['id']) }}
+                {% endif %}
+            </h{{ level }}>
+            {% if category.get('children', [])|length %}
+                {{ render_categories(category.get('children', []), level + 1) }}
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endmacro %}

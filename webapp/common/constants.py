@@ -42,6 +42,8 @@ class BaseConfig:
         'MAPBOX_TOKEN'
     ]
 
+    SUBDOMAINS = []
+
     DEBUG = False
     TESTING = False
 

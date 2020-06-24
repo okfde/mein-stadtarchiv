@@ -32,6 +32,7 @@ from .user import user
 from .admin import admin
 from .api import api
 from .map import map
+from .subsite_management import subsite_management
 
 __all__ = ['launch']
 
@@ -45,7 +46,8 @@ DEFAULT_BLUEPRINTS = [
     admin,
     api,
     gallery,
-    map
+    map,
+    subsite_management
 ]
 
 
@@ -151,7 +153,10 @@ def configure_logging(app):
 def configure_hook(app):
     @app.before_request
     def before_request():
-        pass
+        from flask import g, request
+        from .models import Subsite
+        print(request.host)
+        g.subsite = Subsite.objects(host=request.host).first()
 
 
 def configure_error_handlers(app):

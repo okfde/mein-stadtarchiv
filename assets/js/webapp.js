@@ -15,12 +15,17 @@ import SingleMarkerMap from "./SingleMarkerMap";
 import CategoryFileUpload from "./CategoryFileUpload";
 import DocumentMapSearch from './Helper/DocumentMapSearch';
 import CategoryTableImport from "./Import/CategoryTableImport";
+import SearchTableSubsites from "./SearchTable/SearchTableSubsites";
+import SubsiteManagement from "./Helper/SubsiteManagement";
 
 
 $(document).ready(function () {
     window.common = new Common();
     if (document.getElementById('archive-categories')) {
         window.archiveManagement = new ArchiveManagement();
+    }
+    if (document.getElementById('subsite-form')) {
+        window.subsiteManagement = new SubsiteManagement();
     }
     if (document.getElementById('document-form')) {
         window.documentManagement = new DocumentManagement();
@@ -42,6 +47,11 @@ $(document).ready(function () {
         ReactDOM.render(
             <DocumentMapSearch ref={(documentMapSearch) => {window.documentMapSearch = documentMapSearch}} />,
             document.getElementById("map-search-form"));
+    }
+    if (document.getElementById('subsite-search-form')) {
+        ReactDOM.render(
+            <SearchTableSubsites ref={(searchTableSubsites) => {window.searchTableSubsites = searchTableSubsites}} />,
+            document.getElementById("subsite-search-results"));
     }
     if (document.getElementById('archive-search-form')) {
         ReactDOM.render(

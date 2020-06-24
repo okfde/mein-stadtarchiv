@@ -8,7 +8,7 @@
         <div class="col-md-6">
             <h1>Tauchen Sie in die Geschichte Ihrer Stadt ein!</h1>
             <p>In den Archiven Ihrer Stadt schlummern Dokumente aus vielen Jahrhunderten. Das ist Ihre eigene Geschichte!</p>
-            <p>Für die Kolpingstadt Kerpen haben <a href="/info/ueber-uns">wir</a> dieses Archiv für Sie geöffnet. Viel Spaß beim Durchstöbern Ihrer Stadtgeschichte!</p>
+            <p>Wir haben daher mehrere Stadtarchive für Sie digital geöffnet. Viel Spaß beim Durchstöbern Ihrer Stadtgeschichte!</p>
             <p class="orientation-center"><a href="/recherche" class="btn btn-success">jetzt durchstöbern</a></p>
         </div>
         <div class="col-md-6">
@@ -17,49 +17,117 @@
             </a>
         </div>
     </div>
-    <div class="row row-gap">
-        <div class="col-md-6">
-            <div id="help-required-carousel" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    {% for document in documents %}
-                        <div class="carousel-item{% if loop.first %} active{% endif %}">
-                            <a href="/document/{{ document['id'] }}"><img class="d-block w-100"  src="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document['id'] }}/{{ document['files'][0]['id'] }}/600/1.jpg" alt="{{ document['title'] }}"></a>
-                        </div>
-                    {% endfor %}
+    {% if documents_help|length %}
+        <div class="row row-gap">
+            <div class="col-md-6">
+                <div id="help-required-carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for document in documents_help %}
+                            <div class="carousel-item{% if loop.first %} active{% endif %}">
+                                <a href="/document/{{ document['id'] }}"><img class="d-block w-100"  src="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document['id'] }}/{{ document['files'][0]['id'] }}/600/1.jpg" alt="{{ document['title'] }}"></a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#help-required-carousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">vorher</span>
+                    </a>
+                    <a class="carousel-control-next" href="#help-required-carousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">nachher</span>
+                    </a>
                 </div>
-                <a class="carousel-control-prev" href="#help-required-carousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">vorher</span>
-                </a>
-                <a class="carousel-control-next" href="#help-required-carousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">nachher</span>
-                </a>
+            </div>
+            <div class="col-md-6">
+                <h2>Ihr Archiv noch besser machen</h2>
+                <p>Stadtarchive erhalten hin und wieder Dokumente ohne Kontext. Es wäre doch aber schön, wenn wir auch diese Dokumente einordnen könnten.</p>
+                <p>Gemeinsam mit Ihnen, den Bürgerinnen und Bürgern dieser Stadt, können wir das schaffen - damit unser Archiv noch besser wird. Wenn Sie also etwas über die auf dem Bild dargestellte Situation, über den Ort oder die Personen schreiben können, so kommentieren Sie einfach das Dokument.</p>
+                <p>Anbei im Slider finden Sie einige dieser Dokumente.</p>
+                <p class="orientation-center"><a href="/recherche?helpRequired=1" class="btn btn-success">alle anzeigen</a></p>
             </div>
         </div>
-        <div class="col-md-6">
-            <h2>Ihr Archiv noch besser machen</h2>
-            <p>Stadtarchive erhalten hin und wieder Dokumente ohne Kontext. Es wäre doch aber schön, wenn wir auch diese Dokumente einordnen könnten.</p>
-            <p>Gemeinsam mit Ihnen, den Bürgerinnen und Bürgern dieser Stadt, können wir das schaffen - damit unser Archiv noch besser wird. Wenn Sie also etwas über die auf dem Bild dargestellte Situation, über den Ort oder die Personen schreiben können, so kommentieren Sie einfach das Dokument.</p>
-            <p>Anbei im Slider finden Sie einige dieser Dokumente.</p>
-            <p class="orientation-center"><a href="/recherche?helpRequired=1" class="btn btn-success">alle anzeigen</a></p>
+    {% endif %}
+    {% if documents_highlighted|length %}
+        <div class="row row-gap">
+            {% if not documents_help|length %}
+                <div class="col-md-6">
+                    <h2>Spannende Dokumente</h2>
+                    <p>
+                        Schnell verliert man sich in der Vielzahl der Dokumente, welche man in einem Stadtarchiv
+                        finden kann. Daher haben wir für Sie einige besonders interessante Dokumente herausgesucht,
+                        mit denen Sie einen Eindruck bekommen können, was alles in einem Archiv schlummert.
+                    </p>
+                    <p></p>
+                    <p class="orientation-center"><a href="/recherche?highlighted=1" class="btn btn-success">alle anzeigen</a></p>
+                </div>
+            {% endif %}
+            <div class="col-md-6">
+                <div id="help-required-carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for document in documents_highlighted %}
+                            <div class="carousel-item{% if loop.first %} active{% endif %}">
+                                <a href="/document/{{ document['id'] }}"><img class="d-block w-100"  src="{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document['id'] }}/{{ document['files'][0]['id'] }}/600/1.jpg" alt="{{ document['title'] }}"></a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#help-required-carousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">vorher</span>
+                    </a>
+                    <a class="carousel-control-next" href="#help-required-carousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">nachher</span>
+                    </a>
+                </div>
+            </div>
+            {% if documents_help|length %}
+                <div class="col-md-6">
+                    <h2>Spannende Dokumente</h2>
+                    <p>
+                        Schnell verliert man sich in der Vielzahl der Dokumente, welche man in einem Stadtarchiv
+                        finden kann. Daher haben wir für Sie einige besonders interessante Dokumente herausgesucht,
+                        mit denen Sie einen Eindruck bekommen können, was alles in einem Archiv schlummert.
+                    </p>
+                    <p></p>
+                    <p class="orientation-center"><a href="/recherche?highlighted=1" class="btn btn-success">alle anzeigen</a></p>
+                </div>
+            {% endif %}
         </div>
-    </div>
+    {% endif %}
     <div class="row row-gap">
+        {% if (documents_help|length and documents_highlighted|length) or (not documents_help|length and documents_highlighted|length) %}
+            <div class="col-md-6">
+                <div id="frontpage-map"></div>
+            </div>
+        {% endif %}
         <div class="col-md-6">
             <h2>Noch mehr Stadtgeschichte vor Ort</h2>
             <p>Nicht alle Dokumente sind digital verfügbar. Wenn Sie Interesse an der Geschichte Ihrer Stadt haben, so besuchen Sie Ihr Stadtarchiv doch einfach!</p>
-            <p>
-                Stadtarchiv Kerpen<br>
-                im Haus für Kunst und Geschichte<br>
-                Stiftsstraße 8<br>
-                50171 Kerpen
-            </p>
+            {% if g.subsite %}
+                <p>
+                    {{ g.subsite.title }}<br>
+                    {% if g.subsite.locationSubtitle %}{{ g.subsite.locationSubtitle }}<br>{% endif %}
+                    {{ g.subsite.address }}<br>
+                    {{ g.subsite.postcode }} {{ g.subsite.locality }}
+                </p>
+            {% else %}
+                <p>Mein Stadtarchiv stellt Daten von vielen Archiven bereit, aber wir werden besonders unterstützt von:</p>
+                <ul>
+                    {% for subsite in subsites %}
+                        <li><a href="https://{{ subsite['host'] }}">{{ subsite['title'] }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <p class="orientation-center"><a href="/info/archive" class="btn btn-success">Mehr Informationen</a></p>
         </div>
-        <div class="col-md-6">
-            <div id="frontpage-map"></div>
-        </div>
+        {% if not((documents_help|length and documents_highlighted|length) or (not documents_help|length and documents_highlighted|length)) %}
+            <div class="col-md-6">
+                <div id="frontpage-map"></div>
+                <script>
+                    var frontpage_map_data = {{ subsites|tojson }};
+                </script>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 

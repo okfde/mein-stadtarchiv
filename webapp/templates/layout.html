@@ -5,21 +5,21 @@
         <title>{% block title %}Mein Stadtarchiv{% endblock %}</title>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <meta name="description"
-              content="{% block description %}In den Stadtarchiven schlummern viele spannende Photos und Dokumente, die Sie hier auf mein-stadtarchiv.de durchstöbern können!{% endblock %}"/>
+        <meta name="description" content="{% block description %}In den Stadtarchiven schlummern viele spannende Photos und Dokumente, die Sie hier auf mein-stadtarchiv.de durchstöbern können!{% endblock %}"/>
         <meta name="publisher" content="mein-stadtarchiv.de"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <meta property="og:title" content="{% block og_title %}Mein Stadtarchiv{% endblock %}">
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ config['PROJECT_URL'] }}{{ request.path }}">
-        <meta property="og:image"
-              content="{% block og_image %}{{ config['PROJECT_URL'] }}/static/images/kerpen/aussenansicht-fullscreen.jpg{% endblock %}">
-        <meta property="og:description"
-              content="{% block og_description %}In den Stadtarchiven schlummern viele spannende Photos und Dokumente, die Sie hier auf mein-stadtarchiv.de durchstöbern können!{% endblock %}">
+        <meta property="og:image" content="{% block og_image %}{{ config['PROJECT_URL'] }}/static/images/kerpen/aussenansicht-fullscreen.jpg{% endblock %}">
+        <meta property="og:description" content="{% block og_description %}In den Stadtarchiven schlummern viele spannende Photos und Dokumente, die Sie hier auf mein-stadtarchiv.de durchstöbern können!{% endblock %}">
 
         <link rel="icon" type="image/x-icon" href="/static/images/favicon/favicon.ico">
         <link rel="icon" href="/static/images/favicon/book-icon-32.png" sizes="32x32">
+        {% if g.subsite %}
+            <link rel="canonical" href="{{ config['PROJECT_URL'] }}{{ request.path }}?{{ request.query_string.decode() }}" />
+        {% endif %}
     {% endblock %}
     {% block styles %}
         <link rel="stylesheet" type="text/css" href="{{ static_content['main']['css'] }}">
@@ -32,7 +32,10 @@
     {% block header %}
         <div id="header" class="container">
             <nav class="navbar navbar-expand-md navbar-light">
-                <a class="navbar-brand" href="/"><img src="/static/images/logo.png" alt="Mein Stadtarchiv Logo"></a>
+                <a class="navbar-brand" href="/">
+                    <img src="/static/images/logo.png" alt="Mein Stadtarchiv Logo">
+                    {% if g.subsite and g.subsite.title %} | {{ g.subsite.title }}{% endif %}
+                </a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                         data-target="#navbar-header" aria-controls="navbar-header" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -49,9 +52,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/gallery">Galerie</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/map">Karte</a>
-                        </li>
+                        {% if not g.subsite or (g.subsite and g.subsite.mapEnabled) %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/map">Karte</a>
+                            </li>
+                        {% endif %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">Informationen</a>
@@ -66,6 +71,9 @@
                                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                                    aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <div class="dropdown-menu" aria-labelledby="info-dropdown">
+                                    {% if current_user.has_capability('admin') %}
+                                        <a class="dropdown-item" href="/admin/subsites">Subsites</a>
+                                    {% endif %}
                                     <a class="dropdown-item" href="/admin/archives">Archive</a>
                                     <a class="dropdown-item" href="/admin/comments">Kommentare</a>
                                     <a class="dropdown-item" href="/logout">Logout</a>

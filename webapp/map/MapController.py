@@ -11,7 +11,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, current_app, render_template, request, g
 
 from webapp.common.elastic_request import ElasticRequest
 from ..recherche.RechercheHelper import get_category_data
@@ -69,6 +69,8 @@ def map_api():
         elastic_request.set_range_limit('fileCount', 'gte', 1)
     if form.category.data and form.category.data != 'all':
         elastic_request.set_fq('categoryWithParents', form.category.data)
+    elif g.subsite:
+        elastic_request.set_fq('categoryWithParents', [str(category) for category in g.subsite.categories])
     elastic_request.set_limit(10000)
     elastic_request.set_range_limit('lat', 'gt', 0)
     elastic_request.set_range_limit('lon', 'gt', 0)

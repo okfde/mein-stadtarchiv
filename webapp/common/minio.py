@@ -50,6 +50,11 @@ class Minio(object):
         except minio.error.NoSuchKey:
             miniokeep = BytesIO(b'')
             connection.put_object(current_app.config['MINIO_BUCKET'], 'thumbnails/.miniokeep', miniokeep, 0, 'text/plain')
+        try:
+            connection.stat_object(current_app.config['MINIO_BUCKET'], 'subsites/.miniokeep')
+        except minio.error.NoSuchKey:
+            miniokeep = BytesIO(b'')
+            connection.put_object(current_app.config['MINIO_BUCKET'], 'subsites/.miniokeep', miniokeep, 0, 'text/plain')
         policy = {
             "Version": "2012-10-17",
             "Statement": [
@@ -65,7 +70,8 @@ class Minio(object):
                     "Action": ["s3:GetObject"],
                     "Resource": [
                         "arn:aws:s3:::%s/thumbnails*" % current_app.config['MINIO_BUCKET'],
-                        "arn:aws:s3:::%s/files*" % current_app.config['MINIO_BUCKET']
+                        "arn:aws:s3:::%s/files*" % current_app.config['MINIO_BUCKET'],
+                        "arn:aws:s3:::%s/subsites*" % current_app.config['MINIO_BUCKET']
                     ]
                 },
                 {
@@ -73,7 +79,7 @@ class Minio(object):
                     "Principal": {"AWS": ["*"]},
                     "Action": ["s3:ListBucket"],
                     "Resource": ["arn:aws:s3:::%s" % current_app.config['MINIO_BUCKET']],
-                    "Condition": {"StringEquals": {"s3:prefix": ["files", "thumbnails"]}}
+                    "Condition": {"StringEquals": {"s3:prefix": ["files", "thumbnails", "subsites"]}}
                 }
             ]
         }

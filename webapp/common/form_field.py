@@ -10,3 +10,26 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from flask import request
+from wtforms import SelectMultipleField
+from wtforms.utils import unset_value
+from ..models import Category
+
+
+class ArchiveMultibleField(SelectMultipleField):
+    def __init__(self, *args, all_option=False, **kwargs):
+        super(ArchiveMultibleField, self).__init__(*args, **kwargs)
+
+        archives = Category.objects(parent__exists=False)
+        self.choices = []
+        for archive in archives:
+            self.choices.append((str(archive.id), archive.title))
+    """
+    def process(self, formdata, data=unset_value):
+        if data != unset_value and request.method == 'GET' and data:
+            data = data.id
+        super(ArchiveMultibleField, self).process(formdata, data)
+
+    def populate_obj(self, obj, name):
+        setattr(obj, name, self.data)
+    """

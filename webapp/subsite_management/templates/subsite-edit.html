@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field with context %}
+
+{% block content %}
+    <form method="POST" action="/admin/subsite/{{ subsite.id }}/edit" id="subsite-form">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Subsite bearbeiten</h1>
+            </div>
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.title, 4) }}
+            {{ form_field(form.host, 4) }}
+            {{ form_field(form.categories, 4) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.externalUrl, 4) }}
+            {{ form_field(form.email, 4) }}
+            {{ form_field(form.phone, 4) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.address, 4) }}
+            {{ form_field(form.postcode, 2) }}
+            {{ form_field(form.locality, 4) }}
+            {{ form_field(form.country, 2) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.location_subtitle, 4) }}
+            {{ form_field(form.lat, 4) }}
+            {{ form_field(form.lon, 4) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.summary, 12) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.about, 12) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.submit, 12, 'input-submit') }}
+        </div>
+        {{ form.csrf_token }}
+    </form>
+{% endblock %}

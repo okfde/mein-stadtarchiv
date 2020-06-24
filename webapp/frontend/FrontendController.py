@@ -11,10 +11,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 from elasticsearch.exceptions import NotFoundError
-from flask import Blueprint, render_template, current_app, redirect
+from flask import Blueprint, render_template, current_app, redirect, request, g
 from ..common.elastic_request import ElasticRequest
 from ..common.helpers import get_random_password
-from ..extensions import minio
+from ..models import Subsite
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
@@ -31,11 +31,28 @@ def home():
     elastic_request.set_range_limit('helpRequired', 'gte', 1)
     elastic_request.set_range_limit('fileCount', 'gte', 1)
     elastic_request.source = ['id', 'title', 'files.id']
+    if g.subsite:
+        elastic_request.set_fq('categoryWithParents', [str(category) for category in g.subsite.categories])
+        subsites = [{
+            'lat': g.subsite.lat,
+            'lon': g.subsite.lon,
+            'title': g.subsite.title
+        }]
+    else:
+        subsites = []
+        for subsite in Subsite.objects():
+            subsites.append({
+                'id': str(id),
+                'host': subsite.host,
+                'lat': subsite.lat,
+                'lon': subsite.lon,
+                'title': subsite.title
+            })
     try:
         elastic_request.query()
     except NotFoundError:
         return redirect('/admin/install')
-    return render_template('index.html', documents=elastic_request.get_results())
+    return render_template('index.html', documents=elastic_request.get_results(), subsites=subsites)
 
 
 @frontend.route('/impressum')

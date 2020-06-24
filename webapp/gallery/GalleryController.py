@@ -11,7 +11,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, current_app, render_template, g
 
 from webapp.common.elastic_request import ElasticRequest
 from webapp.common.helpers import get_first_thumbnail_url, get_random_password
@@ -32,6 +32,8 @@ def gallery_main():
     elastic_request.set_sort_field('random')
     elastic_request.set_random_seed(get_random_password())
     elastic_request.query()
+    if g.subsite:
+        elastic_request.set_fq('categoryWithParents', [str(category) for category in g.subsite.categories])
 
     elastic_results = elastic_request.get_results()
     result = []
