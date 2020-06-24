@@ -6,6 +6,7 @@ import ReactDOM from "react-dom";
 
 import Common from './Common';
 import SearchList from './Helper/SearchList'
+import UserManagement from "./Helper/UserManagement";
 import ArchiveManagement from './Helper/ArchiveManagement'
 import DocumentManagement from './Helper/DocumentManagement';
 
@@ -17,12 +18,16 @@ import DocumentMapSearch from './Helper/DocumentMapSearch';
 import CategoryTableImport from "./Import/CategoryTableImport";
 import SearchTableSubsites from "./SearchTable/SearchTableSubsites";
 import SubsiteManagement from "./Helper/SubsiteManagement";
+import SearchTableUsers from "./SearchTable/SearchTableUsers";
 
 
 $(document).ready(function () {
     window.common = new Common();
     if (document.getElementById('archive-categories')) {
         window.archiveManagement = new ArchiveManagement();
+    }
+    if (document.getElementById('user-form')) {
+        window.userManagement = new UserManagement();
     }
     if (document.getElementById('subsite-form')) {
         window.subsiteManagement = new SubsiteManagement();
@@ -47,6 +52,11 @@ $(document).ready(function () {
         ReactDOM.render(
             <DocumentMapSearch ref={(documentMapSearch) => {window.documentMapSearch = documentMapSearch}} />,
             document.getElementById("map-search-form"));
+    }
+    if (document.getElementById('user-search-form')) {
+        ReactDOM.render(
+            <SearchTableUsers ref={(searchTableUsers) => {window.searchTableUsers = searchTableUsers}} />,
+            document.getElementById("user-search-results"));
     }
     if (document.getElementById('subsite-search-form')) {
         ReactDOM.render(

@@ -11,7 +11,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 
-from flask import Blueprint, current_app, render_template, abort, redirect, request, flash
+from flask import Blueprint, render_template, abort, redirect, flash
 from flask_login import current_user
 from ..storage import Subsite
 from .SubsiteForms import SubsiteForm, SubsiteSearchForm, SubsiteDeleteForm

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field with context %}
+
+{% block content %}
+    <form method="POST" action="/admin/user/{{ subsite.id }}/delete" id="user-form">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Nutzer löschen</h1>
+                <p>Wollen Sie den Nutzer {{ subsite.email }} löschen?</p>
+            </div>
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.abort, 6, 'input-submit') }}
+            {{ form_field(form.submit, 6, 'input-submit') }}
+        </div>
+        {{ form.csrf_token }}
+    </form>
+{% endblock %}

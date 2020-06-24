@@ -28,7 +28,7 @@ from .recherche import recherche
 from .single_document import single_document
 from .archive_management import archive_management
 from webapp.gallery import gallery
-from .user import user
+from .user import user_management
 from .admin import admin
 from .api import api
 from .map import map
@@ -42,7 +42,7 @@ DEFAULT_BLUEPRINTS = [
     recherche,
     single_document,
     archive_management,
-    user,
+    user_management,
     admin,
     api,
     gallery,

@@ -72,6 +72,7 @@
                                    aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <div class="dropdown-menu" aria-labelledby="info-dropdown">
                                     {% if current_user.has_capability('admin') %}
+                                        <a class="dropdown-item" href="/admin/users">Nutzer</a>
                                         <a class="dropdown-item" href="/admin/subsites">Subsites</a>
                                     {% endif %}
                                     <a class="dropdown-item" href="/admin/archives">Archive</a>

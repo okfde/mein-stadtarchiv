@@ -12,7 +12,23 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from flask_wtf import FlaskForm
 from wtforms import validators
-from wtforms import (StringField, BooleanField, HiddenField, PasswordField, SubmitField, SelectField)
+from wtforms import StringField, BooleanField, SelectMultipleField, PasswordField, SubmitField, SelectField
+from ..common.form import SearchBaseForm
+from ..common.form_field import SubsiteMultibleField
+
+
+class UserSearchForm(SearchBaseForm):
+    name = StringField(
+        label='Name'
+    )
+    sort_field = SelectField(
+        label='Sortier-Feld',
+        choices=[
+            ('name', 'Name'),
+            ('created', 'Erstellt'),
+            ('modified', 'Verändert')
+        ]
+    )
 
 
 class LoginForm(FlaskForm):
@@ -38,3 +54,44 @@ class LoginForm(FlaskForm):
     )
     submit = SubmitField('login')
 
+
+class UserForm(FlaskForm):
+    email = StringField(
+        'E-Mail',
+        [
+            validators.Email(
+                message='Bitte geben Sie eine E-Mail an'
+            )
+        ]
+    )
+    firstname = StringField(
+        label='Vorname'
+    )
+    lastname = StringField(
+        label='Nachname'
+    )
+    organisation = StringField(
+        label='Organisation'
+    )
+    subsites = SubsiteMultibleField(
+        label='Zugriff auf folgende Subsites'
+    )
+    capabilities = SelectMultipleField(
+        label='Rechte',
+        choices=[
+            ('admin', 'Globaler Administrator'),
+            ('local', 'Lokaler Administrator'),
+            ('archive-view', 'Archive ansehen'),
+            ('archive-manage', 'Archive bearbeiten'),
+            ('comment-view', 'Kommentare ansehen'),
+            ('comment-manage', 'Kommentare bearbeiten'),
+            ('subsite-manage-own', 'Eigene Unterseite bearbeiten')
+        ],
+        description='Ein globaler Administrator darf alles. Ein lokaler Administrator darf alles in den angegebenen Subsites. User, die kein Administrator sind, dürfen nur die Einzelrechte in den angegeben Subsites.'
+    )
+    submit = SubmitField('speichern')
+
+
+class UserDeleteForm(FlaskForm):
+    abort = SubmitField('abbrechen')
+    submit = SubmitField('löschen')

@@ -12,23 +12,26 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from passlib.hash import bcrypt
 from werkzeug.security import check_password_hash
-from mongoengine import Document, StringField, ListField
+from mongoengine import Document, StringField, ListField, ReferenceField
 from flask_login import login_user, UserMixin, AnonymousUserMixin
 from .Base import Base
 
 
 class User(Base, UserMixin):
+    active = True
     email = StringField()
     _password = StringField(db_field='password')
     capabilities = ListField(StringField())
-    active = 1
-    type = 'admin'
+    firstname = StringField()
+    lastname = StringField()
+    organisation = StringField()
+    subsites = ListField(ReferenceField('Subsite', deref_document=False))
 
     def is_authenticated(self):
         return True
 
     def is_active(self):
-        return self.active
+        return True
 
     def is_anonymous(self):
         return False

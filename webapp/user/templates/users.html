@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% from "macros.html" import form_field, action_button with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                Nutzer
+                {{ action_button('new', '/admin/user/new') }}
+            </h1>
+        </div>
+    </div>
+    <form
+            method="POST"
+            action="/api/admin/users" id="user-search-form"
+    >
+        <div class="row row-form">
+            {{ form_field(form.name, 9) }}
+            {{ form_field(form.submit, 3, 'input-submit-emptylabel') }}
+        </div>
+        {{ form.csrf_token }}
+        <div id="user-search-results"></div>
+    </form>
+{% endblock %}
