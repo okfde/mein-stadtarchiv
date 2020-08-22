@@ -13,7 +13,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from flask import Blueprint, current_app, render_template, abort, redirect, request, flash
 from flask_login import current_user
-from ..storage import Category
+from ..storage import Category, Subsite
 from .ArchiveManagementForms import ArchiveForm, ArchiveSearchForm, ArchiveDeleteForm
 
 archive_management = Blueprint('archive_management', __name__, template_folder='templates')
@@ -37,6 +37,14 @@ def archive_main():
                 'lon': archive.lon
             } for archive in archives
         ]
+    )
+
+
+@archive_management.route('/archive/<subsite_id>')
+def subsite_single(subsite_id):
+    return render_template(
+        'subsite.html',
+        subsite=Subsite.get_or_404(subsite_id)
     )
 
 

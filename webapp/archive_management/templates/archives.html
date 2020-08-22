@@ -13,7 +13,13 @@
     <div class="row">
         <div class="col-md-6">
             {% for archive in archives %}
-                <h2>{{ archive.title }}</h2>
+                <h2>
+                    {% if archive.subsite %}
+                        <a href="/archive/{{ archive.subsite.id }}">{{ archive.subsite.title }}</a>
+                    {% else %}
+                        {{ archive.title }}
+                    {% endif %}
+                </h2>
                 <p>{{ archive.description }}</p>
                 <p>
                     <i class="fa fa-home" aria-hidden="true"></i>

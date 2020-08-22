@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ subsite.title }} | {{ super() }}{% endblock %}
+{% block og_title %}{{ subsite.title }} | {{ super() }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ subsite.title }}</h1>
+            {{ subsite.about|safe }}
+        </div>
+    </div>
+{% endblock %}
