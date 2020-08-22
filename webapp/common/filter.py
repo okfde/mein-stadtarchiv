@@ -14,6 +14,7 @@ import os
 import math
 import pytz
 import json
+from bson import ObjectId
 from decimal import Decimal
 from datetime import datetime, date
 from urllib.parse import quote_plus
@@ -21,15 +22,19 @@ from flask import current_app
 
 
 def register_global_filters(app):
+
     class FullJSONEncoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, datetime) or isinstance(obj, date):
                 return obj.isoformat()
-            elif isinstance(obj, Decimal):
+            if isinstance(obj, Decimal):
+                return str(obj)
+            if isinstance(obj, ObjectId):
                 return str(obj)
             return obj.__dict__
 
     app.json_encoder = FullJSONEncoder
+    app.jinja_env.policies['json.dumps_kwargs'] = {'cls': FullJSONEncoder}
 
     @app.template_filter('datetime')
     def template_datetime(value, format='medium'):

@@ -224,15 +224,7 @@ class ElasticRequest:
             return False
         result = []
         for item_raw in self.result_raw['hits']['hits']:
-            item = item_raw['_source']
-            for key in self.datetime_fields:
-                if key in item:
-                    if item[key]:
-                        item[key] = pytz.UTC.localize(datetime.datetime.strptime(item[key], '%Y-%m-%dT%H:%M:%SZ'))\
-                            .astimezone(pytz.timezone('Europe/Berlin'))\
-                            .strftime('%Y-%m-%dT%H:%M:%S')
-
-            result.append(item)
+            result.append(item_raw['_source'])
 
         return result
 

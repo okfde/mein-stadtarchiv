@@ -36,7 +36,7 @@ from .subsite_management import subsite_management
 
 __all__ = ['launch']
 
-DEFAULT_BLUEPRINTS = [
+BLUEPRINTS = [
     frontend,
     ead_ddb_import,
     recherche,
@@ -53,7 +53,6 @@ DEFAULT_BLUEPRINTS = [
 
 def launch():
     app_name = BaseConfig.PROJECT_NAME
-    blueprints = DEFAULT_BLUEPRINTS
 
     app = Flask(
         app_name,
@@ -63,7 +62,7 @@ def launch():
     )
     configure_app(app)
     configure_hook(app)
-    configure_blueprints(app, blueprints)
+    configure_blueprints(app)
     configure_extensions(app)
     configure_logging(app)
     configure_filters(app)
@@ -116,8 +115,8 @@ def configure_extensions(app):
     cache.init_app(app)
 
 
-def configure_blueprints(app, blueprints):
-    for blueprint in blueprints:
+def configure_blueprints(app):
+    for blueprint in BLUEPRINTS:
         app.register_blueprint(blueprint)
 
 
@@ -129,33 +128,12 @@ def configure_logging(app):
     if not os.path.exists(app.config['LOG_DIR']):
         os.makedirs(app.config['LOG_DIR'])
 
-    from logging import INFO, DEBUG, ERROR, handlers, Formatter
-    app.logger.setLevel(DEBUG)
-
-    info_log = os.path.join(app.config['LOG_DIR'], 'info.log')
-    info_file_handler = handlers.RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
-    info_file_handler.setLevel(DEBUG)
-    info_file_handler.setFormatter(Formatter(
-        '%(asctime)s %(levelname)s: %(message)s '
-        '[in %(pathname)s:%(lineno)d]')
-    )
-
-    exception_log = os.path.join(app.config['LOG_DIR'], 'exception.log')
-    exception_log_handler = handlers.RotatingFileHandler(exception_log, maxBytes=100000, backupCount=10)
-    exception_log_handler.setLevel(ERROR)
-    exception_log_handler.setFormatter(Formatter(
-        '%(asctime)s %(levelname)s: %(message)s ')
-    )
-    app.logger.addHandler(info_file_handler)
-    app.logger.addHandler(exception_log_handler)
-
 
 def configure_hook(app):
     @app.before_request
     def before_request():
         from flask import g, request
         from .models import Subsite
-        print(request.host)
         g.subsite = Subsite.objects(host=request.host).first()
 
 

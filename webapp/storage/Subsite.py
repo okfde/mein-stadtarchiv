@@ -21,17 +21,6 @@ class Subsite(Base):
 
     title = StringField()
     host = StringField()
-    externalUrl = StringField()
-    email = StringField()
-    phone = StringField()
-    address = StringField()
-    postcode = StringField()
-    locality = StringField()
-    country = StringField()
-
-    lat = DecimalField(precision=6)
-    lon = DecimalField(precision=6)
-
     summary = StringField()
     about = StringField()
     categories = ListField(ReferenceField('Category', deref_document=False))

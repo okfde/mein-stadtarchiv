@@ -23,12 +23,29 @@ from . import CategoryManagementController
 from . import DocumentManagementController
 
 
-@archive_management.route('/admin/archives')
+@archive_management.route('/archives')
 def archive_main():
+    archives = Category.objects(parent__exists=False).order_by('title').all()
+    return render_template(
+        'archives.html',
+        archives=archives,
+        archives_dict_list=[
+            {
+                'id': archive.id,
+                'title': archive.title,
+                'lat': archive.lat,
+                'lon': archive.lon
+            } for archive in archives
+        ]
+    )
+
+
+@archive_management.route('/admin/archives')
+def archive_admin_main():
     if not current_user.has_capability('admin'):
         abort(403)
     form = ArchiveSearchForm()
-    return render_template('archives.html', form=form)
+    return render_template('admin-archives.html', form=form)
 
 
 @archive_management.route('/admin/archive/<string:archive_id>/show')
@@ -37,7 +54,7 @@ def archive_show(archive_id):
         abort(403)
     archive = Category.get_or_404(archive_id)
     return render_template(
-        'archive-show.html',
+        'admin-archive-show.html',
         archive=archive,
         children=archive.get_dict_with_children(True).get('children')
     )
@@ -55,7 +72,7 @@ def archive_new():
         category.save()
         flash('Archiv %s gespeichert.' % category.title, 'success')
         return redirect('/admin/archives')
-    return render_template('archive-new.html', form=form)
+    return render_template('admin-archive-new.html', form=form)
 
 
 @archive_management.route('/admin/archive/<string:archive_id>/edit', methods=['GET', 'POST'])
@@ -70,7 +87,7 @@ def archive_edit(archive_id):
         category.save()
         flash('Archiv %s gespeichert.' % category.title, 'success')
         return redirect('/admin/archives')
-    return render_template('archive-edit.html', form=form, archive=category)
+    return render_template('admin-archive-edit.html', form=form, archive=category)
 
 
 @archive_management.route('/admin/archive/<string:archive_id>/delete', methods=['GET', 'POST'])
@@ -86,4 +103,4 @@ def archive_delete(archive_id):
         category.delete()
         flash('Archiv %s gelöscht.' % category.title, 'success')
         return redirect('/admin/archives')
-    return render_template('archive-delete.html', form=form, archive=category)
+    return render_template('admin-archive-delete.html', form=form, archive=category)

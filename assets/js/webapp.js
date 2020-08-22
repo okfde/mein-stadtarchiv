@@ -5,86 +5,62 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import Common from './Common';
-import SearchList from './Helper/SearchList'
-import UserManagement from "./Helper/UserManagement";
-import ArchiveManagement from './Helper/ArchiveManagement'
-import DocumentManagement from './Helper/DocumentManagement';
+
+import SearchList from './Frontend/SearchList'
+import ArchiveMap from "./Frontend/ArchiveMap";
+import SingleMarkerMap from "./Frontend/SingleMarkerMap";
+import DocumentMapSearch from './Frontend/DocumentMapSearch';
+
+import UserManagement from "./Backend/UserManagement";
+import ArchiveManagement from './Backend/ArchiveManagement'
+import DocumentManagement from './Backend/DocumentManagement';
+import CategoryTableImport from "./Backend/CategoryTableImport";
+import SubsiteManagement from "./Backend/SubsiteManagement";
+import CategoryFileUpload from "./Backend/CategoryFileUpload";
 
 import SearchTableArchives from './SearchTable/SearchTableArchives'
 import SearchTableComments from './SearchTable/SearchTableComments';
-import SingleMarkerMap from "./SingleMarkerMap";
-import CategoryFileUpload from "./CategoryFileUpload";
-import DocumentMapSearch from './Helper/DocumentMapSearch';
-import CategoryTableImport from "./Import/CategoryTableImport";
 import SearchTableSubsites from "./SearchTable/SearchTableSubsites";
-import SubsiteManagement from "./Helper/SubsiteManagement";
 import SearchTableUsers from "./SearchTable/SearchTableUsers";
+import FrontpageGallery from "./Frontend/FrontpageGallery";
 
 
 $(document).ready(function () {
     window.common = new Common();
-    if (document.getElementById('archive-categories')) {
-        window.archiveManagement = new ArchiveManagement();
-    }
-    if (document.getElementById('user-form')) {
-        window.userManagement = new UserManagement();
-    }
-    if (document.getElementById('subsite-form')) {
-        window.subsiteManagement = new SubsiteManagement();
-    }
-    if (document.getElementById('document-form')) {
-        window.documentManagement = new DocumentManagement();
+
+    let helperObjects = {
+        'archive-map': ArchiveMap,
+        'archive-categories': ArchiveManagement,
+        'user-form': UserManagement,
+        'subsite-form': SubsiteManagement,
+        'document-form': DocumentManagement
     }
 
-    if (document.getElementById('search-list-box')) {
-        ReactDOM.render(
-            <SearchList ref={(searchList) => {window.searchList = searchList}} />,
-            document.getElementById('search-list-box')
-        );
-    }
-    if (document.getElementById('category-table-import')) {
-        ReactDOM.render(
-            <CategoryTableImport ref={(categoryTableImport) => {window.categoryTableImport = categoryTableImport}} />,
-            document.getElementById('category-table-import')
-        );
-    }
-    if (document.getElementById('map-search-form')) {
-        ReactDOM.render(
-            <DocumentMapSearch ref={(documentMapSearch) => {window.documentMapSearch = documentMapSearch}} />,
-            document.getElementById("map-search-form"));
-    }
-    if (document.getElementById('user-search-form')) {
-        ReactDOM.render(
-            <SearchTableUsers ref={(searchTableUsers) => {window.searchTableUsers = searchTableUsers}} />,
-            document.getElementById("user-search-results"));
-    }
-    if (document.getElementById('subsite-search-form')) {
-        ReactDOM.render(
-            <SearchTableSubsites ref={(searchTableSubsites) => {window.searchTableSubsites = searchTableSubsites}} />,
-            document.getElementById("subsite-search-results"));
-    }
-    if (document.getElementById('archive-search-form')) {
-        ReactDOM.render(
-            <SearchTableArchives ref={(searchTableArchives) => {window.searchTableArchives = searchTableArchives}} />,
-            document.getElementById("archive-search-results"));
-    }
-    if (document.getElementById('comment-search-form')) {
-        ReactDOM.render(
-            <SearchTableComments ref={(searchTableComments) => {window.searchTableComments = searchTableComments}} />,
-            document.getElementById("comment-search-results"));
+    for (const [html_id, HelperClass] of Object.entries(helperObjects)) {
+        if (document.getElementById(html_id)) {
+            window[HelperClass.name.charAt(0).toLowerCase() + HelperClass.name.slice(1)] = new HelperClass();
+        }
     }
 
-    if (document.getElementById('single-maker-map-container')) {
-        ReactDOM.render(
-            <SingleMarkerMap ref={(ref) => {window.fileGallery = ref}}/>,
-            document.getElementById('single-maker-map-container')
-        )
+    let reactObjects = {
+        'search-list-box': SearchList,
+        'frontpage-gallery': FrontpageGallery,
+        'category-table-import': CategoryTableImport,
+        'map-search-form': DocumentMapSearch,
+        'user-search-results': SearchTableUsers,
+        'subsite-search-results': SearchTableSubsites,
+        'archive-search-results': SearchTableArchives,
+        'comment-search-results': SearchTableComments,
+        'single-maker-map-container': SingleMarkerMap,
+        'category-file-upload-container': CategoryFileUpload
     }
 
-    if (document.getElementById('category-file-upload-container')) {
-        ReactDOM.render(
-            <CategoryFileUpload ref={(ref) => {window.categoryFileUpload = ref}}/>,
-            document.getElementById('category-file-upload-container')
-        )
+    for (const [html_id, ReactClass] of Object.entries(reactObjects)) {
+        if (document.getElementById(html_id)) {
+            ReactDOM.render(
+                <ReactClass ref={(reactClass) => {window[ReactClass.name.charAt(0).toLowerCase() + ReactClass.name.slice(1)] = reactClass}} />,
+                document.getElementById(html_id)
+            );
+        }
     }
 });

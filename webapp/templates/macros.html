@@ -18,10 +18,10 @@
                 <br>
                 <label>{{ field(class="") }} {{ field.label.text }}</label>
             {% elif form_type == 'input-submit' %}
-                {{ field(class="form-control") }}
+                {{ field(class="form-control" + (' ' + ' '.join(extra_classes) if extra_classes else '')) }}
             {% elif form_type == 'input-submit-emptylabel' %}
                 <label>&nbsp;</label>
-                {{ field(class="form-control") }}
+                {{ field(class="form-control" + (' ' + ' '.join(extra_classes) if extra_classes else '')) }}
             {% endif %}
             {% if field.description %}
                 <p>{{ field.description|safe }}</p>
@@ -52,4 +52,25 @@
     {% elif type == 'custom' %}
         <a href="{{ link }}" class="btn btn-default btn-icon" data-toggle="tooltip" title="{{ text }}"><i class="fa fa-{{ icon }}" aria-hidden="true"></i></a>
     {% endif %}
+{% endmacro %}
+
+{% macro nav_item(path, title) %}
+    <li class="nav-item{% if request.path.startswith(path) %} active{% endif %}">
+        <a class="nav-link" href="{{ path }}">{{ title }}</a>
+    </li>
+{% endmacro %}
+
+{% macro nav_item_extended(path, title, items) %}
+<li class="nav-item dropdown{% if request.path.startswith(path) %} active{% endif %}">
+    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ title }}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="info-dropdown">
+        {% for item in items %}
+            <a class="dropdown-item{% if request.path.startswith(item[0]) %} active{% endif %}" href="{{ item[0] }}">
+                {{ item[1] }}
+            </a>
+        {% endfor %}
+    </div>
+</li>
 {% endmacro %}

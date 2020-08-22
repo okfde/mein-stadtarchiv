@@ -1,24 +1,39 @@
 {% extends "layout.html" %}
-{% from "macros.html" import form_field, action_button with context %}
+
+{% block title %}Daten | {{ super() }}{% endblock %}
+{% block og_title %}Daten | {{ super() }}{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-12">
-            <h1>
-                Archive
-                {{ action_button('new', '/admin/archive/new') }}
-            </h1>
+            <h1>Archive</h1>
+            <p>Die Daten folgender Archive sind auf unserer Plattform</p>
         </div>
     </div>
-    <form
-            method="POST"
-            action="/archives" id="archive-search-form"
-    >
-        <div class="row row-form">
-            {{ form_field(form.title, 9) }}
-            {{ form_field(form.submit, 3, 'input-submit-emptylabel') }}
+    <div class="row">
+        <div class="col-md-6">
+            {% for archive in archives %}
+                <h2>{{ archive.title }}</h2>
+                <p>{{ archive.description }}</p>
+                <p>
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    {{ archive.address }}, {{ archive.postalcode }} {{ archive.locality }}
+                    {% if externalUrl %}
+                        | <i class="fa fa-external-link" aria-hidden="true"></i>
+                        <a href="{{ archive.externalUrl }}">{{ externalUrl }}</a>
+                    {% endif %}
+                </p>
+            {% endfor %}
         </div>
-        {{ form.csrf_token }}
-        <div id="archive-search-results"></div>
-    </form>
+        <div class="col-md-6">
+            <div id="archive-map"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var frontpageMapData = {{ archives_dict_list|tojson }};
+    </script>
+    {{ super() }}
 {% endblock %}

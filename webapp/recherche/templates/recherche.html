@@ -12,23 +12,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-md-4">
             <h1>Recherche</h1>
         </div>
-    </div>
-
-    <form id="search-form">
-        <div class="row" id="search-list-box">
+        <div class="col-md-8">
+            <h1>Ergebnisse</h1>
         </div>
+    </div>
+    <form id="search-form">
+        <div class="row" id="search-list-box"></div>
     </form>
 {% endblock %}
 
 {% block scripts %}
     <script>
         var config = {
-            mapbox_token: "{{ config.MAPBOX_TOKEN }}",
-            cdnUrl: "{{ config['MINIO_MEDIA_URL'] }}",
             categoryData: {{ category_data|tojson }},
             csrf_token: '{{ csrf_token() }}'
         };

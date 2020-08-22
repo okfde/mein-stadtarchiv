@@ -7,11 +7,10 @@ export default class DocumentMap {
     apiUrl = '/api/geojson';
 
     constructor() {
-        mapboxgl.accessToken = config.mapbox_token;
-
+        mapboxgl.accessToken = stadtarchivConfig.mapboxToken;
         this.map = new mapboxgl.Map({
             container: 'document-map',
-            style: 'mapbox://styles/mapbox/dark-v9',
+            style: 'mapbox://styles/mapbox/light-v10',
             center: [10.448, 51.116],
             zoom: 5.5
         });

@@ -14,7 +14,7 @@ from elasticsearch.exceptions import NotFoundError
 from flask import Blueprint, render_template, current_app, redirect, request, g
 from ..common.elastic_request import ElasticRequest
 from ..common.helpers import get_random_password
-from ..models import Subsite
+from ..models import Subsite, Category
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
@@ -25,34 +25,34 @@ def home():
         current_app.config['ELASTICSEARCH_DOCUMENT_INDEX'] + '-latest',
         'document'
     )
-    elastic_request.set_limit(5)
+    elastic_request.set_limit(100)
     elastic_request.set_sort_field('random')
     elastic_request.set_random_seed(get_random_password())
-    elastic_request.set_range_limit('helpRequired', 'gte', 1)
     elastic_request.set_range_limit('fileCount', 'gte', 1)
     elastic_request.source = ['id', 'title', 'files.id']
+    archives = []
     if g.subsite:
         elastic_request.set_fq('categoryWithParents', [str(category) for category in g.subsite.categories])
-        subsites = [{
-            'lat': g.subsite.lat,
-            'lon': g.subsite.lon,
-            'title': g.subsite.title
-        }]
+        for category in g.subsite.categories:
+            archives.append({
+                'id': str(category.id),
+                'title': category.title,
+                'lat': category.lat,
+                'lon': category.lon
+            })
     else:
-        subsites = []
-        for subsite in Subsite.objects():
-            subsites.append({
-                'id': str(id),
-                'host': subsite.host,
-                'lat': subsite.lat,
-                'lon': subsite.lon,
-                'title': subsite.title
+        for category in Category.objects(parent__exists=False):
+            archives.append({
+                'id': category.id,
+                'title': category.title,
+                'lat': category.lat,
+                'lon': category.lon
             })
     try:
         elastic_request.query()
     except NotFoundError:
         return redirect('/admin/install')
-    return render_template('index.html', documents=elastic_request.get_results(), subsites=subsites)
+    return render_template('index.html', documents=elastic_request.get_results(), archives=archives)
 
 
 @frontend.route('/impressum')
@@ -78,6 +78,11 @@ def info_ueber_uns():
 @frontend.route('/info/archive')
 def info_archive():
     return render_template('archive.html')
+
+
+@frontend.route('/info/mitmachen')
+def info_mitmachen():
+    return render_template('mitmachen.html')
 
 
 @frontend.route('/info/daten')

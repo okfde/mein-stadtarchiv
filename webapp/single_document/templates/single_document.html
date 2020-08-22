@@ -85,56 +85,50 @@
                     <div class="col-6">{{ document.modified|datetime }}</div>
                 </div>
             </div>
-
-            <div id="share">
-                <a class="facebook" href="https://www.facebook.com/share.php?u={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}" target="blank"><i class="fa fa-facebook"></i></a>
-                <a class="twitter" href="https://twitter.com/intent/tweet?status={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}+{{ config['PROJECT_URL'] }}{{ request.path }}" target="blank"><i class="fa fa-twitter"></i></a>
-                <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}&source=Unser%20Stadtarchiv" target="blank"><i class="fa fa-linkedin"></i></a>
-                <a class="pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media={% if document.files|length %}{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg{% else %}{{ config['PROJECT_URL'] }}/static/images/stadtarchiv.jpg{% endif %}&url={{ config['PROJECT_URL'] }}{{ request.path }}&is_video=false&description={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}" target="blank"><i class="fa fa-pinterest-p"></i></a>
-            </div>
-            <div class=" d-md-none">
+            <div class="d-md-none">
                 {% include 'single_document_image.html' %}
             </div>
-            <div id="document-comments">
-                <h3>{% if comments|length == 0 %}Noch keine Kommentare{% elif comments|length == 1 %}Ein Kommentar
-                    {% else %}{{ comments|length }} Kommentare{% endif %}</h3>
+            <div id="document-comments" style="margin-top: 2rem;">
+                <h3>
+                    {% if comments|length == 1 %}
+                        Ein Kommentar
+                    {% elif comments|length > 1 %}
+                        {{ comments|length }} Kommentare
+                    {% endif %}
+                </h3>
                 {% for comment in comments %}
                     <div class="document-comment{% if loop.index % 2 == 1 %} document-comment-alt{% endif %}">
                         <p class="document-comment-meta">
+                            <strong>{{ comment.authorName }}</strong> schrieb am {{ comment.created|datetime }}
                             {% if comment.status == 2 %}<i class="fa fa-plus-circle" aria-hidden="true"></i>
                             {% else %}<i class="fa fa-check-circle" aria-hidden="true"></i>{% endif %}
-                            {{ comment.authorName }} schrieb am {{ comment.created|datetime }}:
                         </p>
                         <div class="document-comment-content">{{ comment.content }}</div>
                     </div>
-                {% else %}
-                    <p>
-                        Es wurden noch keine Kommentare geschrieben. Aber vielleicht können Sie uns helfen, das Dokument
-                        besser einzuordnen? Schreiben Sie gerne etwas dazu!
-                    </p>
                 {% endfor %}
             </div>
-            <form class="container" method="POST" action="/document/{{ document.id }}" id="comment-form">
+            <div class="col-md-12" style="margin-top: 2rem;">
+                <h3>Neuen Kommentar schreiben</h3>
+            </div>
+            <form class="container color-box" method="POST" action="/document/{{ document.id }}" id="comment-form">
+                <div class="row row-form">
+                    {{ form_field(form.name, 12) }}
+                </div>
+                <div class="row row-form">
+                    {{ form_field(form.email, 12) }}
+                </div>
+                <div class="row row-form">
+                    {{ form_field(form.text, 12) }}
+                </div>
+                <div class="row row-form">
+                    {{ form_field(form.submit, 12, 'input-submit', extra_classes=['btn btn-highlight']) }}
+                    {{ form.csrf_token }}
+                </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <h3>Kommentar schreiben</h3>
-                    </div>
-                    {{ form_field(form.name, 12) }}
-                    {{ form_field(form.email, 12) }}
-                    {{ form_field(form.text, 12) }}
-                    {{ form_field(form.submit, 12, 'input-submit') }}
-                    {{ form.csrf_token }}
-                    <div class="col-md-12">
-                        <p>Mit dem Schreiben eines Kommentars erklären Sie sich mit unseren <a
-                                href="/nutzungsbedingungen">Nutzungsbedingungen</a> einverstanden.</p>
-                        <h5>Wie Sie uns helfen können</h5>
-                        {% if document.help_required %}
-                            <p>Erkennen Sie, was auf dem Bild zu sehen ist und wann es entstanden sein könnte?</p>
-                        {% else %}
-                            <p>Dieses Dokument ist Teil des Stadtarchives. Wir kennen den Kontext des Bildes, aber
-                                vielleicht können Sie spannende Details ergänzen?</p>
-                        {% endif %}
-                        <p><i class="fa fa-check-circle" aria-hidden="true"></i> Gesichteter Kommentar | <i class="fa fa-plus-circle" aria-hidden="true"></i> Neuer Kommentar</p>
+                        <p>Mit dem Schreiben eines Kommentars erklären Sie sich mit unseren
+                            <a href="/nutzungsbedingungen">Nutzungsbedingungen</a> einverstanden.
+                        </p>
                     </div>
                 </div>
             </form>
@@ -144,6 +138,12 @@
             <div id="lat-value" style="display: none">{{ document.lat }}</div>
             <div id="lon-value" style="display: none">{{ document.lon }}</div>
             <div id="single-maker-map-container"></div>
+            <div id="share">
+                <a class="facebook" href="https://www.facebook.com/share.php?u={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}" target="blank"><i class="fa fa-facebook"></i></a>
+                <a class="twitter" href="https://twitter.com/intent/tweet?status={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}+{{ config['PROJECT_URL'] }}{{ request.path }}" target="blank"><i class="fa fa-twitter"></i></a>
+                <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url={{ config['PROJECT_URL'] }}{{ request.path }}&title={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}&source=Unser%20Stadtarchiv" target="blank"><i class="fa fa-linkedin"></i></a>
+                <a class="pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media={% if document.files|length %}{{ config['MINIO_MEDIA_URL'] }}/thumbnails/{{ document.id }}/{{ document.files[0].id }}/1200/1.jpg{% else %}{{ config['PROJECT_URL'] }}/static/images/stadtarchiv.jpg{% endif %}&url={{ config['PROJECT_URL'] }}{{ request.path }}&is_video=false&description={% if document.title %}{{ document.title|urlencode }}{% else %}Namenloses%20Dokument{% endif %}" target="blank"><i class="fa fa-pinterest-p"></i></a>
+            </div>
         </div>
     </div>
 {% endblock %}

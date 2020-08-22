@@ -14,23 +14,7 @@
             {{ form_field(form.categories, 4) }}
         </div>
         <div class="row row-form">
-            {{ form_field(form.externalUrl, 4) }}
-            {{ form_field(form.email, 4) }}
-            {{ form_field(form.phone, 4) }}
-        </div>
-        <div class="row row-form">
-            {{ form_field(form.address, 4) }}
-            {{ form_field(form.postcode, 2) }}
-            {{ form_field(form.locality, 4) }}
-            {{ form_field(form.country, 2) }}
-        </div>
-        <div class="row row-form">
-            {{ form_field(form.locationSubtitle, 4) }}
-            {{ form_field(form.lat, 4) }}
-            {{ form_field(form.lon, 4) }}
-        </div>
-        <div class="row row-form">
-            {{ form_field(form.mapEnabled, 4) }}
+            {{ form_field(form.mapEnabled, 4, 'input-checkbox') }}
         </div>
         <div class="row row-form">
             {{ form_field(form.summary, 12) }}

@@ -1,0 +1,8 @@
+.pagination, .pagination .page-link, .pagination .page-item.disabled .page-link {
+  border-color: $border-color;
+}
+
+.pagination .page-item-pages .page-link {
+  color: $link-color;
+  user-select: none;
+}

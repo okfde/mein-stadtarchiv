@@ -63,9 +63,9 @@ class BaseConfig:
 
     CELERY_BROKER_URL = 'amqp://localhost'
 
-    MAPBOX_CENTER_LAT = 51.470915
-    MAPBOX_CENTER_LON = 7.219874
-    MAPBOX_ZOOM = 10
+    MAPBOX_CENTER_LAT = 51.167858
+    MAPBOX_CENTER_LON = 6.935225
+    MAPBOX_ZOOM = 7
 
     ELASTICSEARCH_HOST = 'localhost'
     ELASTICSEARCH_DOCUMENT_INDEX = 'stadtarchiv-documents'

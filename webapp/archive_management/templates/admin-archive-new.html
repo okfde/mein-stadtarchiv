@@ -2,15 +2,31 @@
 {% from "macros.html" import form_field with context %}
 
 {% block content %}
-    <form method="POST" action="/admin/archive/{{ archive.id }}/edit" id="archive-form">
+    <form method="POST" action="/admin/archive/new" id="archive-form">
         <div class="row">
             <div class="col-md-12">
-                <h1>Archiv bearbeiten</h1>
+                <h1>Neues Archiv</h1>
             </div>
         </div>
         <div class="row row-form">
             {{ form_field(form.title, 6) }}
             {{ form_field(form.visible, 6, 'input-checkbox-emptylabel') }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.externalUrl, 4) }}
+            {{ form_field(form.email, 4) }}
+            {{ form_field(form.phone, 4) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.address, 4) }}
+            {{ form_field(form.postcode, 2) }}
+            {{ form_field(form.locality, 4) }}
+            {{ form_field(form.country, 2) }}
+        </div>
+        <div class="row row-form">
+            {{ form_field(form.locationSubtitle, 4) }}
+            {{ form_field(form.lat, 4) }}
+            {{ form_field(form.lon, 4) }}
         </div>
         <div class="row row-form">
             {{ form_field(form.description, 12) }}

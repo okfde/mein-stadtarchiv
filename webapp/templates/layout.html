@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% from "macros.html" import nav_item, nav_item_extended with context %}<!DOCTYPE html>
 <html>
 <head>
     {% block head %}
@@ -23,8 +23,6 @@
     {% endblock %}
     {% block styles %}
         <link rel="stylesheet" type="text/css" href="{{ static_content['main']['css'] }}">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     {% endblock %}
 </head>
 <body class="{% block bodyclass %}default{% endblock %}">
@@ -43,29 +41,17 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbar-header">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/recherche">Recherche</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/gallery">Galerie</a>
-                        </li>
+                        {{ nav_item('/recherche', 'Recherche') }}
+                        {{ nav_item('/gallery', 'Galerie') }}
                         {% if not g.subsite or (g.subsite and g.subsite.mapEnabled) %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/map">Karte</a>
-                            </li>
+                            {{ nav_item('/map', 'Karte') }}
                         {% endif %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">Informationen</a>
-                            <div class="dropdown-menu" aria-labelledby="info-dropdown">
-                                <a class="dropdown-item" href="/info/ueber-uns">Über Uns</a>
-                                <a class="dropdown-item" href="/info/archive">Archive</a>
-                                <a class="dropdown-item" href="/info/daten">Daten</a>
-                            </div>
-                        </li>
+                        {{ nav_item_extended('/info', 'Informationen', [
+                            ('/info/ueber-uns', 'Über Uns'),
+                            ('/archives', 'Archive'),
+                            ('/info/mitmachen', 'Mitmachen'),
+                            ('/info/daten', 'Daten')
+                        ]) }}
                         {% if current_user.is_authenticated %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
@@ -98,37 +84,39 @@
     {% block footer %}
         <div id="footer" class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <h3>Über Mein Stadtarchiv</h3>
+                <div class="col-md-6">
+                    <h4>Über "Mein Stadtarchiv"</h4>
                     <p>Wir öffnen das kommunale Stadtarchiv für Bürgerinnen und Bürger und bieten eine Plattform, um das Archiv gemeinsam zu verbessern.</p>
+                    <p class="big-link-box"><a href="/info/ueber-uns">mehr über uns</a></p>
                 </div>
-                <div class="col-md-4">
-                    <h3>Wichtige Links</h3>
-                    <ul>
-                        <li><a href="/impressum">Impressum</a></li>
-                        <li><a href="/datenschutz">Datenschutz</a></li>
-                        <li><a href="/nutzungsbedingungen">Nutzungsbedingungen</a></li>
-                        <li><a href="/info/daten">Daten &amp; Lizenz</a></li>
-                        {% if not current_user.is_authenticated %}
-                            <li><a href="/login">Login</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h3>Kontakt</h3>
+                <div class="col-md-6">
+                    <h4>Kontakt</h4>
                     <p>
                         E-Mail: <a href="mailto:kontakt@mein-stadtarchiv.de">kontakt@mein-stadtarchiv.de</a><br>
                         Büro der OKF:<br>
-                        Singerstraße 109, 10179 Berlin<br>
-                        Stadtarchiv Kerpen:<br>
-                        Stiftsstraße 8, 50171 Kerpen
+                        Singerstraße 109, 10179 Berlin
                     </p>
                 </div>
             </div>
         </div>
     {% endblock %}
 </div>
+<div id="footer-links-wrapper" class="main-wrapper">
+    <a href="/impressum">Impressum</a> |
+    <a href="/datenschutz">Datenschutz</a> |
+    <a href="/nutzungsbedingungen">Nutzungsbedingungen</a> |
+    <a href="/login">Login</a>
+</div>
 {% block scripts %}
+    <script>
+        var stadtarchivConfig = {
+            cdnUrl: "{{ config['MINIO_MEDIA_URL'] }}",
+            mapboxToken: '{{ config['MAPBOX_TOKEN'] }}',
+            mapboxCenterLat: {{ config['MAPBOX_CENTER_LAT'] }},
+            mapboxCenterLon: {{ config['MAPBOX_CENTER_LON'] }},
+            mapboxZoom: {{ config['MAPBOX_ZOOM'] }}
+        }
+    </script>
     <script type="text/javascript" src="{{ static_content['main']['js'] }}"></script>
 {% endblock %}
 {% if config.PIWIK_HOST and config.PIWIK_ID %}

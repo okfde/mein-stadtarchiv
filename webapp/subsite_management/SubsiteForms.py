@@ -44,67 +44,6 @@ class SubsiteForm(FlaskForm):
             )
         ]
     )
-    externalUrl = StringField(
-        label='Externe URL',
-        validators=[
-            URL(
-                message='Bitte geben Sie eine URL ein'
-            ),
-            Optional()
-        ]
-    )
-    email = StringField(
-        label='E-Mail',
-        validators=[
-            Email(
-                message='Bitte geben Sie eine E-Mail ein'
-            ),
-            Optional()
-        ]
-    )
-    phone = StringField(
-        label='Telefon'
-    )
-    locationSubtitle = StringField(
-        label='Orts-Subtitel'
-    )
-    address = StringField(
-        label='Adresse',
-        validators=[
-            DataRequired(
-                message='Bitte geben Sie eine Adresse ein'
-            )
-        ]
-    )
-    postcode = StringField(
-        label='Postleitzahl',
-        validators=[
-            DataRequired(
-                message='Bitte geben Sie eine Postleitzahl ein'
-            )
-        ]
-    )
-    locality = StringField(
-        label='Ort',
-        validators=[
-            DataRequired(
-                message='Bitte geben Sie einen Ort ein'
-            )
-        ]
-    )
-    country = SelectField(
-        label='Land',
-        choices=country_codes,
-        default='DE'
-    )
-    lat = DecimalField(
-        label='Längengrad',
-        places=6
-    )
-    lon = DecimalField(
-        label='Breitengrad',
-        places=6
-    )
     summary = TextAreaField(
         label='Zusammenfassung'
     )

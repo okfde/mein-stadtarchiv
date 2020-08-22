@@ -36,8 +36,7 @@ def subsite_show(subsite_id):
     subsite = Subsite.get_or_404(subsite_id)
     return render_template(
         'subsite-show.html',
-        subsite=subsite,
-        children=subsite.get_dict_with_children(True).get('children')
+        subsite=subsite
     )
 
 

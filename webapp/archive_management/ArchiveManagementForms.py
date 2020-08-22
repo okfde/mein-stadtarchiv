@@ -11,9 +11,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, TextAreaField, BooleanField
-from wtforms.validators import URL, Optional
+from wtforms import StringField, SelectField, SubmitField, TextAreaField, BooleanField, DecimalField
+from wtforms.validators import URL, Optional, DataRequired, Email
 from ..common.form import SearchBaseForm
+from ..common.countrycodes import country_codes
 
 
 class ArchiveSearchForm(SearchBaseForm):
@@ -59,6 +60,67 @@ class ArchiveForm(FlaskForm):
             URL(message='Bitte eine valide URL oder gar keine eingeben.'),
             Optional()
         ]
+    )
+    externalUrl = StringField(
+        label='Externe URL',
+        validators=[
+            URL(
+                message='Bitte geben Sie eine URL ein'
+            ),
+            Optional()
+        ]
+    )
+    email = StringField(
+        label='E-Mail',
+        validators=[
+            Email(
+                message='Bitte geben Sie eine E-Mail ein'
+            ),
+            Optional()
+        ]
+    )
+    phone = StringField(
+        label='Telefon'
+    )
+    locationSubtitle = StringField(
+        label='Orts-Subtitel'
+    )
+    address = StringField(
+        label='Adresse',
+        validators=[
+            DataRequired(
+                message='Bitte geben Sie eine Adresse ein'
+            )
+        ]
+    )
+    postcode = StringField(
+        label='Postleitzahl',
+        validators=[
+            DataRequired(
+                message='Bitte geben Sie eine Postleitzahl ein'
+            )
+        ]
+    )
+    locality = StringField(
+        label='Ort',
+        validators=[
+            DataRequired(
+                message='Bitte geben Sie einen Ort ein'
+            )
+        ]
+    )
+    country = SelectField(
+        label='Land',
+        choices=country_codes,
+        default='DE'
+    )
+    lat = DecimalField(
+        label='Längengrad',
+        places=6
+    )
+    lon = DecimalField(
+        label='Breitengrad',
+        places=6
     )
     submit = SubmitField(
         label='speichern'

@@ -1,5 +1,6 @@
 .bootstrap-multiselect {
   display: block;
+  width: 100%;
 }
 
 .multiselect-container.dropdown-menu {
@@ -19,4 +20,27 @@
 
 .multiselect-container.dropdown-menu label input {
   margin-right: 10px;
+}
+
+.multiselect.dropdown-toggle {
+  cursor: pointer;
+}
+
+.multiselect-container.dropdown-menu {
+  right: 0;
+}
+
+.multiselect-container > li > a > label {
+  padding-left: 12px;
+}
+
+.multiselect-container > li > a > label > input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.multiselect-container {
+  height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  z-index: 2500;
 }

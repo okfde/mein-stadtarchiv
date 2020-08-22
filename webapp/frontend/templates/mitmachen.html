@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block title %}Mitmachen | {{ super() }}{% endblock %}
+{% block og_title %}Mitmachen | {{ super() }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Mitmachen</h1>
+            <p>
+                "Mein Stadtarchiv" ist darauf ausgelegt, Stadtarchiv-Daten aus vielen Quellen und Formaten darzustellen.
+                Außerdem ist "Mein Stadtarchiv" freie Software, die Sie auch ganz einfach selbst einsetzen können
+            </p>
+            <h2>Möglichkeit 1: Datenimport und Darstellung</h2>
+            <p>
+                Um Daten bei "Mein Stadtarchiv" zu integrieren, müssen diese 1) in einem offenen Format vorliegen und
+                2) unter einer freien Lizenz stehen. Das Hosting stellen wir nicht in Rechnung, und wenn Sie die Daten
+                vor- und aufbereiten, dann geht der gesamte Vorgang kostenlos.
+            </p>
+            <p>
+                <strong>Offene Formate</strong> sind Formate, die eine Maschine gut lesen kann. Für Archivdaten ist
+                dies vor allem <a href="https://wiki.deutsche-digitale-bibliothek.de/pages/viewpage.action?pageId=19010180">EAD-DDB</a>.
+                Andere XML-Formate oder CSVs sind ebenfalls offene Formate, machen aber mehr Arbeit, da dort weniger
+                definiert ist und so der Aufwand beim Erstimport höher wird.
+            </p>
+            <p>
+                <strong>Freie Lizenzen</strong> sind Lizenzen, die eine freie Weiternutzung der Werke ermöglichen.
+                "Mein Stadtarchiv" hat zum Ziel, dass die Geschichte einer Stadt für alle Menschen offen steht, und dies
+                geht nur, wenn die Daten frei sind. Typische freie Lizenzen sind die freien Creative Commons Lizenzen
+                oder die Datenlizenz Deutschland.
+            </p>
+
+            <h2>Möglichkeit 2: "Mein Stadtarchiv" unter einer eigenen Webadresse</h2>
+            <p>
+                "Mein Stadtarchiv" hat die Möglichkeit, ein Archiv unter einer eigenen Webadresse anzuzeigen, z.B.
+                unter einer Subdomain der Archiv-Website oder einer Subdomain der Stadt-Website. Auf einer solchen
+                Seite ist dann auch viel Platz für eine individuelle Beschreibung des Archivs. Allerdings ist dies
+                recht aufwändig, so dass wir den Stundenaufwand in Rechnung stellen müssten.
+            </p>
+
+            <h2>Möglichkeit 3: "Mein Stadtarchiv" selbst hosten</h2>
+            <p>
+                "Mein Stadtarchiv" ist freie Software und kann auf einem Linux-Server selbst gehostet werden. Wir
+                empfehlen, einen technisch kundigigen Menschen dabei zu haben, da es sich bei "Mein Stadtarchiv"
+                um eine WSGI-Anwendung handelt, welche bestenfalls als Systemdienst eingerichtet werden sollte.
+                Und auch eine MongoDB findet man nicht auf jedem Webspace. Wir haben aber versucht, die Installation
+                so leicht wie möglich zu machen, so dass man mit normalen Linux-Kenntnissen sehr weit kommen wird.
+            </p>
+            <p>
+                Wenn Sie bei der Installation Fehler finden, melden Sie diese bitte in unserem
+                <a href="https://github.com/okfde/mein-stadtarchiv/issues">Github-Repository</a>.
+            </p>
+        </div>
+    </div>
+{% endblock %}

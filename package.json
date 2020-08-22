@@ -30,6 +30,7 @@
     "bootstrap-daterangepicker": "^3.0",
     "bootstrap-multiselect": "0.9.13",
     "bootstrap-select": "^1.13",
+    "font-awesome": "^4.7",
     "clean-webpack-plugin": "^3.0",
     "core-js": "^3.6",
     "css-loader": "^3.5",
@@ -56,6 +57,7 @@
     "webpack-cli": "^3.3",
     "moment-timezone": "^0.5",
     "moment-timezone-data-webpack-plugin": "^1.2",
-    "file-loader": "^6.0.0"
+    "file-loader": "^6.0.0",
+    "react-card-flip": "^1.0"
   }
 }

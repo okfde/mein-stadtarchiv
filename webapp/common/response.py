@@ -13,6 +13,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 from flask import make_response
 import json
 import datetime
+from decimal import Decimal
 from lxml import etree
 
 
@@ -32,5 +33,7 @@ class FullJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
             return obj.isoformat()
+        if isinstance(obj, Decimal):
+            return str(obj)
         return obj.__dict__
 

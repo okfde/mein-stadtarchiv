@@ -32,7 +32,7 @@ export default class DocumentMapSearch extends Component {
             this.search(this.state.params);
         };
 
-        mapboxgl.accessToken = config.mapbox_token;
+        mapboxgl.accessToken = stadtarchivConfig.mapboxToken;
 
         this.map = new mapboxgl.Map({
             container: 'document-map',
@@ -91,41 +91,43 @@ export default class DocumentMapSearch extends Component {
             );
         }
         return (
-            <div className="row">
-                <div className="col-md-3">
-                    <label htmlFor="fulltext">Volltext</label>
-                    <input
-                        type="text"
-                        id="fulltext"
-                        name="fulltext"
-                        className="form-control"
-                        value={this.state.params.fulltext}
-                        onChange={this.handleChange.bind(this)}
-                    />
-                </div>
-                <div className="col-md-3">
-                    <span className="fake-label">&nbsp;</span>
-                    <label htmlFor="files_required">
+            <div className="color-box" style={{marginBottom: '15px'}}>
+                <div className="row">
+                    <div className="col-md-3">
+                        <label htmlFor="fulltext">Volltext</label>
                         <input
-                            type="checkbox"
-                            name="files_required"
-                            id="files_required"
-                            checked={this.state.params.files_required}
+                            type="text"
+                            id="fulltext"
+                            name="fulltext"
+                            className="form-control"
+                            value={this.state.params.fulltext}
                             onChange={this.handleChange.bind(this)}
                         />
-                        {' '}Nur Dokumente mit Medien
-                    </label>
-                </div>
-                <div className="col-md-3">
-                    <span className="fake-label">Kategorie</span>
-                    <SearchListCategories
-                      onUpdate={(category) => this.updateCategory(category)}
-                    >
-                    </SearchListCategories>
-                </div>
-                <div className="col-md-3">
-                    <span className="fake-label">&nbsp;</span>
-                    <input type="submit" name="submit" value="suchen" className="form-control"/>
+                    </div>
+                    <div className="col-md-3">
+                        <span className="fake-label">&nbsp;</span>
+                        <label htmlFor="files_required">
+                            <input
+                                type="checkbox"
+                                name="files_required"
+                                id="files_required"
+                                checked={this.state.params.files_required}
+                                onChange={this.handleChange.bind(this)}
+                            />
+                            {' '}Nur Dokumente mit Medien
+                        </label>
+                    </div>
+                    <div className="col-md-3">
+                        <span className="fake-label">Kategorie</span>
+                        <SearchListCategories
+                          onUpdate={(category) => this.updateCategory(category)}
+                        >
+                        </SearchListCategories>
+                    </div>
+                    <div className="col-md-3">
+                        <span className="fake-label">&nbsp;</span>
+                        <input type="submit" name="submit" value="suchen" className="form-control btn btn-highlight" />
+                    </div>
                 </div>
             </div>
         );

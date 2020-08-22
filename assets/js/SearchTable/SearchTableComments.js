@@ -1,3 +1,4 @@
+import { daterangepicker_ranges, daterangepicker_locale, multiselect_options } from '../Constants';
 import React from "react";
 import SearchTable from './SearchTable'
 import moment from 'moment';
@@ -35,12 +36,12 @@ export default class SearchTableArchives extends SearchTable {
 
     init() {
         super.init();
-        $('#status').multiselect(window.common.multiselect_options);
+        $('#status').multiselect(multiselect_options);
         $('#daterange').daterangepicker({
             startDate: this.defaultStartDate,
             endDate: this.defaultEndDate,
-            ranges: window.common.daterangepicker_ranges,
-            locale: window.common.daterangepicker_locale
+            ranges: daterangepicker_ranges,
+            locale: daterangepicker_locale
         }, (start, end, label) => this.daterangepickerSubmit(start, end, label));
     }
 

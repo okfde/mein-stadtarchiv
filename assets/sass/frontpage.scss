@@ -1,0 +1,28 @@
+#home-carousel .carousel-inner {
+  max-height: 300px;
+}
+
+#archive-map {
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+#frontpage-gallery {
+  height: 180px;
+  overflow: hidden;
+}
+
+.image-flip-box {
+  height: 180px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.image-flip-box-special {
+  height: 180px;
+  padding: 10px;
+  color: $box-color;
+  background-color: $link-color;
+}

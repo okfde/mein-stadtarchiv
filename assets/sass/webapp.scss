@@ -1,5 +1,15 @@
+$border-color: #9658ea;
+$box-color: #e0deff;
+$link-color: #6f42c1;
+
 @import "layout";
+@import "header";
+@import "footer";
+@import "pagination";
 @import "search-table";
 @import "search-list";
+@import "single";
 @import "bootstrap-multiselect";
 @import "document-map";
+@import "frontpage";
+@import "image-wall";

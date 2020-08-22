@@ -1,4 +1,6 @@
 import React from "react";
+import { getUrlParams, buildImageUrl } from '../Helper';
+import { formatDatetime } from '../Format';
 
 const { Component } = React;
 
@@ -38,7 +40,7 @@ export default class SearchList extends Component {
 
     componentDidMount() {
         let params = this.state.params;
-        Object.assign(params, window.common.getUrlParams());
+        Object.assign(params, getUrlParams());
         params.filesRequired = (params.filesRequired) ? parseInt(params.filesRequired) && true : false;
         params.helpRequired = (params.helpRequired) ? parseInt(params.helpRequired) && true : false;
         params.csrf_token = config.csrf_token;
@@ -159,81 +161,88 @@ export default class SearchList extends Component {
         }
         return ([
             <div className="col-md-4" key="sidebar">
-                <h3>Suche</h3>
-                <p>
-                    <label htmlFor="fulltext">Volltext</label>
-                    <input
-                        type="text"
-                        id="fulltext"
-                        name="fulltext"
-                        className="form-control"
-                        value={this.state.params.fulltext}
-                        onChange={this.handleChange.bind(this)}
-                    />
-                </p>
-                <div className="container no-gutters" style={{marginBottom: '1rem'}}>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <label htmlFor="yearStart">Zeitraum</label>
+                <div id="search-box" className="color-box">
+                    <p>
+                        <label htmlFor="fulltext">Volltext</label>
+                        <input
+                            type="text"
+                            id="fulltext"
+                            name="fulltext"
+                            className="form-control"
+                            autoComplete="off"
+                            value={this.state.params.fulltext}
+                            onChange={this.handleChange.bind(this)}
+                            placeholder="z.B. Kirche, Gerichtsverhandlung, ..."
+                        />
+                    </p>
+                    <div className="container no-gutters" style={{marginBottom: '1rem'}}>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <label htmlFor="yearStart">Zeitraum</label>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-5">
+                                <input
+                                    type="number"
+                                    id="yearStart"
+                                    name="yearStart"
+                                    className="form-control"
+                                    autoComplete="off"
+                                    value={this.state.params.yearStart}
+                                    onChange={this.handleChange.bind(this)}
+                                    placeholder="z.B. 1850"
+                                />
+                            </div>
+                            <div className="col-2 orientation-center">
+                                -
+                            </div>
+                            <div className="col-5">
+                                <input
+                                    type="number"
+                                    id="yearEnd"
+                                    name="yearEnd"
+                                    className="form-control"
+                                    autoComplete="off"
+                                    value={this.state.params.yearEnd}
+                                    onChange={this.handleChange.bind(this)}
+                                    placeholder="z.B. 1950"
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-5">
+                    <p>
+                        <label htmlFor="filesRequired">
                             <input
-                                type="number"
-                                id="yearStart"
-                                name="yearStart"
-                                className="form-control"
-                                value={this.state.params.yearStart}
+                                type="checkbox"
+                                name="filesRequired"
+                                id="filesRequired"
+                                checked={this.state.params.filesRequired}
                                 onChange={this.handleChange.bind(this)}
                             />
-                        </div>
-                        <div className="col-2 orientation-center">
-                            -
-                        </div>
-                        <div className="col-5">
+                            {' '}Nur Dokumente mit Medien
+                        </label>
+                    </p>
+                    <p>
+                        <label htmlFor="helpRequired">
                             <input
-                                type="number"
-                                id="yearEnd"
-                                name="yearEnd"
-                                className="form-control"
-                                value={this.state.params.yearEnd}
+                                type="checkbox"
+                                name="helpRequired"
+                                id="helpRequired"
+                                checked={this.state.params.helpRequired}
                                 onChange={this.handleChange.bind(this)}
                             />
-                        </div>
-                    </div>
+                            {' '}Unbekannte Inhalte
+                        </label>
+                    </p>
+                    <SearchListCategories
+                      onUpdate={(category) => this.updateCategory(category)}
+                    >
+                    </SearchListCategories>
+                    <p>
+                        <input type="submit" name="submit" value="suchen" className="form-control btn btn-highlight" />
+                    </p>
                 </div>
-                <p>
-                    <label htmlFor="filesRequired">
-                        <input
-                            type="checkbox"
-                            name="filesRequired"
-                            id="filesRequired"
-                            checked={this.state.params.filesRequired}
-                            onChange={this.handleChange.bind(this)}
-                        />
-                        {' '}Nur Dokumente mit Medien
-                    </label>
-                </p>
-                <p>
-                    <label htmlFor="helpRequired">
-                        <input
-                            type="checkbox"
-                            name="helpRequired"
-                            id="helpRequired"
-                            checked={this.state.params.helpRequired}
-                            onChange={this.handleChange.bind(this)}
-                        />
-                        {' '}Unbekannte Inhalte
-                    </label>
-                </p>
-                <SearchListCategories
-                  onUpdate={(category) => this.updateCategory(category)}
-                >
-                </SearchListCategories>
-                <p>
-                    <input type="submit" name="submit" value="suchen" className="form-control"/>
-                </p>
             </div>,
             <div className="col-md-8" key="results">
                 {this.renderStatusLineTop()}
@@ -275,18 +284,18 @@ export default class SearchList extends Component {
         return(
             <li key={document.id}>
                 <div className="search-result-text">
-                    <h2>
+                    <h3>
                         <a href={`/document/${document.id}`}>
                             {(document.title) ? document.title : 'Unbekanntes Dokument'}
                         </a>
-                    </h2>
+                    </h3>
                     <p className="search-result-meta">{meta.join(' | ')}</p>
                     {document.description &&
                         <p className="search-result-description">{this.formatExcept(document.description)}</p>
                     }
                 </div>
                 {document.files && <div className="search-result-image">
-                    <img src={window.common.buildImageUrl(document.id, document.files[0].id, 150)} />
+                    <img src={buildImageUrl(document.id, document.files[0].id, 150)} />
                 </div>}
             </li>
         );
@@ -381,7 +390,7 @@ export default class SearchList extends Component {
                             <span aria-hidden="true">&lsaquo;</span>
                         </a>
                     </li>
-                    <li className="page-item disabled">
+                    <li className="page-item disabled page-item-pages">
                         <span className="page-link">{this.state.page}/{this.state.pageMax}</span>
                     </li>
                     <li className={'page-item' + (this.state.page >= this.state.pageMax ? ' disabled' : '')}>
@@ -420,7 +429,7 @@ export default class SearchList extends Component {
     formatDateTime(datetime) {
         if (!datetime)
             return '';
-        return window.common.datetimeify(datetime);
+        return formatDatetime(datetime);
     }
 
     formatYear(date) {
