@@ -77,7 +77,7 @@ def info_ueber_uns():
 
 @frontend.route('/info/archive')
 def info_archive():
-    return render_template('archive.html')
+    return redirect('/archives')
 
 
 @frontend.route('/info/mitmachen')
