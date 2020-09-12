@@ -41,7 +41,6 @@ $(document).ready(function () {
             window[HelperClass.name.charAt(0).toLowerCase() + HelperClass.name.slice(1)] = new HelperClass();
         }
     }
-
     let reactObjects = {
         'search-list-box': SearchList,
         'frontpage-gallery': FrontpageGallery,

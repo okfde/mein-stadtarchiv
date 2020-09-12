@@ -14,6 +14,15 @@
             {{ form_field(form.abort, 6, 'input-submit') }}
             {{ form_field(form.submit, 6, 'input-submit') }}
         </div>
+        {{ form.mapping }}
         {{ form.csrf_token }}
     </form>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var tableHeaderData = {{ header|tojson }};
+        var tablePreviewData = {{ datasets|tojson }};
+    </script>
+    {{ super() }}
 {% endblock %}

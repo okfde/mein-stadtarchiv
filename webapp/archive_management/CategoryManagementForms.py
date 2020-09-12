@@ -11,11 +11,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, BooleanField, FileField, SelectField
+from wtforms import StringField, SubmitField, TextAreaField, BooleanField, FileField, SelectField, HiddenField
 from wtforms.validators import DataRequired
 from ..common.form_validator import ValidateMimeType, ValidateKnownXml, DataRequiredIfOtherEmpty, \
     DataRequiredIfOtherMimetype
 from ..common.form import SearchBaseForm
+from ..common.form_filter import json_filter
 
 
 class CategorySearchForm(SearchBaseForm):
@@ -79,6 +80,11 @@ class CategoryFileForm(FlaskForm):
 
 
 class CategoryTableForm(FlaskForm):
+    mapping = HiddenField(
+        filters=[
+            json_filter
+        ]
+    )
     delete_file = BooleanField(
         label='Hochgeladene Tabellen-Datei vom Server löschen'
     )

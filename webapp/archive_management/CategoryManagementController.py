@@ -91,6 +91,7 @@ def admin_archive_category_table(category_id, filename):
     category = Category.get_or_404(category_id)
     check_uuid_filename(filename)
     form = CategoryTableForm()
+    dit = DataImportTable(filename)
     if form.validate_on_submit():
         if form.abort.data:
             if form.delete_file.data:
@@ -99,8 +100,16 @@ def admin_archive_category_table(category_id, filename):
                 category.save()
             return redirect('/admin/archive/%s/show' % category.parent.id)
         flash('Importvorgang gestartet', 'success')
+        dit.save(category, form.mapping.data)
         return redirect('/admin/archive/%s/show' % category.parent.id)
-    return render_template('category-table.html', category=category, form=form, filename=filename)
+    return render_template(
+        'category-table.html',
+        category=category,
+        form=form,
+        filename=filename,
+        header=dit.header,
+        datasets=dit.preview
+    )
 
 
 @archive_management.route('/api/admin/category/<string:category_id>/table/<string:filename>', methods=['GET', 'POST'])

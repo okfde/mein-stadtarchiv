@@ -8,27 +8,24 @@ export default class CategoryTableImport extends Component {
     };
 
     componentDidMount() {
-        this.category_uid = document.getElementById('category-table-import').getAttribute('data-category');
-        this.filename = document.getElementById('category-table-import').getAttribute('data-filename');
-        this.apiUrl = '/api/admin/category/' + this.category_uid + '/table/' + this.filename;
         this.params = {
             csrf_token: document.getElementById('csrf_token').value
         };
-        $.post(this.apiUrl, this.params)
-            .then(data => {
-                if (data.status) {
-                    this.setState({
-                        initialized: true,
-                        error: true
-                    });
-                    return
-                }
-                this.setState({
-                    initialized: true,
-                    header: data.data.header,
-                    datasets: data.data.datasets
-                })
-            });
+        this.setState({
+            initialized: true,
+            header: tableHeaderData,
+            datasets: tablePreviewData,
+            mapping: (new Array(tableHeaderData.length)).fill('identifier')
+        })
+    }
+
+    updateMapping(position, evt) {
+        let mapping = [...this.state.mapping];
+        mapping[position] = evt.target.value;
+        this.setState({
+            mapping: mapping
+        });
+        document.getElementById('mapping').value = JSON.stringify(mapping);
     }
 
     render() {
@@ -46,10 +43,6 @@ export default class CategoryTableImport extends Component {
                 </div>
             );
         }
-        let trs = [];
-        for (let i = 0; i < this.state.header.length; i++) {
-            trs.push(this.renderRow(this.state.header[i], i));
-        }
         return (
             <div className="row row-form">
                 <div className="col-md-12">
@@ -62,7 +55,7 @@ export default class CategoryTableImport extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {trs}
+                        {this.state.header.map((row, i) => this.renderRow(row, i))}
                         </tbody>
                     </table>
                 </div>
@@ -75,21 +68,22 @@ export default class CategoryTableImport extends Component {
             <tr key={`row-${position}`}>
                 <td>{field}</td>
                 <td>
-                    {this.renderFieldSelect()}
+                    {this.renderFieldSelect(position)}
                 </td>
                 <td>{this.state.datasets[0][position]}</td>
             </tr>
         )
     }
 
-    renderFieldSelect() {
+    renderFieldSelect(position) {
         return(
-            <select className="form-control">
+            <select className="form-control" value={this.state.mapping[position]} onChange={this.updateMapping.bind(this, position)}>
                 <optgroup label="Basis">
-                    <option value="title">Laufende Nummer / ID</option>
+                    <option value="identifier">Laufende Nummer / ID</option>
                     <option value="title">Titel</option>
                     <option value="description">Beschreibung</option>
                     <option value="filename">Dateiname</option>
+                    <option value="photographer">Fotograf</option>
                 </optgroup>
                 <optgroup label="Lizenz">
                     <option value="licence">Lizenz</option>
