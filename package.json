@@ -43,7 +43,7 @@
     "mapbox-gl": "^1.10",
     "mini-css-extract-plugin": "^0.8",
     "moment": "^2.25",
-    "node-sass": "^4.14",
+    "node-sass": "^7.0",
     "normalize.css": "^8.0",
     "popper.js": "^1.16",
     "react": "^16.13",
