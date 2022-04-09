@@ -42,7 +42,7 @@
     "leaflet": "^1.6.0",
     "mapbox-gl": "^1.10",
     "mini-css-extract-plugin": "^0.8",
-    "moment": "^2.25",
+    "moment": "^2.29",
     "node-sass": "^4.14",
     "normalize.css": "^8.0",
     "popper.js": "^1.16",
